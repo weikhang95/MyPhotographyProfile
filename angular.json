@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "MyPhotographyProfile:build:production"
+              "buildTarget": "MyPhotographyProfile:build:production"
             },
             "development": {
-              "browserTarget": "MyPhotographyProfile:build:development"
+              "buildTarget": "MyPhotographyProfile:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -80,7 +80,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "MyPhotographyProfile:build"
+            "buildTarget": "MyPhotographyProfile:build"
           }
         },
         "test": {
