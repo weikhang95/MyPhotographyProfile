@@ -42,3 +42,13 @@ mat-sidenav {
   --mdc-checkbox-unselected-hover-state-layer-color: red;
   --mdc-checkbox-unselected-hover-icon-color: red;
 }
+
+// <uniquifier>: Use a unique and descriptive class name
+// <weight>: Use a value from 300 to 700
+
+.font-signika {
+  font-family: "Signika", serif;
+  font-optical-sizing: auto;
+  font-variation-settings:
+    "GRAD" 0;
+}
