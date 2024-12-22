@@ -1,6 +1,6 @@
 import { animate, group, query, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
-
+import { NgOptimizedImage } from '@angular/common'
 
 const baseStyles =  style({
   position: 'absolute',
