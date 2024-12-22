@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+// import { ThemeService } from './theme.service';
 
 @Component({
     selector: 'app-root',
@@ -7,5 +8,9 @@ import { Component } from '@angular/core';
     standalone: false
 })
 export class AppComponent {
-  title = 'MyPhotographyProfile';
+  // constructor(private _themeService: ThemeService) {}
+
+  // toggleTheme(): void {
+  //   this._themeService.toggleDarkMode();
+  // }
 }

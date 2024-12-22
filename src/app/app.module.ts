@@ -6,22 +6,26 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatButtonModule } from '@angular/material/button';
-import { HomeModule } from './home/home.module';
+import { TopbarComponent } from './topbar/topbar.component';
+import { PortfolioComponent } from './portfolio/portfolio.component';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
     ],
     providers: [
         provideAnimationsAsync()
     ],
     bootstrap: [AppComponent],
     imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatButtonModule,
-        HomeModule,
-    ]
+      BrowserModule,
+      AppRoutingModule,
+      BrowserAnimationsModule,
+      MatButtonModule,
+      TopbarComponent,
+      PortfolioComponent,
+      AboutComponent
+]
 })
 export class AppModule { }
