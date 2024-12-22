@@ -5,10 +5,10 @@
 @tailwind components;
 @tailwind utilities;
 
-$theme: matx.define-theme((
+$theme: mat.define-theme((
   color: (
     theme-type: dark,
-    primary: matx.$m3-violet-palette,
+    primary: mat.$violet-palette,
   ),
   typography: (
     brand-family: 'Comic Sans',
@@ -19,8 +19,8 @@ $theme: matx.define-theme((
   )
 ));
 
-$light-theme: matx.define-theme();
-$dark-theme: matx.define-theme((
+$light-theme: mat.define-theme();
+$dark-theme: mat.define-theme((
   color: (
     theme-type: dark
   )
