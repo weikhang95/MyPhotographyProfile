@@ -5,6 +5,45 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background-light: #ffffff;
+  --text-light: #1a1a1a;
+  --background-dark: #121212;
+  --surface-dark: #1e1e1e;
+  --text-dark: #e0e0e0;
+  --secondary-dark: #b3b3b3;
+  
+  --transition-duration: 0.3s;
+}
+
+body {
+  background-color: var(--background-light);
+  color: var(--text-light);
+  transition: background-color var(--transition-duration) ease,
+              color var(--transition-duration) ease;
+}
+
+body.dark-mode {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
+/* Dark mode specific styles */
+.dark-mode {
+  /* Surface colors for cards, modals, etc */
+  --surface-color: var(--surface-dark);
+  
+  /* Secondary text for less important content */
+  --text-secondary: var(--secondary-dark);
+  
+  /* Subtle shadows for depth */
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --card-shadow: 0 4px 6px var(--shadow-color);
+  
+  /* Overlay for modals and dialogs */
+  --overlay-color: rgba(0, 0, 0, 0.75);
+}
+
 $theme: mat.define-theme((
   color: (
     theme-type: dark,
