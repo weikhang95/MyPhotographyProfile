@@ -1,17 +1,18 @@
 <div class="bg-white dark:bg-black text-black dark:text-white">
-  <div class="container mx-auto">
-    <div class="text-4xl pt-10 pb-8 font-bold">PORTFOLIO</div>
-    <section class="text-neutral-700">
-      <div class="container w-full px-4">
-        <div class="columns-1 sm:columns-2 lg:columns-3 gap-4">
-          <div *ngFor="let image of portfolioImages" class="relative mb-4 break-inside-avoid">
+  <div class="container mx-auto px-3 sm:px-4">
+    <div class="text-2xl sm:text-3xl md:text-4xl pt-6 sm:pt-8 md:pt-10 pb-4 sm:pb-6 md:pb-8 font-bold">PORTFOLIO</div>
+    <section class="text-neutral-700 dark:text-neutral-300">
+      <div class="w-full">
+        <div class="columns-1 sm:columns-2 lg:columns-3 gap-3 sm:gap-4">
+          <div *ngFor="let image of portfolioImages" class="relative mb-3 sm:mb-4 break-inside-avoid">
             <div class="overflow-hidden rounded-lg shadow-lg">
-              <a [href]="getCloudinaryUrl(image.filename, image.width, image.height)" data-fancybox="gallery">
+              <a [href]="getCloudinaryUrl(image.filename, image.width, image.height)" 
+                 data-fancybox="gallery" 
+                 class="block aspect-auto">
                 <img [ngSrc]="getCloudinaryUrl(image.filename, image.width, image.height)" 
                      [width]="image.width" 
                      [height]="image.height" 
                      [alt]="image.alt"
-                     priority
                      class="w-full h-auto object-cover transition-all duration-500 ease-in-out transform hover:scale-105 hover:brightness-90">
               </a>
             </div>

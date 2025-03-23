@@ -18,20 +18,24 @@ interface PortfolioImage {
 })
 export class PortfolioComponent implements OnInit {
   ngOnInit(): void {
+    // Initialize Fancybox
     Fancybox.bind("[data-fancybox]", {
-      // Custom options if needed
+      // Custom options
+      Carousel: {
+        infinite: true,
+      },
     });
   }
-
+  
   private readonly cloudinaryBasePrefix = 'https://res.cloudinary.com/dbdetsjli/image/upload/';
-
+  
   getCloudinaryUrl(filename: string, width: number, height: number): string {
-    return `${this.cloudinaryBasePrefix}w_${width},h_${height},c_fit,q_auto,f_auto/${filename}`;
+    const url = `${this.cloudinaryBasePrefix}w_${width},h_${height},c_fit,q_auto,f_auto/${filename}`;
+    return url;
   }
   
   portfolioImages: PortfolioImage[] = [
     {
-
       filename: '342493F6-9858-4FF3-8553-165FDDEE1C1A_zvhb4c',
       alt: 'Penang turf club',
       width: 900,
@@ -97,12 +101,12 @@ export class PortfolioComponent implements OnInit {
       width: 900,
       height: 1600
     },
-    {
-      filename: '9939D92A-D983-46D4-A3AC-736A5FEC6E16_1_201_a_wn5avg',
-      alt: 'Plitvice lakes, Croatia',
-      width: 1600,
-      height: 1067
-    },
+    // {
+    //   filename: '9939D92A-D983-46D4-A3AC-736A5FEC6E16_1_201_a_wn5avg',
+    //   alt: 'Plitvice lakes, Croatia',
+    //   width: 1600,
+    //   height: 1067
+    // },
     {
       filename: '39EF5CFF-BC2E-469B-AFB4-68F5B029A6AF_y5cc6c',
       alt: 'Moon',

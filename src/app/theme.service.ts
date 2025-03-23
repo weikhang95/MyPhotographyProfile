@@ -1,11 +1,20 @@
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
 export class ThemeService {
   private readonly themeKey = 'user-theme';
-
+  private isDarkThemeSubject = new BehaviorSubject<boolean>(false);
+  
+  isDarkTheme$: Observable<boolean> = this.isDarkThemeSubject.asObservable();
+  
   constructor() {
     this.applyUserOrSystemTheme();
     this.listenForSystemThemeChanges();
   }
-
+  
   applyUserOrSystemTheme(): void {
     const userPreference = localStorage.getItem(this.themeKey);
     if (userPreference) {
@@ -14,18 +23,18 @@ export class ThemeService {
       this.applySystemTheme();
     }
   }
-
-  toggleDarkMode(): void {
-    const isDarkMode = !document.body.classList.contains('dark-mode');
+  
+  toggleTheme(): void {
+    const isDarkMode = !document.documentElement.classList.contains('dark');
     this.applyTheme(isDarkMode);
     localStorage.setItem(this.themeKey, isDarkMode ? 'dark' : 'light');
   }
-
+  
   applySystemTheme(): void {
     const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     this.applyTheme(isSystemDark);
   }
-
+  
   listenForSystemThemeChanges(): void {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     mediaQuery.addEventListener('change', (event) => {
@@ -34,8 +43,9 @@ export class ThemeService {
       }
     });
   }
-
+  
   private applyTheme(isDarkMode: boolean): void {
-    document.body.classList.toggle('dark-mode', isDarkMode);
+    document.documentElement.classList.toggle('dark', isDarkMode);
+    this.isDarkThemeSubject.next(isDarkMode);
   }
 }

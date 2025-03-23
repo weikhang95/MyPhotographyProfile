@@ -1,9 +1,9 @@
-<div class="container mx-auto">
-  <h1 class="text-4xl pt-10 pb-8"><b>ABOUT ME</b></h1>
-  <div class="grid grid-cols-2 gap-14 md:gap-20">
-    <div class="col-span-2 md:col-span-1">
+<div class="container mx-auto px-3 sm:px-4">
+  <h1 class="text-2xl sm:text-3xl md:text-4xl pt-6 sm:pt-8 md:pt-10 pb-4 sm:pb-6 md:pb-8 font-bold">ABOUT ME</h1>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 md:gap-14 lg:gap-20">
+    <div class="col-span-1">
       <div
-        class="bg-white dark:bg-neutral-900 p-5 pb-28 m-6 md:m-12 shadow-lg border border-gray-100 dark:border-neutral-800 hover:rotate-0 transition duration-500 -rotate-6 relative">
+        class="bg-white dark:bg-neutral-900 p-4 sm:p-5 pb-20 sm:pb-24 md:pb-28 mx-auto sm:m-6 md:m-12 max-w-sm shadow-lg border border-gray-100 dark:border-neutral-800 hover:rotate-0 transition duration-500 -rotate-3 sm:-rotate-6 relative">
         <img [ngSrc]="getCloudinaryUrl(profileImage.filename, profileImage.width, profileImage.height)"
           [alt]="profileImage.alt"
           [width]="profileImage.width" 
@@ -11,25 +11,25 @@
           priority
           class="flex flex-col w-full aspect-square object-cover h-auto opacity-100">
         <div class="absolute bottom-0 left-0 right-0 text-center">
-          <p class="text-gray-800 dark:text-slate-200 pb-7 h-full text-6xl font-nothingyoucoulddo">me</p>
+          <p class="text-gray-800 dark:text-slate-200 pb-4 sm:pb-6 md:pb-7 h-full text-4xl sm:text-5xl md:text-6xl font-nothingyoucoulddo">me</p>
         </div>
       </div>
     </div>
-    <section class="font-normal text-center text-base md:text-start mx-3 col-span-2 md:col-span-1 my-auto">
+    <section class="font-normal text-center md:text-start mx-auto md:mx-3 col-span-1 my-6 md:my-auto max-w-xl">
       <div class="block md:hidden">
-        <p class="text-3xl font-serif font-bold mb-1">Hello there,</p>
-        <p class="text-3xl font-serif font-bold mb-6">I'm Wei Khang <span class="animate-wave">👋</span></p>
+        <p class="text-2xl sm:text-3xl font-serif font-bold mb-1">Hello there,</p>
+        <p class="text-2xl sm:text-3xl font-serif font-bold mb-4 sm:mb-6">I'm Wei Khang <span class="animate-wave">👋</span></p>
       </div>
-      <p class="hidden md:block text-3xl font-serif font-bold mb-6">Hello there, I'm Wei Khang
+      <p class="hidden md:block text-2xl sm:text-3xl font-serif font-bold mb-4 sm:mb-6">Hello there, I'm Wei Khang
         <span class="animate-wave">👋</span>
       </p>
-      <p class="mb-4">
+      <p class="mb-4 text-sm sm:text-base">
         I'm a Mechatronic Engineer turned Senior Full Stack Developer at ViTrox Corporation Berhad since 2021. Based in Penang, Malaysia, I combine technical expertise with creativity to build impactful digital solutions.
       </p>
-      <p class="mb-4">
+      <p class="mb-4 text-sm sm:text-base">
         Photography is my creative outlet. With my Nikon Z5 and Z24-120 and Z40 lenses, I capture life's special moments and tell stories through images. From street scenes to landscapes, each shot is an opportunity to share a unique perspective.
       </p>
-      <p>
+      <p class="text-sm sm:text-base">
         Beyond tech and photography, I'm passionate about badminton and anime. I believe in continuous learning and meaningful connections. Whether it's coding or creating visual stories, I'm always excited to collaborate on new adventures!
       </p>
     </section>
