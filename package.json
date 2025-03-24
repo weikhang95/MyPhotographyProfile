@@ -24,7 +24,6 @@
     "@angular/router": "^19.0.5",
     "@fancyapps/ui": "^5.0.36",
     "@mui/material": "^6.4.8",
-    "nvm": "^0.0.4",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
