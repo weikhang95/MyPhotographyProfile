@@ -9,7 +9,14 @@
       }
     }
   ],
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+  "routes": [
+    {
+      "src": "/(assets|favicon.ico|main.*|polyfills.*|runtime.*|scripts.*|styles.*|browser.*)",
+      "dest": "/$1"
+    },
+    {
+      "src": "/*",
+      "dest": "/index.html"
+    }
   ]
 }
