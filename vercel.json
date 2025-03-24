@@ -1,10 +1,7 @@
 {
   "version": 2,
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html",
-      "headers": { "Cache-Control": "no-store" }
-    }
+  "rewrites": [
+    { "source": "/(assets|favicon.ico|main.*|polyfills.*|runtime.*|scripts.*|styles.*|browser.*)", "destination": "/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
