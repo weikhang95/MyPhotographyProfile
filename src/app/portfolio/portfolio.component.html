@@ -6,12 +6,12 @@
         <div class="columns-1 sm:columns-2 lg:columns-3 gap-3 sm:gap-4">
           <div *ngFor="let image of portfolioImages" class="relative mb-3 sm:mb-4 break-inside-avoid">
             <div class="overflow-hidden rounded-lg shadow-lg">
-              <a [href]="getCloudinaryUrl(image.filename, image.width, image.height)" 
+              <a [href]="getFullSizeUrl(image)" 
                  data-fancybox="gallery" 
                  class="block aspect-auto">
-                <img [ngSrc]="getCloudinaryUrl(image.filename, image.width, image.height)" 
-                     [width]="image.width" 
-                     [height]="image.height" 
+                <img [ngSrc]="getDisplayUrl(image)" 
+                     [width]="getDisplayWidth(image)" 
+                     [height]="getDisplayHeight(image)" 
                      [alt]="image.alt"
                      class="w-full h-auto object-cover transition-all duration-500 ease-in-out transform hover:scale-105 hover:brightness-90">
               </a>
