@@ -9,14 +9,8 @@
       }
     }
   ],
-  "routes": [
-    {
-      "src": "/(assets|favicon.ico|main.*|polyfills.*|runtime.*|scripts.*|styles.*|browser.*)",
-      "dest": "/$1"
-    },
-    {
-      "src": "/*",
-      "dest": "/index.html"
-    }
+  "rewrites": [
+    { "source": "/(assets|favicon.ico|main.*|polyfills.*|runtime.*|scripts.*|styles.*|browser.*)", "destination": "/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
