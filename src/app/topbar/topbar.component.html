@@ -1,14 +1,18 @@
 <header>
   <!-- Mobile menu button -->
   <div class="lg:hidden flex items-center p-4">
-    <button (click)="toggleMobileMenu()" class="text-black dark:text-white focus:outline-none">
+    <button (click)="toggleMobileMenu()"
+            [attr.aria-expanded]="isMobileMenuOpen"
+            aria-controls="mobile-menu"
+            aria-label="Toggle navigation menu"
+            class="text-black dark:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-md p-1">
       @if (!isMobileMenuOpen) {
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       }
       @if (isMobileMenuOpen) {
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       }
@@ -16,14 +20,16 @@
     <a class="ml-4 text-xl font-signika font-bold" href="/">WEI KHANG</a>
 
     <!-- Theme toggle on mobile -->
-    <button (click)="toggleTheme()" class="ml-auto text-black dark:text-white focus:outline-none">
+    <button (click)="toggleTheme()"
+            [attr.aria-label]="isDarkTheme ? 'Switch to light mode' : 'Switch to dark mode'"
+            class="ml-auto text-black dark:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-md p-1">
       @if (isDarkTheme) {
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
       }
       @if (!isDarkTheme) {
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
         </svg>
       }
@@ -32,11 +38,10 @@
 
   <!-- Mobile menu -->
   @if (isMobileMenuOpen) {
-    <div @slideMenu class="lg:hidden bg-white dark:bg-neutral-900 fixed top-16 left-0 right-0 z-50 shadow-md py-4">
-      <nav class="flex flex-col space-y-4 px-4">
-        <a class="text-base font-signika font-medium tracking-wider py-2 border-b border-neutral-200 dark:border-neutral-800" routerLink="/" routerLinkActive="text-blue-500 dark:text-blue-400" (click)="closeMobileMenu()">PORTFOLIO</a>
-        <a class="text-base font-signika font-medium tracking-wider py-2 border-b border-neutral-200 dark:border-neutral-800" routerLink="/about" routerLinkActive="text-blue-500 dark:text-blue-400" (click)="closeMobileMenu()">ABOUT ME</a>
-        <!-- <a class="text-lg font-signika py-2" routerLink="/contact" routerLinkActive="text-blue-500 dark:text-blue-400" (click)="closeMobileMenu()">CONTACT</a> -->
+    <div @slideMenu id="mobile-menu" role="navigation" class="lg:hidden bg-white dark:bg-neutral-900 fixed top-16 left-0 right-0 z-50 shadow-md py-4">
+      <nav class="flex flex-col space-y-4 px-4" aria-label="Mobile navigation">
+        <a class="text-base font-signika font-medium tracking-wider py-2 border-b border-neutral-200 dark:border-neutral-800 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/" routerLinkActive="text-blue-500 dark:text-blue-400" (click)="closeMobileMenu()">PORTFOLIO</a>
+        <a class="text-base font-signika font-medium tracking-wider py-2 border-b border-neutral-200 dark:border-neutral-800 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/about" routerLinkActive="text-blue-500 dark:text-blue-400" (click)="closeMobileMenu()">ABOUT ME</a>
       </nav>
     </div>
   }
@@ -44,24 +49,25 @@
   <!-- Desktop navigation -->
   <mat-toolbar class="hidden lg:flex dark:!bg-neutral-900 !bg-white !py-4 text-black dark:!text-white">
     <a class="text-2xl font-signika font-bold tracking-wide" href="/">WEI KHANG</a>
-    <div class="flex flex-1 justify-end gap-8">
-      <a class="text-base font-signika font-medium tracking-wider hover:text-blue-500 transition-colors duration-200" routerLink="/" routerLinkActive="text-blue-500 dark:text-blue-400">PORTFOLIO</a>
-      <a class="text-base font-signika font-medium tracking-wider hover:text-blue-500 transition-colors duration-200" routerLink="/about" routerLinkActive="text-blue-500 dark:text-blue-400">ABOUT ME</a>
-      <!-- <a class="text-lg font-signika hover:text-blue-500 transition-colors duration-200" routerLink="/contact" routerLinkActive="text-blue-500 dark:text-blue-400">CONTACT</a> -->
+    <nav class="flex flex-1 justify-end gap-8" aria-label="Main navigation">
+      <a class="text-base font-signika font-medium tracking-wider hover:text-blue-500 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/" routerLinkActive="text-blue-500 dark:text-blue-400">PORTFOLIO</a>
+      <a class="text-base font-signika font-medium tracking-wider hover:text-blue-500 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/about" routerLinkActive="text-blue-500 dark:text-blue-400">ABOUT ME</a>
 
       <!-- Theme toggle on desktop -->
-      <button (click)="toggleTheme()" class="text-black dark:text-white focus:outline-none">
+      <button (click)="toggleTheme()"
+              [attr.aria-label]="isDarkTheme ? 'Switch to light mode' : 'Switch to dark mode'"
+              class="text-black dark:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-md p-1">
         @if (isDarkTheme) {
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
           </svg>
         }
         @if (!isDarkTheme) {
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
           </svg>
         }
       </button>
-    </div>
+    </nav>
   </mat-toolbar>
 </header>

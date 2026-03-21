@@ -4,7 +4,7 @@
     <section class="text-neutral-700 dark:text-neutral-300">
       <div class="w-full">
         <div class="columns-1 sm:columns-2 lg:columns-3 gap-3 sm:gap-4">
-          @for (image of portfolioImages; track image) {
+          @for (image of portfolioImages; track image; let i = $index) {
             <div class="reveal-image relative mb-3 sm:mb-4 break-inside-avoid group">
               <div class="overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-500">
                 <a [href]="getFullSizeUrl(image)"
@@ -14,6 +14,7 @@
                     [width]="getDisplayWidth(image)"
                     [height]="getDisplayHeight(image)"
                     [alt]="image.alt"
+                    [priority]="i < 3"
                     class="w-full h-auto object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]">
                   <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500"></div>
                 </a>

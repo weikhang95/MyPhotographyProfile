@@ -11,9 +11,5 @@ import { RouterOutlet } from '@angular/router';
     imports: [TopbarComponent, RouterOutlet]
 })
 export class AppComponent {
-  // constructor(private _themeService: ThemeService) {}
-
-  // toggleTheme(): void {
-  //   this._themeService.toggleDarkMode();
-  // }
+  currentYear = new Date().getFullYear();
 }
