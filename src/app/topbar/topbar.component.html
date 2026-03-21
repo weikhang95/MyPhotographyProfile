@@ -16,27 +16,27 @@
       <svg *ngIf="isDarkTheme" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
       </svg>
-      <svg *ngIf="!isDarkTheme" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 24 24" stroke="currentColor">
+      <svg *ngIf="!isDarkTheme" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
       </svg>
     </button>
   </div>
 
   <!-- Mobile menu -->
-  <div *ngIf="isMobileMenuOpen" class="lg:hidden bg-white dark:bg-black fixed top-16 left-0 right-0 z-50 shadow-md py-4">
+  <div *ngIf="isMobileMenuOpen" @slideMenu class="lg:hidden bg-white dark:bg-neutral-900 fixed top-16 left-0 right-0 z-50 shadow-md py-4">
     <nav class="flex flex-col space-y-4 px-4">
-      <a class="text-lg font-signika py-2 border-b border-gray-200 dark:border-gray-800" routerLink="/" routerLinkActive="text-blue-500 dark:text-blue-400" (click)="closeMobileMenu()">PORTFOLIO</a>
-      <a class="text-lg font-signika py-2 border-b border-gray-200 dark:border-gray-800" routerLink="/about" routerLinkActive="text-blue-500 dark:text-blue-400" (click)="closeMobileMenu()">ABOUT ME</a>
+      <a class="text-base font-signika font-medium tracking-wider py-2 border-b border-neutral-200 dark:border-neutral-800" routerLink="/" routerLinkActive="text-blue-500 dark:text-blue-400" (click)="closeMobileMenu()">PORTFOLIO</a>
+      <a class="text-base font-signika font-medium tracking-wider py-2 border-b border-neutral-200 dark:border-neutral-800" routerLink="/about" routerLinkActive="text-blue-500 dark:text-blue-400" (click)="closeMobileMenu()">ABOUT ME</a>
       <!-- <a class="text-lg font-signika py-2" routerLink="/contact" routerLinkActive="text-blue-500 dark:text-blue-400" (click)="closeMobileMenu()">CONTACT</a> -->
     </nav>
   </div>
 
   <!-- Desktop navigation -->
-  <mat-toolbar class="hidden lg:flex dark:!bg-black !bg-white !py-4 text-black dark:!text-white">
-    <a class="text-2xl font-signika font-bold" href="/">WEI KHANG</a>
-    <div class="flex flex-1 justify-end gap-6">
-      <a class="text-lg font-signika hover:text-blue-500 transition-colors duration-200" routerLink="/" routerLinkActive="text-blue-500 dark:text-blue-400">PORTFOLIO</a>
-      <a class="text-lg font-signika hover:text-blue-500 transition-colors duration-200" routerLink="/about" routerLinkActive="text-blue-500 dark:text-blue-400">ABOUT ME</a>
+  <mat-toolbar class="hidden lg:flex dark:!bg-neutral-900 !bg-white !py-4 text-black dark:!text-white">
+    <a class="text-2xl font-signika font-bold tracking-wide" href="/">WEI KHANG</a>
+    <div class="flex flex-1 justify-end gap-8">
+      <a class="text-base font-signika font-medium tracking-wider hover:text-blue-500 transition-colors duration-200" routerLink="/" routerLinkActive="text-blue-500 dark:text-blue-400">PORTFOLIO</a>
+      <a class="text-base font-signika font-medium tracking-wider hover:text-blue-500 transition-colors duration-200" routerLink="/about" routerLinkActive="text-blue-500 dark:text-blue-400">ABOUT ME</a>
       <!-- <a class="text-lg font-signika hover:text-blue-500 transition-colors duration-200" routerLink="/contact" routerLinkActive="text-blue-500 dark:text-blue-400">CONTACT</a> -->
       
       <!-- Theme toggle on desktop -->

@@ -1,99 +1,75 @@
 @use '@angular/material' as mat;
 @use '@angular/material-experimental' as matx;
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@use "tailwindcss";
 
-:root {
-  --background-light: #ffffff;
-  --text-light: #1a1a1a;
-  --background-dark: #121212;
-  --surface-dark: #1e1e1e;
-  --text-dark: #e0e0e0;
-  --secondary-dark: #b3b3b3;
-  
-  --transition-duration: 0.3s;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
-body {
-  background-color: var(--background-light);
-  color: var(--text-light);
-  transition: background-color var(--transition-duration) ease,
-              color var(--transition-duration) ease;
-}
-
-body.dark-mode {
-  background-color: var(--background-dark);
-  color: var(--text-dark);
-}
-
-/* Dark mode specific styles */
-.dark-mode {
-  /* Surface colors for cards, modals, etc */
-  --surface-color: var(--surface-dark);
-  
-  /* Secondary text for less important content */
-  --text-secondary: var(--secondary-dark);
-  
-  /* Subtle shadows for depth */
-  --shadow-color: rgba(0, 0, 0, 0.3);
-  --card-shadow: 0 4px 6px var(--shadow-color);
-  
-  /* Overlay for modals and dialogs */
-  --overlay-color: rgba(0, 0, 0, 0.75);
-}
-
-$theme: mat.define-theme((
-  color: (
-    theme-type: dark,
-    primary: mat.$violet-palette,
-  ),
+// Material theme
+$light-theme: mat.define-theme((
   typography: (
-    brand-family: 'Comic Sans',
-    bold-weight: 900
-  ),
-  density: (
-    scale: -1
+    brand-family: 'Signika',
+    bold-weight: 700
   )
 ));
 
-$light-theme: mat.define-theme();
 $dark-theme: mat.define-theme((
   color: (
     theme-type: dark
+  ),
+  typography: (
+    brand-family: 'Signika',
+    bold-weight: 700
   )
 ));
 
 html {
-  // Apply the base theme at the root, so it will be inherited by the whole app.
   @include mat.all-component-themes($light-theme);
 }
 
-mat-sidenav {
-  // Override the colors to create a dark sidenav.
-  @include mat.all-component-colors($dark-theme);
-}
-
-.danger {
-  // Override the checkbox hover state to indicate that this is a dangerous setting. No need to
-  // target the internal selectors for the elements that use these variables.
-  --mdc-checkbox-unselected-hover-state-layer-color: red;
-  --mdc-checkbox-unselected-hover-icon-color: red;
-}
-
-// <uniquifier>: Use a unique and descriptive class name
-// <weight>: Use a value from 300 to 700
+// Typography system
+// Scale: Major Third (1.25)
 
 .font-signika {
-  font-family: "Signika", serif;
+  font-family: "Signika", sans-serif;
   font-optical-sizing: auto;
-  font-variation-settings:
-    "GRAD" 0;
+  font-variation-settings: "GRAD" 0;
 }
 
 .font-nothingyoucoulddo {
-  font-family: "Nothing You Could Do", serif;
+  font-family: "Nothing You Could Do", cursive;
   font-weight: 400;
   font-style: normal;
+}
+
+body {
+  font-family: "Signika", sans-serif;
+  font-optical-sizing: auto;
+  font-variation-settings: "GRAD" 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Signika", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  line-height: 1.2;
+}
+
+p {
+  line-height: 1.7;
+}
+
+// Reduced motion: respect user preference
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

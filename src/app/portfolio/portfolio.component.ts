@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
 import { Fancybox } from "@fancyapps/ui";
 import { NgOptimizedImage, NgFor } from '@angular/common';
 
@@ -31,15 +31,50 @@ const IMAGE_CONFIG = {
   standalone: true,
   imports: [NgOptimizedImage, NgFor]
 })
-export class PortfolioComponent implements OnInit {
+export class PortfolioComponent implements OnInit, AfterViewInit, OnDestroy {
+  private observer?: IntersectionObserver;
+  private prefersReducedMotion = false;
+
+  constructor(private el: ElementRef) {}
+
   ngOnInit(): void {
-    // Initialize Fancybox
     Fancybox.bind("[data-fancybox]", {
-      // Custom options
       Carousel: {
         infinite: true,
       },
     });
+
+    this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  ngAfterViewInit(): void {
+    if (this.prefersReducedMotion) {
+      // Show all images immediately for reduced motion users
+      this.el.nativeElement.querySelectorAll('.reveal-image').forEach((el: HTMLElement) => {
+        el.classList.add('revealed');
+      });
+      return;
+    }
+
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            this.observer?.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    this.el.nativeElement.querySelectorAll('.reveal-image').forEach((el: HTMLElement) => {
+      this.observer?.observe(el);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.observer?.disconnect();
   }
   
   private readonly cloudinaryBasePrefix = 'https://res.cloudinary.com/dbdetsjli/image/upload/';
@@ -71,7 +106,7 @@ export class PortfolioComponent implements OnInit {
   
   // Get cloudinary URL with webP format
   getCloudinaryUrl(filename: string, width: number, height: number): string {
-    const url = `${this.cloudinaryBasePrefix}w_${width},h_${height},c_fit,q_auto,f_webp/${filename}`;
+    const url = `${this.cloudinaryBasePrefix}w_${width},h_${height},c_fit,q_auto,f_auto/${filename}`;
     return url;
   }
   
