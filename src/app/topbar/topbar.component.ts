@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { trigger, transition, style, animate } from '@angular/animations';
 import { ThemeService } from '../theme.service';
 
@@ -10,11 +10,10 @@ import { ThemeService } from '../theme.service';
   selector: 'app-topbar',
   standalone: true,
   imports: [
-    CommonModule,
     MatIconModule,
     MatToolbarModule,
     RouterModule
-  ],
+],
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.scss',
   animations: [

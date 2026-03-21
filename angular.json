@@ -86,12 +86,6 @@
           "options": {
             "buildTarget": "MyPhotographyProfile:build"
           }
-        },
-        "test": {
-          "builder": "@angular-builders/jest:run",
-          "options": {
-            "tsConfig": "tsconfig.spec.json"
-          }
         }
       }
     }

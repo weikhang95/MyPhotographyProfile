@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
 import { Fancybox } from "@fancyapps/ui";
-import { NgOptimizedImage, NgFor } from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
 
 interface PortfolioImage {
   filename: string;
@@ -29,7 +29,7 @@ const IMAGE_CONFIG = {
   templateUrl: './portfolio.component.html',
   styleUrls: ['./portfolio.component.scss'],
   standalone: true,
-  imports: [NgOptimizedImage, NgFor]
+  imports: [NgOptimizedImage]
 })
 export class PortfolioComponent implements OnInit, AfterViewInit, OnDestroy {
   private observer?: IntersectionObserver;

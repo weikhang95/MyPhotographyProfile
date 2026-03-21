@@ -1,3 +1,7 @@
+import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone/index.mjs';
+
+setupZoneTestEnv();
+
 const cloudinaryOrigin = 'https://res.cloudinary.com';
 
 if (!window.matchMedia) {
