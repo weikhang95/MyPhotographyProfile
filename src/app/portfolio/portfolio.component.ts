@@ -34,10 +34,15 @@ const IMAGE_CONFIG = {
 export class PortfolioComponent implements OnInit, AfterViewInit, OnDestroy {
   private observer?: IntersectionObserver;
   private prefersReducedMotion = false;
+  private readonly isBrowser = typeof window !== 'undefined';
 
   constructor(private el: ElementRef) {}
 
   ngOnInit(): void {
+    if (!this.isBrowser) {
+      return;
+    }
+
     Fancybox.bind("[data-fancybox]", {
       Carousel: {
         infinite: true,
@@ -48,11 +53,19 @@ export class PortfolioComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    if (!this.isBrowser) {
+      return;
+    }
+
     if (this.prefersReducedMotion) {
       // Show all images immediately for reduced motion users
       this.el.nativeElement.querySelectorAll('.reveal-image').forEach((el: HTMLElement) => {
         el.classList.add('revealed');
       });
+      return;
+    }
+
+    if (typeof IntersectionObserver === 'undefined') {
       return;
     }
 

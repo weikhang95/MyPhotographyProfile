@@ -33,13 +33,13 @@
               "src/styles.scss",
               "@fancyapps/ui/dist/fancybox/fancybox.css"
             ],
-            "scripts": [
-              "node_modules/@fancyapps/ui/dist/fancybox/fancybox.umd.js"
-            ],
             "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
+              "optimization": {
+                "fonts": false
+              },
               "budgets": [
                 {
                   "type": "initial",

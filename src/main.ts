@@ -2,6 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter, Routes } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { AppComponent } from './app/app.component';
+import { passthroughImageLoaderProvider } from './app/image-loader';
 
 const routes: Routes = [
   { path: '', loadComponent: () => import('./app/portfolio/portfolio.component').then(m => m.PortfolioComponent) },
@@ -12,6 +13,7 @@ const routes: Routes = [
 
 bootstrapApplication(AppComponent, {
   providers: [
+    passthroughImageLoaderProvider,
     provideRouter(routes),
     provideAnimationsAsync(),
   ]
