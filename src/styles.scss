@@ -78,8 +78,8 @@ mat-sidenav {
 .danger {
   // Override the checkbox hover state to indicate that this is a dangerous setting. No need to
   // target the internal selectors for the elements that use these variables.
-  --mdc-checkbox-unselected-hover-state-layer-color: red;
-  --mdc-checkbox-unselected-hover-icon-color: red;
+  --mat-checkbox-unselected-hover-state-layer-color: red;
+  --mat-checkbox-unselected-hover-icon-color: red;
 }
 
 // <uniquifier>: Use a unique and descriptive class name
