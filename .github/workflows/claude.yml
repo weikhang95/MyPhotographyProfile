@@ -23,9 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -39,4 +39,4 @@ jobs:
             --model claude-haiku-4-5-20251001
             --allowedTools "Bash(npm ci),Bash(npm run build),Bash(npm run build:*),Bash(npm test),Bash(npx ng build:*),Bash(gh pr create:*)"
             --max-turns 15
-            --append-system-prompt "Before pushing any change, run 'npm ci', 'npm run build', and 'npm test' and make sure all pass. Fix failures before pushing. After pushing a branch, open a PR with gh pr create."
+            --append-system-prompt "Before pushing any change, run 'npm test' and make sure all tests pass; fix failures first. After pushing the branch you MUST open a pull request yourself by running gh pr create — do not just post a link. The CI workflow will run the full build and tests on the PR; merge is blocked until it passes."
