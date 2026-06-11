@@ -35,6 +35,7 @@ jobs:
           # Pro/Max subscription alternative (run `claude setup-token` locally):
           # claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: |
+            --model claude-haiku-4-5-20251001
             --allowedTools "Bash(npm ci),Bash(npm run build),Bash(npm run build:*),Bash(npm test),Bash(npx ng build:*),Bash(gh pr create:*)"
             --max-turns 15
             --append-system-prompt "Before pushing any change, run 'npm ci', 'npm run build', and 'npm test' and make sure all pass. Fix failures before pushing. After pushing a branch, open a PR with gh pr create."
