@@ -1,0 +1,11 @@
+{
+  "name": "agent-study",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "fix-issue": "bun run fix-issue.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest"
+  }
+}

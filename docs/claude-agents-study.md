@@ -146,4 +146,8 @@ One sentence: runner method = GitHub brings compute + trigger + repo to Claude; 
 ## Study plan
 
 - [x] Method 1: add workflow, install app, add secret, test with a real issue
-- [ ] Method 2: extend `webhook.ts` into a GitHub webhook receiver that creates a managed-agent session
+  - Verified end-to-end 2026-06-11: issue #1 → Haiku fix → branch → PR #2 → CI gate (`ci.yml` + branch protection on `main`) → merge
+  - Lesson: prompt is advisory (Haiku skipped build step), branch protection is the enforced gate
+- [ ] Method 2: run `agent-study/fix-issue.ts <issue#>` — CLI glue that creates a managed-agent session to fix an issue
+  - Needs `ANTHROPIC_API_KEY` env + optional repo-scoped `GITHUB_TOKEN` (falls back to `gh auth token`)
+  - Later: upgrade glue from CLI to real GitHub webhook receiver (needs public URL — smee.io/ngrok)
