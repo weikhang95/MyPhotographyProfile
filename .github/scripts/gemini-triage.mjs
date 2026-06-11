@@ -3,8 +3,10 @@
 // one constrained Gemini call -> validate verdict -> apply labels.
 // Dependency-free: Node 22 global fetch against GitHub + Gemini REST APIs.
 
-const { GITHUB_TOKEN, GEMINI_API_KEY, REPO, ISSUE_NUMBER } = process.env;
-const MODEL = 'gemini-3.1-flash-lite';
+const { GITHUB_TOKEN, GEMINI_API_KEY, ANTHROPIC_API_KEY, REPO, ISSUE_NUMBER, TRIAGE_PROVIDER } =
+  process.env;
+const GEMINI_MODEL = 'gemini-3.1-flash-lite';
+const CLAUDE_MODEL = 'claude-haiku-4-5';
 const TRIAGED_MARKER = 'gemini-triaged';
 
 async function github(path, options = {}) {
@@ -22,7 +24,7 @@ async function github(path, options = {}) {
 
 async function askGemini(systemPrompt, userContent) {
   const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,
+    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
     {
       method: 'POST',
       headers: {
@@ -38,6 +40,51 @@ async function askGemini(systemPrompt, userContent) {
   if (!res.ok) throw new Error(`Gemini: ${res.status} ${await res.text()}`);
   const data = await res.json();
   return (data.candidates?.[0]?.content?.parts?.[0]?.text ?? '').trim();
+}
+
+async function askClaude(systemPrompt, userContent) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'x-api-key': ANTHROPIC_API_KEY,
+      'anthropic-version': '2023-06-01',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: CLAUDE_MODEL,
+      max_tokens: 256,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userContent }],
+    }),
+  });
+  if (!res.ok) throw new Error(`Anthropic: ${res.status} ${await res.text()}`);
+  const data = await res.json();
+  return (data.content?.[0]?.text ?? '').trim();
+}
+
+// Provider chain: first success wins. TRIAGE_PROVIDER=gemini|claude forces a
+// single provider (useful for testing each path without touching secrets).
+const PROVIDERS = [
+  { name: 'gemini', ask: askGemini },
+  { name: 'claude', ask: askClaude },
+];
+
+async function classify(systemPrompt, userContent) {
+  const chain = TRIAGE_PROVIDER
+    ? PROVIDERS.filter((p) => p.name === TRIAGE_PROVIDER)
+    : PROVIDERS;
+  if (chain.length === 0) throw new Error(`Unknown TRIAGE_PROVIDER "${TRIAGE_PROVIDER}"`);
+
+  for (const provider of chain) {
+    try {
+      const verdict = await provider.ask(systemPrompt, userContent);
+      console.log(`Provider "${provider.name}" verdict: "${verdict}"`);
+      return verdict;
+    } catch (err) {
+      console.error(`Provider "${provider.name}" failed: ${err.message}`);
+    }
+  }
+  throw new Error('All providers failed.');
 }
 
 /**
@@ -101,11 +148,10 @@ async function main() {
     return;
   }
 
-  const verdict = await askGemini(
+  const verdict = await classify(
     buildSystemPrompt(areaLabels),
     `<issue_title>${issue.title}</issue_title>\n<issue_body>\n${issue.body ?? ''}\n</issue_body>`,
   );
-  console.log(`Gemini verdict: "${verdict}"`);
 
   const labelsToApply = handleVerdict(verdict, areaLabels);
   if (labelsToApply.length === 0) {
