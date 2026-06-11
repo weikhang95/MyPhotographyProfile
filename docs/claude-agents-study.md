@@ -125,6 +125,38 @@ const session = await client.beta.sessions.create({
 
 - Claude API tokens only (no subscription option); sandbox compute included. No GitHub runner minutes.
 
+### How the webhook trigger works (findings)
+
+GitHub webhooks **push** events to your URL — something must be reachable at the moment the event fires. But the handler only needs to live **seconds**: create session → send issue text → return 200. No need to hold the SSE stream open; the agent finishes alone in Anthropic's sandbox and opens the PR itself. Fire-and-forget.
+
+```
+GitHub event (issue opened)
+        │
+        ▼
+GitHub POSTs JSON ──▶ https://your-endpoint/webhook   ◀── must be reachable RIGHT THEN
+                                │
+                                ▼
+                      handler: create managed-agent session, return 200
+                                │
+                                ▼  (handler can exit now!)
+                      agent runs ALONE in Anthropic cloud,
+                      pushes branch + opens PR itself
+```
+
+Four ways to "be listening":
+
+| # | Option | How | Verdict |
+|---|--------|-----|---------|
+| 1 | Always-on server | VPS / machine 24-7, public IP | heavy, skip |
+| 2 | **Serverless function** | `api/github-webhook.ts` on Vercel — platform listens for you, zero idle cost | **best real option** (already deploy there) |
+| 3 | Local + tunnel | smee.io / ngrok → local bun server | dev/study day only |
+| 4a | Polling (no webhook) | cron every 5 min: `gh issue list --label agent-fix` → create sessions | no public URL ever |
+| 4b | GitHub Actions as webhook | workflow `on: issues` just curls managed-agents API — GitHub hosts the listener free | full circle: Method 1 trigger + Method 2 brain |
+
+Option 4b: runner runs ~30s (create session, exit); agent works for hours after in the sandbox.
+
+Note: `webhook.ts` at repo root is unrelated — it pipes localhost events into a local Claude Code session (MCP channel), not GitHub glue.
+
 ---
 
 ## Comparison
@@ -150,4 +182,4 @@ One sentence: runner method = GitHub brings compute + trigger + repo to Claude; 
   - Lesson: prompt is advisory (Haiku skipped build step), branch protection is the enforced gate
 - [ ] Method 2: run `agent-study/fix-issue.ts <issue#>` — CLI glue that creates a managed-agent session to fix an issue
   - Needs `ANTHROPIC_API_KEY` env + optional repo-scoped `GITHUB_TOKEN` (falls back to `gh auth token`)
-  - Later: upgrade glue from CLI to real GitHub webhook receiver (needs public URL — smee.io/ngrok)
+  - Later: upgrade glue from CLI to auto-trigger — preferred: Vercel serverless function (option 2) or GitHub Actions-as-webhook (option 4b); see webhook findings above
