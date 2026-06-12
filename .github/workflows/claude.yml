@@ -38,5 +38,5 @@ jobs:
           claude_args: |
             --model claude-haiku-4-5-20251001
             --allowedTools "Bash(npm ci),Bash(npm run build),Bash(npm run build:*),Bash(npm test),Bash(npx ng build:*),Bash(gh pr create:*)"
-            --max-turns 15
+            --max-turns 50
             --append-system-prompt "Before pushing any change, run 'npm test' and make sure all tests pass; fix failures first. After pushing the branch you MUST open a pull request yourself by running gh pr create — do not just post a link. The CI workflow will run the full build and tests on the PR; merge is blocked until it passes."
