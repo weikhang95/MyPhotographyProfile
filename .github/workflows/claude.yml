@@ -42,8 +42,21 @@ jobs:
             --max-turns 50
             --append-system-prompt "Before pushing any change, run 'npm test' and make sure all tests pass; fix failures first. The workflow opens a pull request from your branch automatically after you push; CI runs the full build and tests on it and merge is blocked until they pass."
 
+      # Enforced test gate: the agent's "run tests first" instruction is
+      # advisory; this step actually runs them on the pushed branch. Fails
+      # the job (and blocks PR creation) if the suite is red.
+      - name: Verify Claude's branch builds and passes tests
+        if: steps.claude.outputs.branch_name != ''
+        run: |
+          git fetch origin "${{ steps.claude.outputs.branch_name }}"
+          git checkout "${{ steps.claude.outputs.branch_name }}"
+          npm ci
+          npm run build
+          npm test
+
       # The action cannot open PRs itself (by design it only pushes a branch
       # and posts a prefilled link). This step closes that gap deterministically.
+      # Runs only if the test gate above passed.
       - name: Open PR for Claude's branch
         if: steps.claude.outputs.branch_name != ''
         env:
