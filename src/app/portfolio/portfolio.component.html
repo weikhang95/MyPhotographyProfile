@@ -3,9 +3,9 @@
     <h1 class="text-2xl sm:text-3xl md:text-4xl pt-6 sm:pt-8 md:pt-10 pb-4 sm:pb-6 md:pb-8 font-semibold font-signika tracking-wider">PORTFOLIO</h1>
     <section class="text-neutral-700 dark:text-neutral-300">
       <div class="w-full">
-        <div class="columns-1 sm:columns-2 lg:columns-3 gap-3 sm:gap-4">
+        <div class="columns-1 sm:columns-2 lg:columns-3">
           @for (image of portfolioImages; track image; let i = $index) {
-            <div class="reveal-image relative mb-3 sm:mb-4 break-inside-avoid group">
+            <div class="reveal-image relative mb-3 sm:mb-4 mr-3 sm:mr-4 break-inside-avoid group">
               <div class="overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-500">
                 <a [href]="getFullSizeUrl(image)"
                   data-fancybox="gallery"
