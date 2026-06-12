@@ -15,6 +15,12 @@ permissions:
   statuses: write
   id-token: write
 
+# A newer @claude comment on the same issue means new instructions —
+# cancel the in-flight run instead of racing it.
+concurrency:
+  group: claude-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   claude:
     if: |
@@ -22,7 +28,8 @@ jobs:
       (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
       (github.event_name == 'issues' && contains(github.event.issue.body, '@claude'))
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # 3 agent attempts + 3 build/test gates won't fit in 30.
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v5
 
@@ -31,6 +38,7 @@ jobs:
           node-version: 22
           cache: npm
 
+      # ---------- Attempt 1 (mention-driven) ----------
       - uses: anthropics/claude-code-action@v1
         id: claude
         with:
@@ -44,35 +52,120 @@ jobs:
             --append-system-prompt "Before pushing any change, run 'npm test' and make sure all tests pass; fix failures first. The workflow opens a pull request from your branch automatically after you push; CI runs the full build and tests on it and merge is blocked until they pass."
 
       # Enforced test gate: the agent's "run tests first" instruction is
-      # advisory; this step actually runs them on the pushed branch. Fails
-      # the job (and blocks PR creation) if the suite is red.
-      - name: Verify Claude's branch builds and passes tests
+      # advisory; this gate actually runs them on the pushed branch.
+      # continue-on-error turns a red suite into branchable data
+      # (steps.gate1.outcome) instead of killing the job, so attempt 2 can run.
+      - name: "Gate 1: build and test Claude's branch"
+        id: gate1
         if: steps.claude.outputs.branch_name != ''
+        continue-on-error: true
+        shell: bash
         run: |
           git fetch origin "${{ steps.claude.outputs.branch_name }}"
           git checkout "${{ steps.claude.outputs.branch_name }}"
-          npm ci
-          npm run build
-          npm test
+          { npm ci && npm run build && npm test; } 2>&1 | tee /tmp/gate1.log
 
+      - name: Capture gate 1 failure log
+        if: steps.gate1.outcome == 'failure'
+        run: |
+          {
+            echo "GATE1_LOG<<GATE_EOF"
+            tail -n 60 /tmp/gate1.log
+            echo "GATE_EOF"
+          } >> "$GITHUB_ENV"
+
+      # ---------- Attempt 2 (retry with failure log) ----------
+      # The gate left the workspace checked out on the failed branch, so the
+      # action branches from it — previous work is preserved, fix is incremental.
+      - name: "Attempt 2: retry with gate 1 log"
+        id: claude2
+        if: steps.gate1.outcome == 'failure'
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          show_full_output: true
+          prompt: |
+            Your previous attempt to fix issue #${{ github.event.issue.number }} failed the automated build/test gate.
+            Your previous work is on branch '${{ steps.claude.outputs.branch_name }}' and the workspace is already checked out on it — continue from that work, do not start over.
+            Failing output (last 60 lines):
+            ${{ env.GATE1_LOG }}
+            Fix the failures, run 'npm test' yourself to confirm it is green, then commit and push.
+          claude_args: |
+            --model claude-haiku-4-5-20251001
+            --allowedTools "Bash(npm ci),Bash(npm run build),Bash(npm run build:*),Bash(npm test),Bash(npx ng build:*)"
+            --max-turns 50
+
+      - name: "Gate 2: build and test retry branch"
+        id: gate2
+        if: steps.gate1.outcome == 'failure' && steps.claude2.outputs.branch_name != ''
+        continue-on-error: true
+        shell: bash
+        run: |
+          BRANCH="${{ steps.claude2.outputs.branch_name || steps.claude.outputs.branch_name }}"
+          git fetch origin "$BRANCH"
+          git checkout "$BRANCH"
+          { npm ci && npm run build && npm test; } 2>&1 | tee /tmp/gate2.log
+
+      - name: Capture gate 2 failure log
+        if: steps.gate2.outcome == 'failure'
+        run: |
+          {
+            echo "GATE2_LOG<<GATE_EOF"
+            tail -n 60 /tmp/gate2.log
+            echo "GATE_EOF"
+          } >> "$GITHUB_ENV"
+
+      # ---------- Attempt 3 (final retry, both logs) ----------
+      - name: "Attempt 3: final retry with both gate logs"
+        id: claude3
+        if: steps.gate2.outcome == 'failure'
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          show_full_output: true
+          prompt: |
+            This is the final retry for issue #${{ github.event.issue.number }} — two previous attempts failed the automated build/test gate.
+            The latest work is on branch '${{ steps.claude2.outputs.branch_name || steps.claude.outputs.branch_name }}' and the workspace is already checked out on it — continue from that work, do not start over.
+            Gate failure after attempt 1 (last 60 lines):
+            ${{ env.GATE1_LOG }}
+            Gate failure after attempt 2 (last 60 lines):
+            ${{ env.GATE2_LOG }}
+            Re-think the approach if the same error repeats. Fix the failures, run 'npm test' yourself to confirm it is green, then commit and push.
+          claude_args: |
+            --model claude-haiku-4-5-20251001
+            --allowedTools "Bash(npm ci),Bash(npm run build),Bash(npm run build:*),Bash(npm test),Bash(npx ng build:*)"
+            --max-turns 50
+
+      # Final gate: no continue-on-error — red here fails the job for real.
+      - name: "Gate 3: build and test final branch"
+        id: gate3
+        if: steps.gate2.outcome == 'failure' && steps.claude3.outputs.branch_name != ''
+        shell: bash
+        run: |
+          BRANCH="${{ steps.claude3.outputs.branch_name || steps.claude2.outputs.branch_name || steps.claude.outputs.branch_name }}"
+          git fetch origin "$BRANCH"
+          git checkout "$BRANCH"
+          { npm ci && npm run build && npm test; } 2>&1 | tee /tmp/gate3.log
+
+      # ---------- Success path ----------
       # The action cannot open PRs itself (by design it only pushes a branch
       # and posts a prefilled link). This step closes that gap deterministically.
-      # Runs only if the test gate above passed.
       # Note: outputs.github_token is revoked by the action's own cleanup step,
       # so we must use the workflow GITHUB_TOKEN here.
       - name: Open PR for Claude's branch
-        if: steps.claude.outputs.branch_name != ''
+        if: ${{ !cancelled() && (steps.gate1.outcome == 'success' || steps.gate2.outcome == 'success' || steps.gate3.outcome == 'success') }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ steps.claude3.outputs.branch_name || steps.claude2.outputs.branch_name || steps.claude.outputs.branch_name }}
         run: |
           # Idempotent: job re-runs must not fail because the PR already exists.
-          if gh pr view "${{ steps.claude.outputs.branch_name }}" --repo "${{ github.repository }}" --json number --jq .number 2>/dev/null; then
+          if gh pr view "$BRANCH" --repo "${{ github.repository }}" --json number --jq .number 2>/dev/null; then
             echo "PR already exists for this branch — skipping create."
             exit 0
           fi
           gh pr create \
             --repo "${{ github.repository }}" \
-            --head "${{ steps.claude.outputs.branch_name }}" \
+            --head "$BRANCH" \
             --title "${{ github.event.issue.title || 'Claude changes' }}" \
             --body "Automated change by Claude for #${{ github.event.issue.number }}.
 
@@ -80,10 +173,11 @@ jobs:
 
       # PRs created with GITHUB_TOKEN don't trigger ci.yml (GitHub recursion
       # guard), which would leave the required build-test check pending forever.
-      # The gate step above already ran the identical build+test, so report it
-      # as the build-test status on the branch head to satisfy branch protection.
+      # The passing gate above already ran the identical build+test, so report
+      # it as the build-test status on the branch head to satisfy protection.
+      # HEAD is correct: the last gate that ran checked out the final branch.
       - name: Report build-test status on branch head
-        if: steps.claude.outputs.branch_name != ''
+        if: ${{ !cancelled() && (steps.gate1.outcome == 'success' || steps.gate2.outcome == 'success' || steps.gate3.outcome == 'success') }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -91,3 +185,26 @@ jobs:
             -f state=success \
             -f context=build-test \
             -f description="npm ci + build + test passed in Claude workflow gate"
+
+      # ---------- Failure path ----------
+      # All attempts exhausted (or a retry produced no branch): report back on
+      # the issue so failure is visible where the work was requested.
+      - name: Comment failure on issue
+        if: ${{ !cancelled() && steps.claude.outputs.branch_name != '' && steps.gate1.outcome != 'success' && steps.gate2.outcome != 'success' && steps.gate3.outcome != 'success' && github.event.issue.number }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          LOG_FILE=$(ls /tmp/gate*.log 2>/dev/null | tail -1)
+          {
+            echo "Claude could not produce a passing fix after 3 attempts."
+            echo ""
+            echo "Last gate failure (tail):"
+            echo '```'
+            [ -n "$LOG_FILE" ] && tail -n 40 "$LOG_FILE" || echo "(no gate log captured)"
+            echo '```'
+            echo ""
+            echo "Full run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          } > /tmp/failure-comment.md
+          gh issue comment "${{ github.event.issue.number }}" \
+            --repo "${{ github.repository }}" \
+            --body-file /tmp/failure-comment.md
