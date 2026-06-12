@@ -35,6 +35,8 @@ jobs:
         id: claude
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Print the full agent session (every tool call) in the step log
+          show_full_output: true
           # Pro/Max subscription alternative (run `claude setup-token` locally):
           # claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: |
