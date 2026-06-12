@@ -45,7 +45,7 @@ Action repo: <https://github.com/anthropics/claude-code-action>
 - Trigger built in: `@claude` mention in issue/PR comments, or any GitHub event with a `prompt`.
 - Bash is **allowlisted**, not open: `claude_args: --allowedTools "Bash(npm run build),..."` — exact command or `prefix:*` wildcard.
 - "Build before push" is a *contract*, not a guarantee: put it in `CLAUDE.md` ("Always run `npm run build` and tests before pushing"). Normal CI on the PR is the second gate.
-- Default from an issue: pushes branch + posts a "create PR" link. True auto-PR needs `Bash(gh pr create:*)` allowed + `pull-requests: write` permission.
+- The action **cannot create PRs at all** (documented limitation, not model behavior): from an issue it pushes a branch + posts a prefilled "create PR" link, full stop. Allowing `Bash(gh pr create:*)` does not change this. True auto-PR = a separate workflow step after the action, using its `branch_name` + `github_token` outputs to run `gh pr create` deterministically (implemented in `claude.yml` 2026-06-12).
 - Commits pushed by the default Actions token do NOT trigger other workflows; the Claude GitHub app token avoids this, so CI still runs on Claude's PRs.
 
 ### Setup (this repo)
@@ -180,6 +180,7 @@ One sentence: runner method = GitHub brings compute + trigger + repo to Claude; 
 - [x] Method 1: add workflow, install app, add secret, test with a real issue
   - Verified end-to-end 2026-06-11: issue #1 → Haiku fix → branch → PR #2 → CI gate (`ci.yml` + branch protection on `main`) → merge
   - Lesson: prompt is advisory (Haiku skipped build step), branch protection is the enforced gate
+  - Correction 2026-06-12: "agent didn't open PR" was the action's documented limitation, not prompt-skipping — see Key facts; fixed with a post-action `gh pr create` step
 - [ ] Method 2: run `agent-study/fix-issue.ts <issue#>` — CLI glue that creates a managed-agent session to fix an issue
   - Needs `ANTHROPIC_API_KEY` env + optional repo-scoped `GITHUB_TOKEN` (falls back to `gh auth token`)
   - Later: upgrade glue from CLI to auto-trigger — preferred: Vercel serverless function (option 2) or GitHub Actions-as-webhook (option 4b); see webhook findings above

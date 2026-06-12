@@ -31,12 +31,29 @@ jobs:
           cache: npm
 
       - uses: anthropics/claude-code-action@v1
+        id: claude
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           # Pro/Max subscription alternative (run `claude setup-token` locally):
           # claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: |
             --model claude-haiku-4-5-20251001
-            --allowedTools "Bash(npm ci),Bash(npm run build),Bash(npm run build:*),Bash(npm test),Bash(npx ng build:*),Bash(gh pr create:*)"
+            --allowedTools "Bash(npm ci),Bash(npm run build),Bash(npm run build:*),Bash(npm test),Bash(npx ng build:*)"
             --max-turns 50
-            --append-system-prompt "Before pushing any change, run 'npm test' and make sure all tests pass; fix failures first. After pushing the branch you MUST open a pull request yourself by running gh pr create — do not just post a link. The CI workflow will run the full build and tests on the PR; merge is blocked until it passes."
+            --append-system-prompt "Before pushing any change, run 'npm test' and make sure all tests pass; fix failures first. The workflow opens a pull request from your branch automatically after you push; CI runs the full build and tests on it and merge is blocked until they pass."
+
+      # The action cannot open PRs itself (by design it only pushes a branch
+      # and posts a prefilled link). This step closes that gap deterministically.
+      - name: Open PR for Claude's branch
+        if: steps.claude.outputs.branch_name != ''
+        env:
+          GH_TOKEN: ${{ steps.claude.outputs.github_token }}
+        run: |
+          gh pr create \
+            --repo "${{ github.repository }}" \
+            --head "${{ steps.claude.outputs.branch_name }}" \
+            --title "${{ github.event.issue.title || 'Claude changes' }}" \
+            --body "Automated change by Claude for #${{ github.event.issue.number }}.
+
+          Closes #${{ github.event.issue.number }}" \
+            || echo "PR not created (may already exist or branch unchanged)"
