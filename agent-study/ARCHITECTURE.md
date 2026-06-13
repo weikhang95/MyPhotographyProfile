@@ -4,7 +4,8 @@ Deep reference for the local webhook relay that drives Claude Managed Agents to
 fix GitHub issues, replacing the `@claude` GitHub Actions runner.
 
 > Quickstart / setup lives in [README.md](./README.md). This doc is the *why* and
-> the *how it fits together*.
+> the *how it fits together*. For the runner-vs-Managed-Agents evaluation and how
+> Anthropic's customers use Managed Agents, see [EVAL.md](./EVAL.md).
 
 ---
 
