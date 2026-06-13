@@ -14,29 +14,15 @@ Action repo: <https://github.com/anthropics/claude-code-action>
 
 ### Flow
 
-```
- YOU                         GITHUB.COM                      GITHUB RUNNER (ubuntu VM)
-┌──────────┐                ┌─────────────────┐             ┌──────────────────────────┐
-│ open     │                │ Issue #42       │             │  (spun up per job,       │
-│ issue /  │───comment────▶ │ "@claude fix    │             │   destroyed after)       │
-│ comment  │   "@claude"    │  topbar bug"    │             │                          │
-└──────────┘                └────────┬────────┘             │  1. checkout repo        │
-                                     │                      │  2. setup node           │
-                                     │ event triggers       │  3. run claude-code CLI  │
-                                     │ workflow             │     │                    │
-                                     ▼                      │     ├─ read issue        │
-                            ┌─────────────────┐             │     ├─ edit files        │
-                            │ .github/        │── starts ──▶│     ├─ npm run build ✓   │
-                            │ workflows/      │             │     ├─ npm test      ✓   │
-                            │ claude.yml      │             │     └─ git commit/push   │
-                            └─────────────────┘             └───────────┬──────────────┘
-                                     ▲                                  │
-                                     │                                  │ tokens only
-                            ┌────────┴────────┐             ┌───────────▼──────────────┐
-                            │ branch pushed   │             │   ANTHROPIC API          │
-                            │ + PR opened     │◀────────────│   (model thinks here,    │
-                            │ + comment reply │             │    code stays on runner) │
-                            └─────────────────┘             └──────────────────────────┘
+```mermaid
+flowchart TD
+    YOU["You — comment '@claude fix topbar bug'"] --> ISSUE["GitHub.com · Issue #42"]
+    ISSUE -->|event triggers workflow| WF[".github/workflows/claude.yml"]
+    WF -->|spun up per job, destroyed after| RUN["GitHub runner (ubuntu VM)"]
+    RUN --> STEPS["1. checkout repo<br/>2. setup node<br/>3. run claude-code CLI:<br/>&nbsp;&nbsp;├─ read issue<br/>&nbsp;&nbsp;├─ edit files<br/>&nbsp;&nbsp;├─ npm run build ✓<br/>&nbsp;&nbsp;├─ npm test ✓<br/>&nbsp;&nbsp;└─ git commit / push"]
+    STEPS <-->|tokens only| API["Anthropic API<br/>model thinks here,<br/>code stays on runner"]
+    STEPS --> OUT["branch pushed + PR opened<br/>+ comment reply"]
+    OUT --> ISSUE
 ```
 
 ### Key facts
@@ -71,28 +57,16 @@ Docs: <https://platform.claude.com/docs/en/managed-agents/overview>
 
 ### Flow
 
-```
- YOU                    YOUR GLUE SERVER                ANTHROPIC CLOUD SANDBOX
-┌──────────┐           ┌──────────────────┐            ┌──────────────────────────┐
-│ open     │           │ webhook.ts /     │            │  persistent session      │
-│ issue    │           │ small server /   │            │  (lives across turns)    │
-└────┬─────┘           │ cron / Action    │            │                          │
-     │                 │                  │            │  agent has:              │
-     ▼                 │ 1. receive       │            │   bash, file ops,        │
-┌──────────┐  webhook  │    webhook       │            │   web, MCP               │
-│ GITHUB   │──────────▶│ 2. fetch issue   │            │                          │
-│ issues.  │  POST     │    body via API  │  create    │  1. git clone https://   │
-│ opened   │           │ 3. call Anthropic│  session   │     x-token@github/repo  │
-└──────────┘           │    API:          │──────────▶ │  2. read issue text      │
-     ▲                 │    POST /v1/     │            │     (sent in prompt)     │
-     │                 │    sessions      │            │  3. edit files           │
-     │ PR appears      │    + user event  │   SSE      │  4. npm run build ✓      │
-     │ (agent pushed   │ 4. stream events │◀────────── │  5. git push branch      │
-     │  it itself)     │    until idle    │  events    │  6. gh pr create         │
-     └─────────────────│ 5. post summary  │            │                          │
-                       │    back to issue │            │  sandbox persists,       │
-                       └──────────────────┘            │  can resume tomorrow     │
-                                                       └──────────────────────────┘
+```mermaid
+flowchart TD
+    YOU["You — open issue"] --> GH["GitHub · issues.opened"]
+    GH -->|webhook POST| GLUE["Your glue server<br/>(webhook.ts / small server / cron / Action)"]
+    GLUE --> G1["1. receive webhook<br/>2. fetch issue body via API<br/>3. call Anthropic API: POST /v1/sessions + user event<br/>4. stream SSE events until idle<br/>5. post summary back to issue"]
+    G1 -->|create session| SBX["Anthropic cloud sandbox<br/>persistent session (lives across turns)<br/>agent has: bash, file ops, web, MCP"]
+    SBX --> SB1["1. git clone https://x-token@github/repo<br/>2. read issue text (sent in prompt)<br/>3. edit files<br/>4. npm run build ✓<br/>5. git push branch<br/>6. gh pr create"]
+    SB1 -->|agent pushed it itself| PR["PR appears"]
+    PR --> GH
+    SBX -.->|sandbox persists, can resume tomorrow| SBX
 ```
 
 ### Key facts
@@ -129,18 +103,11 @@ const session = await client.beta.sessions.create({
 
 GitHub webhooks **push** events to your URL — something must be reachable at the moment the event fires. But the handler only needs to live **seconds**: create session → send issue text → return 200. No need to hold the SSE stream open; the agent finishes alone in Anthropic's sandbox and opens the PR itself. Fire-and-forget.
 
-```
-GitHub event (issue opened)
-        │
-        ▼
-GitHub POSTs JSON ──▶ https://your-endpoint/webhook   ◀── must be reachable RIGHT THEN
-                                │
-                                ▼
-                      handler: create managed-agent session, return 200
-                                │
-                                ▼  (handler can exit now!)
-                      agent runs ALONE in Anthropic cloud,
-                      pushes branch + opens PR itself
+```mermaid
+flowchart TD
+    EV["GitHub event — issue opened"] --> POST["GitHub POSTs JSON to<br/>https://your-endpoint/webhook<br/>⚠ must be reachable RIGHT THEN"]
+    POST --> H["handler: create managed-agent session → return 200"]
+    H -->|handler can exit now!| AGENT["agent runs ALONE in Anthropic cloud,<br/>pushes branch + opens PR itself"]
 ```
 
 Four ways to "be listening":
