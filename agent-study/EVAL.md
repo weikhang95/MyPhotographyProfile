@@ -64,10 +64,21 @@ is the whole point. Our study is the small-scale mirror image of theirs.
 | **Sentry** (Seer) | Background **RCA** on telemetry → hands off to a Managed Agent that writes the fix and **opens a PR**. ~1M RCAs/yr, 600k+ PRs/mo reviewed. | "Eliminated the operational overhead of maintaining bespoke agent infrastructure." One engineer shipped in **weeks, not months**. Ran via Vertex AI for data residency. | Same shape as ours (event → agent → fix → PR); their trigger is an internal RCA event instead of `@claude`. Validates our #1/#12 findings: infra burden is the deciding cost — worth paying at their volume, not at ours. |
 | **Notion** | Move a task to "ready to start" on a board → invokes a Claude session; **30+ concurrent** agent tasks, results routed to reviewers. | Long-running sessions, memory, parallel fan-out across a team. 90% cost / 85% latency cut via prompt caching. | Their "status change → session" **is** our "`@claude` comment → `sessions.create()`". Their concurrency need is exactly our **tie on scalability**. |
 | **Rakuten** | Specialist agents per department (eng/product/sales/marketing/finance), tasks assigned from Slack/Teams. | Deployed all departments in **one week** by *not* building custom infra; isolated sandboxes for non-technical staff. | The multi-team, many-trigger case where our "always-on relay" burden is absorbed by a real platform — the right side of our When-to-use-which table. |
+| **Vibecode** | An **end-user** prompt in a mobile app → a Managed Agent builds a production React Native/Expo app (Claude Code is the engine). Multi-tenant: per-user sessions + sandboxes at scale. | CEO Ansh Nanda: pre-Managed-Agents users had to "manually run LLMs in sandboxes, manage their lifecycle, equip them with tools… weeks or months"; now **10× quicker** to spin up. $50k→$100/app, months→<1hr, 3×→$10M ARR. | The **agent-as-product** variant (vs the others' internal automation), and the most explicit statement anywhere of our infra-burden thesis — the exact axis our eval turns on. |
 
 **The throughline:** every customer chose Managed Agents to *avoid owning agent
 infrastructure* at scale — the same axis on which the runner beats it for one small
-repo. Same trade-off, opposite ends of the volume curve.
+repo. Same trade-off, opposite ends of the volume curve. Vibecode's CEO says it
+most plainly: building the sandbox/lifecycle/tooling yourself is "weeks or months,"
+and Managed Agents makes it **10× faster** — which is exactly the burden GitHub
+Actions hands *us* for free at one-repo scale, and exactly the burden worth paying
+down at theirs.
+
+Two sub-patterns sit on the spine: **internal automation** (Sentry, Notion, Rakuten —
+the agent serves the company's own developers/staff) and **agent-as-product**
+(Vibecode — the agent *is* the product, run multi-tenant for paying end-users, with
+per-end-user sessions and sandboxes). Our `@claude` relay is the smallest possible
+instance of the first.
 
 ---
 
