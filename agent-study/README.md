@@ -15,6 +15,10 @@ GitHub @claude comment ──tunnel──▶ relay.ts (local) ──sessions.cre
 > dimensions, plus how Anthropic's customers (Sentry, Notion, Rakuten) use Managed
 > Agents — see [EVAL.md](./EVAL.md). **TL;DR: for one small repo, the runner wins;
 > Managed Agents pays off at scale.**
+>
+> For the **enterprise playbook** — how to spin up tasks well and keep the workflow
+> running smoothly (the production patterns behind the case studies) — see
+> [PLAYBOOK.md](./PLAYBOOK.md).
 
 | File | Role |
 |------|------|
