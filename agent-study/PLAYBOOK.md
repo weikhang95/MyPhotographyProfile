@@ -38,6 +38,68 @@ Everything else is a corollary of those two ideas.
 
 ---
 
+## The eval loop: retrieve → eval → improve
+
+The canonical way to read sessions, grade them, and make the agent better over
+time — three first-party mechanisms wired into one cycle. (Built on the Sessions
+API behind `platform.claude.com/workspaces/default/sessions`.)
+
+```mermaid
+flowchart TD
+    L["sessions.list()<br/>recent sessions"] --> E["events.list(id)<br/>tool calls · model_usage · grader spans"]
+    L --> R["retrieve(id)<br/>status · usage · outcome_evaluations"]
+
+    E --> Q{"ran with a<br/>defined outcome?"}
+    R --> Q
+    Q -->|yes| OG["read outcome_evaluations<br/>satisfied / needs_revision / failed"]
+    Q -->|no| RG["re-grade: define_outcome + rubric<br/>(or LLM-judge the event log)"]
+    OG --> SC["scorecard<br/>success% · $/run · cache-hit% · failures"]
+    RG --> SC
+
+    SC --> M["curate memory store<br/>lessons the agent wrote @ /mnt/memory"]
+    SC --> U["agents.update()<br/>→ new immutable version"]
+    M --> RUN["re-run, pinned to {agent, version:N}"]
+    U --> RUN
+    RUN -. next batch .-> L
+
+    classDef retrieve fill:#E6F1FB,stroke:#2563EB,color:#0C447C;
+    classDef eval fill:#FEF3C7,stroke:#D97706,color:#92400E;
+    classDef improve fill:#E6FFED,stroke:#16A34A,color:#22863A;
+    class L,E,R retrieve;
+    class Q,OG,RG,SC eval;
+    class M,U,RUN improve;
+```
+
+**1 · Retrieve** — `sessions.list()` enumerates runs; per run, `events.list(id)` is
+the source of truth (every `agent.tool_use`/`tool_result`, `span.model_request_end.model_usage`
+for cost + cache-hit %, and any `span.outcome_evaluation_end`), while `retrieve(id)`
+is the quick header (`status`, `usage`, `outcome_evaluations`). Same data the
+dashboard renders.
+
+**2 · Eval** — if the session was kicked off with a `user.define_outcome`, the grade
+already exists: read `outcome_evaluations` (`satisfied` / `needs_revision` / `failed`).
+If not (e.g. our `@claude` fix sessions), **re-grade** — spin a fresh outcome session
+with a rubric pointed at the prior output in `/mnt/session/outputs/`, or run an
+LLM-judge over the event log. Either way, roll the results into a **scorecard**:
+success rate, $/run (from `model_usage`), cache-hit %, and top failure reasons
+(`terminated` vs `idle` `stop_reason`).
+
+**3 · Improve** — two durable levers. The agent writes lessons to its **memory store**
+during runs (`/mnt/memory/<store>/`, each write an immutable `memver` tagged with its
+`session_id`); you curate them host-side via `memory_stores.memories.list/update`.
+When the scorecard exposes a systemic prompt/tool gap, `agents.update()` mints a
+**new immutable agent version**.
+
+**Loop** — re-run the next batch **pinned to `{agent, version:N}`** so you can A/B the
+improvement against the prior version, then retrieve those sessions and repeat. That
+closed loop is what turns the dashboard's raw numbers into an agent that gets better.
+
+> **For this repo's relay specifically:** its sessions currently run *without* an
+> outcome, so they land on the **"no"** branch (re-grade or judge). The upgrade that
+> makes the relay self-grading like Sentry's is to send a `user.define_outcome` at
+> kickoff with a rubric like *"a PR is opened, `npm test` is green, the diff is
+> minimal and scoped to the issue."*
+
 ## How each customer leans on it
 
 | Customer | Signature patterns |
