@@ -167,6 +167,34 @@ async function openPullRequest(args: {
   }
 }
 
+// Cost hygiene: once a run ends, free the session's container so an idle-but-alive
+// session doesn't keep accruing session-hours. Archive (not delete) keeps the event
+// log readable for the eval loop. Poll past the post-idle status-write race first —
+// the stream emits `idle` slightly before the queryable status settles, so an
+// immediate archive can 400 with "cannot archive while running".
+async function archiveWhenSettled(
+  client: Anthropic,
+  sessionId: string,
+  issueNumber: number | string,
+): Promise<void> {
+  try {
+    let status = "running";
+    for (let i = 0; i < 10; i++) {
+      status = (await client.beta.sessions.retrieve(sessionId)).status;
+      if (status !== "running") break;
+      await new Promise((r) => setTimeout(r, 200));
+    }
+    if (status === "running") {
+      console.log(`[#${issueNumber}] still running after ~2s — left unarchived`);
+      return;
+    }
+    await client.beta.sessions.archive(sessionId);
+    console.log(`[#${issueNumber}] session archived — container freed`);
+  } catch (err) {
+    console.error(`[#${issueNumber}] archive skipped:`, err);
+  }
+}
+
 export type RunArgs = {
   client: Anthropic;
   repo: string; // "owner/name"
@@ -258,4 +286,7 @@ export async function runIssue(args: RunArgs): Promise<void> {
       title,
     });
   }
+
+  // Run's done — free the container so it stops accruing session-hours.
+  await archiveWhenSettled(client, session.id, issueNumber);
 }
