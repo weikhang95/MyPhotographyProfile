@@ -25,7 +25,41 @@ const SYSTEM =
 const GIT_AUTHOR_NAME = "Claude Agent";
 const GIT_AUTHOR_EMAIL = "33756637+weikhang95@users.noreply.github.com";
 
-type State = { agentId?: string; environmentId?: string };
+// Persistent memory store — mounted at /mnt/memory/<name>/ on every session, so the
+// agent carries durable repo knowledge + accumulated lessons ACROSS runs (sessions
+// are otherwise amnesiac). Created once, cached in .state.json like the agent/env.
+const MEMORY_STORE_NAME = "issue-fixer-lessons";
+const SEED_LESSONS = `# Repository knowledge — weikhang95/MyPhotographyProfile
+
+Durable facts about this repo. Read before starting an issue — they save you from
+re-discovering the project each run.
+
+## Stack
+- Angular 21 photography-portfolio site, TypeScript, SCSS styles.
+- Package manager: npm (Node 22). Tests: Jest (jsdom).
+
+## Commands (from repo root)
+- Install: \`npm ci\`
+- Test: \`npm test\`   (must be green before you push)
+- Build: \`npm run build\`
+
+## Workflow rules
+- Branch from the default branch as \`agent/issue-<n>\`. NEVER push to main.
+- Do NOT run \`gh pr create\` — the relay opens the PR after you push. Pushing the
+  branch is your final step.
+- Keep changes minimal and scoped to the issue.
+
+## Common locations
+- App shell / page titles: \`src/index.html\`
+- Components: \`src/app/<feature>/\`
+- Global styles: \`src/styles.scss\`
+
+## Lessons
+Append durable, reusable lessons to \`/mnt/memory/${MEMORY_STORE_NAME}/lessons/<topic>.md\`
+(build/test gotchas, conventions). Do NOT store secrets or one-off issue details.
+`;
+
+type State = { agentId?: string; environmentId?: string; memoryStoreId?: string };
 
 // In-process singleton: concurrent webhook deliveries share one ensure() so we
 // never race to create duplicate agents/environments or to write .state.json.
@@ -58,6 +92,28 @@ async function _ensure(client: Anthropic): Promise<Required<State>> {
     });
     state.environmentId = env.id;
     console.log(`Created environment: ${env.id}`);
+  }
+
+  if (!state.memoryStoreId) {
+    const store = await client.beta.memoryStores.create({
+      name: MEMORY_STORE_NAME,
+      // description is injected into the agent's system prompt — write it for the model.
+      description:
+        "Durable knowledge about the MyPhotographyProfile repo (stack, test/build " +
+        "commands, branch + PR conventions, file map) plus lessons from past issues. " +
+        "Read /repo.md and skim /lessons/ before starting; append reusable lessons after.",
+    });
+    state.memoryStoreId = store.id;
+    // Seed reference material once. 409 = path already exists (re-run) — ignore.
+    try {
+      await client.beta.memoryStores.memories.create(store.id, {
+        path: "/repo.md",
+        content: SEED_LESSONS,
+      });
+    } catch {
+      /* already seeded */
+    }
+    console.log(`Created memory store: ${store.id}`);
   }
 
   await Bun.write(STATE_FILE, JSON.stringify(state, null, 2));
@@ -124,7 +180,7 @@ export type RunArgs = {
 // when the session goes idle (terminal stop_reason) or terminates.
 export async function runIssue(args: RunArgs): Promise<void> {
   const { client, repo, issueNumber, ghToken, title, instruction } = args;
-  const { agentId, environmentId } = await ensureAgentAndEnv(client);
+  const { agentId, environmentId, memoryStoreId } = await ensureAgentAndEnv(client);
 
   // Repo attached as a github_repository resource: the sandbox git proxy injects
   // the token on push / gh calls, so the token never enters the prompt or history.
@@ -138,6 +194,17 @@ export async function runIssue(args: RunArgs): Promise<void> {
         url: `https://github.com/${repo}`,
         mount_path: "/workspace/repo",
         authorization_token: ghToken,
+      },
+      // Persistent cross-session memory (mounts at /mnt/memory/<name>/). Attach is
+      // session-create-only — it cannot be added later via resources.add().
+      {
+        type: "memory_store",
+        memory_store_id: memoryStoreId,
+        access: "read_write",
+        instructions:
+          "Repo knowledge + lessons from past issues. Read /repo.md and skim " +
+          "/lessons/ before starting; after finishing, append any durable, reusable " +
+          "lesson to /lessons/<topic>.md. Never store secrets or issue-specific trivia.",
       },
     ],
   });
