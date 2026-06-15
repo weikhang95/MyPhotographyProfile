@@ -5,7 +5,10 @@ fix GitHub issues, replacing the `@claude` GitHub Actions runner.
 
 > Quickstart / setup lives in [README.md](./README.md). This doc is the *why* and
 > the *how it fits together*. For the runner-vs-Managed-Agents evaluation and how
-> Anthropic's customers use Managed Agents, see [EVAL.md](./EVAL.md).
+> Anthropic's customers use Managed Agents, see [EVAL.md](./EVAL.md); for context
+> management & observability, [OBSERVABILITY.md](./OBSERVABILITY.md); for enterprise
+> patterns, [PLAYBOOK.md](./PLAYBOOK.md); for the study's capstone + verdict,
+> [CONCLUSION.md](./CONCLUSION.md).
 
 ---
 
@@ -38,7 +41,7 @@ a thing lives in tells you who runs it and what secrets it can see.
 │  webhook delivery ──────┼───┼──►│ ngrok /  │───►│ Bun.serve │  │   │   │   claude-haiku-4-5    │   │
 │                         │   │   │cloudflared│   │  :8788    │  │   │   └──────────┬───────────┘   │
 │  ▲                      │   │   └──────────┘    └─────┬─────┘  │   │              │ tools          │
-│  │ git push + gh        │   │                         │        │   │   ┌──────────▼───────────┐   │
+│  │ git push only        │   │                         │        │   │   ┌──────────▼───────────┐   │
 │  │ (via git proxy)      │   │           sessions.create()──────┼───┼──►│  per-session container│   │
 │  │                      │   │                         │        │   │   │  /workspace/repo      │   │
 │  └──────────────────────┼───┼─────────────────────────┼────────┼───┼───┤  bash · edit · git    │   │
@@ -77,7 +80,7 @@ sequenceDiagram
     Note over R: 1. verify HMAC ✓<br/>2. event = issue_comment<br/>3. dedupe (delivery id)<br/>4. sender != Bot ✓<br/>5. body has @claude ✓
     R-->>GH: 202 accepted (ack within 10s)
     R->>GH: ackReaction 👀 (best effort)
-    R->>A: sessions.create() (agent + env + repo resource)
+    R->>A: sessions.create() (agent + env + repo + memory_store resources)
     A->>S: provision · clone repo @ proxy
     R->>A: events.stream() — open FIRST
     R->>A: events.send() — user.message
@@ -85,14 +88,23 @@ sequenceDiagram
     A-->>R: agent.message
     S->>S: create branch · edit files · npm test
     A-->>R: agent.tool_use (×N)
-    S->>GH: git push + gh pr create<br/>(proxy adds token at egress)
-    A-->>R: session.status_idle (stop_reason: end_turn) → break, done
+    S->>GH: git push -u origin agent/issue-n<br/>(proxy adds token at egress — NO gh pr create)
+    A-->>R: session.status_idle (stop_reason: end_turn) → break
+    R->>GH: branchPushed? GET /branches/agent/issue-n (host-side)
+    R->>GH: openPullRequest() — POST /pulls with relay PAT (host-side)
+    R->>A: archiveWhenSettled() — free the container
     GH-->>H: sees PR
 ```
 
 **Key ordering rule:** `events.stream()` is opened *before* `events.send()`
 (stream-first). SSE has no replay — open after send and you miss the agent's first
 events.
+
+**Why the PR is host-side:** the sandbox can `git push` but **cannot** `gh pr create`
+(the `github_repository` resource is git-only). So the agent's last step is pushing
+the branch; the relay then verifies the branch landed (`branchPushed` — `end_turn` ≠
+work shipped) and opens the PR itself via the REST API, then archives the session to
+stop the session-hour meter.
 
 ---
 
@@ -140,24 +152,39 @@ flowchart TD
 ```
 agent-study/
 │
-├── relay.ts ─────────────► the trigger server (NEW glue)
+├── relay.ts ─────────────► Method 2 — the trigger server (NEW glue)
 │     │  imports                  • Bun.serve on 127.0.0.1:8788
 │     │                           • HMAC verify · dedupe · @claude detect · bot guard
 │     ▼                           • pre-warms agent at startup (no create in request path)
 ├── agent.ts ─────────────► shared Managed Agents driver
-│     ▲   │                       • ensureAgentAndEnv()  → cached singleton + .state.json
+│     ▲   │                       • ensureAgentAndEnv()  → cached agent+env+memory + .state.json
 │     │   │                       • runIssue()           → session + stream loop
+│     │   │                       • branchPushed() → openPullRequest() → archiveWhenSettled()
 │     │   ▼
-│     │  .state.json ──────► { agentId, environmentId }   (gitignored, written once)
+│     │  .state.json ──────► { agentId, environmentId, memoryStoreId }  (gitignored)
 │     │
 ├── fix-issue.ts ─────────► manual CLI  (bun run fix-issue <n>)
 │         imports agent.ts        • gh issue view → runIssue()   (same code path as relay)
 │
+├── deploy-loop.ts ───────► Method 3 — graded define_outcome Deployment loop
+│         imports agent.ts        • reuses the SAME cached agent+env+memory
+├── inspect-session.ts ───► debug: real outcome from the terminal event, not session.status
+│
 ├── .env ─────────────────► ANTHROPIC_API_KEY · GITHUB_TOKEN · GITHUB_WEBHOOK_SECRET (gitignored)
 ├── .env.example ─────────► template (committed)
 ├── README.md ────────────► quickstart / setup steps
-└── ARCHITECTURE.md ──────► this file
+├── ARCHITECTURE.md ──────► this file
+├── EVAL.md ──────────────► runner-vs-Managed scorecard + customers
+├── PLAYBOOK.md ──────────► enterprise patterns + retrieve→eval→improve loop
+├── OBSERVABILITY.md ─────► context management + observability across surfaces
+└── CONCLUSION.md ────────► the study capstone + verdict
 ```
+
+A **memory store** (`memstore_…`) is attached as a *second* resource on every session
+(alongside `github_repository`), mounts at `/mnt/memory/issue-fixer-lessons/`, and
+carries durable repo knowledge + lessons across runs. Its id is cached in
+`.state.json` like the agent/env. See [OBSERVABILITY.md](./OBSERVABILITY.md) and
+[CONCLUSION.md](./CONCLUSION.md) for depth.
 
 Both entry points (`relay.ts`, `fix-issue.ts`) funnel through `runIssue()` in
 `agent.ts` — single source of truth for how a session is created and streamed.
@@ -199,7 +226,17 @@ for await (event of stream):
     session.status_idle:
         requires_action      → CONTINUE   (waiting on us; not used here yet)
         else (end_turn/…)    → BREAK
+
+# after BREAK — host-side, NOT in the sandbox:
+if end_turn AND branchPushed(agent/issue-n):   # end_turn ≠ work shipped
+    openPullRequest(...)                        # REST API, relay's PAT
+archiveWhenSettled(session)                     # free the container (cost hygiene)
 ```
+
+> **`done` is not the end of the work.** The state machine above stops at the stream
+> loop; `runIssue()` then runs three host-side steps — verify the branch landed, open
+> the PR, archive the session. The PR and the archive happen on *your machine*, never
+> in the sandbox.
 
 ---
 
@@ -216,8 +253,9 @@ Two independent secret boundaries. Neither secret crosses into the agent's promp
    relay recomputes & compares                       │
    (timing-safe, length-checked)                     ▼
         │                                     sandbox git proxy holds it
-        ├─ match    → process                 and injects on `git push` / `gh`
-        └─ mismatch → 401, drop                       │
+        ├─ match    → process                 and injects on `git push` only
+        └─ mismatch → 401, drop                       │   (no `gh` in the sandbox;
+                                                      │    PR is opened host-side)
                                                       ▼
    ⚠ verify BEFORE JSON.parse —               token NEVER appears in:
      a tampered body changes the                • the prompt / user.message
@@ -236,6 +274,9 @@ Layered guards:
   repeats. (In-memory only — a relay restart forgets ids.)
 - **Least-privilege token** — use a *fine-grained* PAT scoped to this repo
   (Contents/PR/Issues RW), not your broad `gh auth token`.
+- **Memory store carries no secret** — a *second* resource (`memory_store`) is
+  attached per session for durable lessons; its instructions say never to store
+  secrets or issue-specific trivia, so a leaked memory file exposes only repo know-how.
 
 ---
 
@@ -253,7 +294,8 @@ Layered guards:
         3× retry + build/test gate   ◄── workflow logic     (agent advised to test; hard gate
                 │                         (enforced)          is ci.yml on the resulting PR)
                 ▼                                                          ▼
-        gh pr create + synthetic status                     agent opens PR via git proxy
+        gh pr create + synthetic status                     agent pushes branch;
+                                                             relay opens PR host-side
                                                                            │
         ci.yml: required "build-test" check ◄─────────────────────────────┘ (KEEP — still runs)
 ```
@@ -298,8 +340,10 @@ agent opens.
 | **Agent** | Persisted, versioned config (model + system + tools). Created once; `.state.json` caches its id. |
 | **Environment** | Container template (`cloud` + `unrestricted` networking). Created once; cached. |
 | **Session** | One run pairing the agent + environment, with the repo mounted. Created per `@claude`. |
-| **`github_repository` resource** | Repo mounted at `/workspace/repo`; git proxy injects the PAT at egress. |
-| **git proxy** | Sandbox-side egress that adds the token to git/gh calls so it stays out of the prompt. |
+| **`github_repository` resource** | Repo mounted at `/workspace/repo`; git proxy injects the PAT at egress. Grants `git push` only — **not** PR creation. |
+| **`memory_store` resource** | A second resource per session: durable lessons mounted at `/mnt/memory/<name>/`; id cached in `.state.json`. Carries no secret. |
+| **git proxy** | Sandbox-side egress that adds the token to `git push` so it stays out of the prompt. The agent never runs `gh`; the PR is opened host-side by the relay. |
+| **`branchPushed`** | Host-side check that the `agent/issue-<n>` branch exists on origin before opening a PR — `end_turn` ≠ work shipped. |
 | **stop_reason** | On `session.status_idle`: `requires_action` (continue) vs `end_turn` / `retries_exhausted` (terminal). |
 | **delivery id** | GitHub's `X-GitHub-Delivery` header; the dedupe key. |
 ```

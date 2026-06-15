@@ -8,6 +8,18 @@ end-to-end), we ran a 12-dimension comparison. Each dimension was analysed and t
 - **System A — GitHub Actions runner**: `.github/workflows/claude.yml` + `anthropics/claude-code-action` on a GitHub-hosted runner.
 - **System B — Claude Managed Agents relay**: `agent-study/relay.ts` + `agent.ts` (local webhook relay → Anthropic-hosted agent).
 
+> **A third method was also studied** — **System C, the Managed Agents *Deployment*
+> loop** (`agent-study/deploy-loop.ts`): a standing `define_outcome` + rubric that
+> Anthropic *runs and grades* (eval → revise). It isn't scored in the 12 dimensions
+> below because it's the same hosting/trigger profile as System B (so #1/#2/#3/#8/#12
+> are unchanged), and it was studied as a *pattern*, not run to a PR. Where it *would*
+> move the needle vs System B: **#6 Persistence** and **#11 Capabilities** improve (a
+> graded outcome loop is exactly the merge-ready-output capability the relay lacks),
+> and **#9 Observability** improves (outcome-evaluation spans give a first-party grade
+> instead of `inspect-session.ts`). See [CONCLUSION.md](./CONCLUSION.md) for the
+> three-method ladder and [PLAYBOOK.md](./PLAYBOOK.md) for the retrieve → eval →
+> improve loop it implements.
+
 ## Verdict: Runner 7 · Tie 3 · Managed 2
 
 For **this** repo (solo dev, public, low `@claude` volume) the GitHub Actions

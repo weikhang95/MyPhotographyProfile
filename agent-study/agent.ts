@@ -167,6 +167,29 @@ async function openPullRequest(args: {
   }
 }
 
+// Verify the agent actually pushed its branch before opening a PR. `end_turn` only
+// means the agent stopped talking — NOT that it produced commits. Gating on the
+// branch existing on origin turns "agent finished" into "agent finished AND shipped",
+// and avoids firing a PR (→ confusing 422) on a branch that was never pushed.
+async function branchPushed(repo: string, branch: string, ghToken: string): Promise<boolean> {
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${repo}/branches/${encodeURIComponent(branch)}`,
+      {
+        headers: {
+          Authorization: `Bearer ${ghToken}`,
+          Accept: "application/vnd.github+json",
+          "X-GitHub-Api-Version": "2022-11-28",
+          "User-Agent": "claude-managed-agent-relay",
+        },
+      },
+    );
+    return res.ok; // 200 = branch exists (something was pushed); 404 = nothing pushed
+  } catch {
+    return false; // network error → treat as "not verified", don't open a blind PR
+  }
+}
+
 // Cost hygiene: once a run ends, free the session's container so an idle-but-alive
 // session doesn't keep accruing session-hours. Archive (not delete) keeps the event
 // log readable for the eval loop. Poll past the post-idle status-write race first —
@@ -276,15 +299,16 @@ export async function runIssue(args: RunArgs): Promise<void> {
     }
   }
 
-  // Agent finished cleanly → open the PR host-side from the branch it pushed.
-  if (succeeded) {
-    await openPullRequest({
-      repo,
-      branch: `agent/issue-${issueNumber}`,
-      issueNumber,
-      ghToken,
-      title,
-    });
+  // Open the PR host-side ONLY if the agent both finished cleanly (end_turn) AND
+  // actually pushed the branch. `end_turn` alone is "agent stopped", not "work
+  // shipped" — verifying the artifact exists keeps us from opening empty/false PRs.
+  const branch = `agent/issue-${issueNumber}`;
+  if (succeeded && (await branchPushed(repo, branch, ghToken))) {
+    await openPullRequest({ repo, branch, issueNumber, ghToken, title });
+  } else if (succeeded) {
+    console.log(`[#${issueNumber}] end_turn but ${branch} not on origin — nothing pushed, skipping PR`);
+  } else {
+    console.log(`[#${issueNumber}] no terminal end_turn — skipping PR`);
   }
 
   // Run's done — free the container so it stops accruing session-hours.

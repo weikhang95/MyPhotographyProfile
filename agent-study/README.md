@@ -8,6 +8,9 @@ machine, exposed to GitHub via a tunnel.
 GitHub @claude comment ──tunnel──▶ relay.ts (local) ──sessions.create()──▶ Managed Agent (Anthropic cloud) ──opens PR──▶ repo
 ```
 
+> **Concluding the study? Start with [CONCLUSION.md](./CONCLUSION.md)** — the capstone:
+> the three methods studied, the verdict, the cost model, and a map of every doc.
+>
 > For the full design — zone diagram, request-lifecycle sequence, relay decision
 > flow, session state machine, and security model — see [ARCHITECTURE.md](./ARCHITECTURE.md).
 >
@@ -19,13 +22,18 @@ GitHub @claude comment ──tunnel──▶ relay.ts (local) ──sessions.cre
 > For the **enterprise playbook** — how to spin up tasks well and keep the workflow
 > running smoothly (the production patterns behind the case studies) — see
 > [PLAYBOOK.md](./PLAYBOOK.md).
+>
+> For **context management & observability** — who owns the message array, and how
+> caching / compaction / memory differ — see [OBSERVABILITY.md](./OBSERVABILITY.md).
 
 | File | Role |
 |------|------|
-| `agent.ts` | Shared driver: cached agent + cloud env, runs one session per issue. |
+| `agent.ts` | Shared driver: cached agent + cloud env + memory store, runs one session per issue. |
+| `relay.ts` | **Method 2** — webhook server: verifies signature, detects `@claude`, starts a session. |
 | `fix-issue.ts` | Manual CLI: `bun run fix-issue <n>`. |
-| `relay.ts` | Webhook server: verifies signature, detects `@claude`, starts a session. |
-| `.state.json` | Cached `agentId` / `environmentId` (gitignored, created on first run). |
+| `deploy-loop.ts` | **Method 3** — a graded `define_outcome` Deployment loop (see [PLAYBOOK.md](./PLAYBOOK.md)). |
+| `inspect-session.ts` | Debug helper: reads a session's *real* outcome from the terminal event. |
+| `.state.json` | Cached `agentId` / `environmentId` / `memoryStoreId` (gitignored, created on first run). |
 
 ## 1. Setup
 
@@ -35,6 +43,8 @@ bun install
 cp .env.example .env   # then fill in the three values
 ```
 
+- **`ANTHROPIC_API_KEY`** — your Anthropic API key (`sk-ant-…`); this bills and
+  authorizes the Managed Agent. The relay dies at startup if it's missing.
 - **`GITHUB_TOKEN`** — create a *fine-grained* PAT scoped to this repo with
   **Contents: RW, Pull requests: RW, Issues: RW**. This is what the agent pushes with.
 - **`GITHUB_WEBHOOK_SECRET`** — invent a long random string; you paste the same

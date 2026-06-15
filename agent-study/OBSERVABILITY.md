@@ -20,13 +20,15 @@ Everything below falls out of this. If Anthropic holds the session state server-
 - **Raw API gotcha:** append the full `response.content` back each turn — the compaction block rides in `content`. Keep only `.text` and you silently lose compaction state.
 - **Managed Agents / Claude Code:** server (or harness) holds the transcript and re-injects the condensed history itself. You do nothing; the memory store is *not* involved in compaction.
 
-## Memory stores ≠ compaction
+## Three systems that never touch: caching ≠ compaction ≠ memory
 
-Compaction and memory stores are unrelated systems that never touch.
+Three independent systems that are easy to conflate and never interact:
 
-- Compaction populates nothing durable; it is transcript-internal.
-- A memory store is explicit, durable, versioned (`memver_...`), workspace-scoped, file-based storage the agent reads/writes via ordinary file tools at `/mnt/memory/<name>/`.
-- Writing a summary to memory is **additive** — it does not shrink the live session. The original messages stay in the window; you copied a distillation *out*.
+- **Prompt caching** — within a single run. Automatic reuse of the cached prefix (surfaces as `cache_creation_input_tokens` / `cache_read_input_tokens` in the usage schema below). A cost/latency lever only; it persists *no* durable state.
+- **Compaction** — within a session transcript. Summarizes/prunes earlier turns to fit the window; lossy; transcript-internal; populates nothing durable.
+- **Memory store** — across sessions. Explicit, durable, versioned (`memver_...`), workspace-scoped, file-based storage the agent reads/writes via ordinary file tools at `/mnt/memory/<name>/`.
+
+Writing a summary to memory is **additive** — it does not shrink the live session. The original messages stay in the window; you copied a distillation *out*.
 
 ## Manual "compaction" = checkpoint + session rollover
 
@@ -98,5 +100,8 @@ Around that kernel, Claude Code adds a local-runtime envelope per line: `uuid`, 
 
 ## See also
 
+- [CONCLUSION.md](./CONCLUSION.md) — the capstone; "whoever holds the array owns observability" is the principle the verdict turns on.
+- [ARCHITECTURE.md](./ARCHITECTURE.md) — the inbound-receiver design (relay + tunnel) referenced below.
+- [EVAL.md](./EVAL.md) — the runner-vs-Managed scorecard referenced below.
 - The webhook-direction note: Anthropic platform webhooks (`platform.claude.com/.../webhooks`) are **outbound** Managed-Agents state notifications (Anthropic → you, HMAC-signed, thin payload). They do not replace a self-hosted **inbound** receiver (e.g. a Cloudflare-tunnelled endpoint that ingests GitHub events into a session). Opposite directions; same who-holds-state lens.
 - Runner-vs-Managed eval: this repo's automation stays on the GitHub Actions `@claude` runner — the Managed Agents memory/session loop solves a long-session degradation problem a solo portfolio repo does not have.
