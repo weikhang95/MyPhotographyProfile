@@ -25,6 +25,9 @@ GitHub @claude comment ──tunnel──▶ relay.ts (local) ──sessions.cre
 >
 > For **context management & observability** — who owns the message array, and how
 > caching / compaction / memory differ — see [OBSERVABILITY.md](./OBSERVABILITY.md).
+>
+> For **what's left to learn** — the Managed Agents surface the study never walked
+> (self-hosted sandboxes, vaults, MCP/skills, versioning) — see [STUDY-GAPS.md](./STUDY-GAPS.md).
 
 | File | Role |
 |------|------|

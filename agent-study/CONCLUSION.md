@@ -168,6 +168,7 @@ the GitHub webhook URL.
 | [EVAL.md](./EVAL.md) | 12-dimension runner-vs-Managed scorecard + how Anthropic's customers use it. |
 | [PLAYBOOK.md](./PLAYBOOK.md) | Enterprise patterns; the retrieve → eval → improve loop (Method 3's home). |
 | [OBSERVABILITY.md](./OBSERVABILITY.md) | Context management + observability across raw API / Claude Code / Managed Agents. |
+| [STUDY-GAPS.md](./STUDY-GAPS.md) | The unexplored frontier: self-hosted sandboxes, vaults, MCP/skills, versioning — what to learn next. |
 | **CONCLUSION.md** | This file — the capstone. |
 
 | Code | Role |
@@ -186,3 +187,8 @@ the GitHub webhook URL.
 work" gate that decides which webhook deliveries deserve a paid deployment fire. It's
 the one genuinely-yours decision (domain + cost/UX trade-off), left as a TODO rather
 than guessed at.
+
+Beyond that one TODO, whole **subsystems** were left unexplored — self-hosted sandboxes,
+vaults, MCP/skills on the agent, versioning. They're mapped and prioritized in
+[STUDY-GAPS.md](./STUDY-GAPS.md). Learning gaps, not shipping gaps: the verdict above
+holds regardless.
