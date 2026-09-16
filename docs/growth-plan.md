@@ -1,14 +1,14 @@
 # Growth Plan — Decisions and Q&A
 
 **Session date:** 2026-09-16
-**Status:** Planning (grilling session). Q1–Q24 decided; **Q25 (build order) still open**. PRDs have **not** yet been updated to reflect these decisions — see [Next session](#next-session-start-here).
+**Status:** Planning (grilling session). Q1–Q25 decided; **redesign planning session pending** (research in [`docs/design-research.md`](./design-research.md)). PRDs have **not** yet been updated to reflect these decisions — see [Next session](#next-session-start-here).
 **Related docs:** [`docs/prd/00-overview.md`](./prd/00-overview.md), [`docs/prd/07-backend-cloudflare.md`](./prd/07-backend-cloudflare.md), [`docs/cloudflare-free-tier.md`](./cloudflare-free-tier.md), [`.impeccable.md`](../.impeccable.md)
 
 ---
 
 ## Next session (start here)
 
-1. Answer **Q25** (build order). Recommendation: **B — Foundation → Content → Polish**.
+1. Plan the redesign (owner flagged it as a big need) using [`docs/design-research.md`](./design-research.md).
 2. Confirm shared understanding of this document (nothing has been implemented from it yet).
 3. Update PRDs to match these decisions (see [PRD impact](#prd-impact)).
 4. Start Step 0 (Foundation).
@@ -54,7 +54,7 @@ npm run db:migrate:local
 | Q22 | Intent signal | **No "open to work"**. Showcase + learning in public. GitHub link added. Contact form gets an **enquiry type** |
 | Q23 | Replacing CV | **Richer About + `/now` page + TIL tag** on notes |
 | Q24 | Employer | **Not named on site**; work history lives on LinkedIn, site links to it |
-| Q25 | Build order | **OPEN** — recommendation B (below) |
+| Q25 | Build order | **B — Foundation → Content → Polish**, with redesign treated as a major track to plan next session |
 
 ---
 
@@ -88,7 +88,7 @@ npm run db:migrate:local
 |---|---|---|
 | Own deep studies | "Agent SDK Capability Study — Claude Agent SDK vs OpenAI Agents SDK vs Codex SDK", "AI Agents in EDA / FPGA IP Design — Deep Study (中英双语)" | Low: original analysis |
 | RedNote AI Knowledge Base | 56 notes digested from other authors' 小红书 posts (agent loop, sandbox, harness, context engineering…) | Copyright; reads as reposting |
-| V-ONE AI Server / Builder UI Engineering Wikis | LangGraph + DeepAgents, human-in-the-loop, chat agent deep dive | **Employer-internal**; confidentiality |
+| Work engineering wikis | Internal agent-server documentation | **Employer-internal**; confidentiality |
 
 Local file with related study material: `docs/claude-agents-study.md`.
 
@@ -455,7 +455,7 @@ interface Series {
 - **Recommendation:** C.
 - **Decision:** **C.** The site never names the employer.
 
-### Q25. Build order — OPEN
+### Q25. Build order
 
 **Dependencies:**
 - i18n + prerender touch every component, so retrofitting them after the redesign causes rework.
@@ -479,15 +479,18 @@ interface Series {
 | 5 | **PRD 6:** a11y, motion, Lighthouse, cleanup (remove `vercel.json`, Cloudinary preconnect) | Final polish |
 | ∥ | **Diagram style kit** (design work, Figma library) | Needed before the flagship post |
 | Gate | **Domain bought (owner):** switch `SITE_URL`, custom domain on Worker, enable indexing, Search Console + Bing, AI Crawl Control, Email Routing `hi@` | Any time; blocks indexing |
+| Long-term | **Playful zone:** three.js / pixel-art / game-like interaction inspired by MMORPGs and anime, isolated from the calm main site (e.g. lazy `/play` route or easter egg), respecting reduced motion and performance. Research: [`docs/design-research.md`](./design-research.md) | Owner's personal interest; after core site is stable |
 | Later | Newsletter, share kit + POSSE, own view counters, admin photo upload, Turnstile + email alerts (PRD 7 C/D) | After go-loud trigger or as learning |
 
 Step 0 is estimated at 1–2 sessions.
+
+- **Decision:** **B.** Owner notes the redesign is a big need; plan it in detail next session (may reorder PRD 2/3/4 inside B). Overnight design research was run to feed that session.
 
 ---
 
 ## PRD impact
 
-To do after Q25 is confirmed. These PRDs don't reflect the decisions yet.
+To do after the redesign planning session. These PRDs don't reflect the decisions yet.
 
 | PRD | Change needed |
 |---|---|
