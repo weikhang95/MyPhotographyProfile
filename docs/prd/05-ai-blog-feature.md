@@ -96,7 +96,7 @@ Add a `/blog` route backed by local markdown files in `src/content/posts/`. Buil
 - RSS feed generation (a strong candidate for a follow-up; the `BlogContentService` interface is designed to make it trivial later).
 - Per-tag landing pages (`/blog/tags/:tag`).
 - Search across posts (revisit once there are >10 posts).
-- Server-side rendering of posts for SEO (use static prerender via the existing Vercel deploy as a follow-up if SEO becomes important).
+- Server-side rendering of posts for SEO (use Angular static prerender served as Cloudflare Workers static assets as a follow-up if SEO becomes important).
 - Multi-author byline support — single author (the site owner) is assumed.
 - Markdown extensions like footnotes, math, mermaid diagrams (add when a post demands them).
 

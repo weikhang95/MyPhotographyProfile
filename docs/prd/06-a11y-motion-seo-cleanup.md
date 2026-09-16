@@ -73,6 +73,6 @@ Run a structured audit across the whole site: WCAG 2.2 AA conformance for contra
 
 ## Further Notes
 
-- The `tailwind.config.js` change from `'media'` to `'class'` in PRD 1 should already be in place; confirm.
-- Vercel deploy is already configured (`vercel.json`); the static `sitemap.xml` and `robots.txt` will be served from `dist/` automatically.
+- Done in PRD 1: Tailwind 4 has no `tailwind.config.js`; dark mode uses `@custom-variant dark` on the `.dark` class in `src/styles.scss`. The global `:focus-visible` ring is also in place.
+- Hosting is Cloudflare Workers static assets (`wrangler.jsonc`, `npm run deploy`); `sitemap.xml` and `robots.txt` in the build output are served automatically. Remove `vercel.json` once Cloudflare is confirmed as the only host.
 - If a future PRD adds RSS for the blog, it can extend the same prebuild script used for the manifest and sitemap.
