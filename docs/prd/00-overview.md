@@ -1,0 +1,36 @@
+# PRD Overview — Portfolio Redesign + AI Blog
+
+Six staged PRDs that take the site from its current state (gradient brand, Material Icons font, MUI duplicate, single-purpose photo portfolio) to its target state (warm-neutral editorial palette, Phosphor icons, photography portfolio plus AI blog under one unified design system).
+
+**Source of truth for design intent:** [`.impeccable.md`](../../.impeccable.md). The five design principles there override taste arguments anywhere in these PRDs.
+
+**Status label vocabulary:** `ready-for-agent` once a PRD is approved and unblocked. Merge stages strictly in order — later PRDs depend on tokens and shared components established earlier.
+
+| # | PRD | Depends on | Ship size |
+| - | --- | ---------- | --------- |
+| 1 | [Design Foundations](./01-design-foundations.md) | — | Medium |
+| 2 | [Shared Components](./02-shared-components.md) | 1 | Medium |
+| 3 | [Portfolio Redesign](./03-portfolio-redesign.md) | 1, 2 | Medium |
+| 4 | [About + Contact Polish](./04-about-contact-polish.md) | 1, 2 | Small |
+| 5 | [AI Blog Feature](./05-ai-blog-feature.md) | 1, 2 | Large |
+| 6 | [A11y, Motion, SEO, Cleanup](./06-a11y-motion-seo-cleanup.md) | 1–5 | Medium |
+
+## Deep modules introduced across these PRDs
+
+| Module | PRD | Tested? |
+| ------ | --- | ------- |
+| `ThemeService` | exists; touched in 1 | No (not in scope) |
+| Design tokens (CSS vars + Tailwind theme) | 1 | No (static surface) |
+| `IconComponent` (Phosphor wrapper) | 2 | No |
+| `PortfolioImageService` | 3 | **Yes** |
+| `LightboxAdapter` | 3 | No |
+| `BlogContentService` | 5 | **Yes** |
+| `MarkdownRenderer` | 5 | **Yes** |
+
+## What is not in any of these PRDs
+
+- Migration to standalone components / signals across the whole app (a few components are already standalone; full migration is deferred).
+- CMS-backed blog content (markdown in repo is the chosen source).
+- Multi-language support (English only).
+- Server-side rendering / Angular Universal.
+- E-commerce or booking flows.
