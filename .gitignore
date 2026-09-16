@@ -41,3 +41,10 @@ testem.log
 .DS_Store
 Thumbs.db
 .vercel
+
+# Cloudflare
+.wrangler/
+.dev.vars*
+
+# macOS
+.DS_Store
