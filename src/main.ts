@@ -1,12 +1,21 @@
-import { enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { provideZoneChangeDetection } from "@angular/core";
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideRouter, Routes } from '@angular/router';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { AppComponent } from './app/app.component';
+import { passthroughImageLoaderProvider } from './app/image-loader';
 
-import { AppModule } from './app/app.module';
-import { environment } from './environments/environment';
+const routes: Routes = [
+  { path: '', loadComponent: () => import('./app/portfolio/portfolio.component').then(m => m.PortfolioComponent) },
+  { path: 'about', loadComponent: () => import('./app/about/about.component').then(m => m.AboutComponent) },
+  { path: 'contact', loadComponent: () => import('./app/contact/contact.component').then(m => m.ContactComponent) },
+  { path: '**', redirectTo: '' }
+];
 
-if (environment.production) {
-  enableProdMode();
-}
-
-platformBrowserDynamic().bootstrapModule(AppModule, { applicationProviders: [provideZoneChangeDetection()], })
-  .catch(err => console.error(err));
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection(),passthroughImageLoaderProvider,
+    provideRouter(routes),
+    provideAnimationsAsync(),
+  ]
+}).catch(err => console.error(err));

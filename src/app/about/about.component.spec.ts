@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AboutComponent } from './about.component';
+import { passthroughImageLoaderProvider } from '../image-loader';
 
 describe('AboutComponent', () => {
   let component: AboutComponent;
@@ -8,7 +9,10 @@ describe('AboutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AboutComponent]
+      imports: [AboutComponent],
+      providers: [
+        passthroughImageLoaderProvider
+      ]
     })
     .compileComponents();
 
