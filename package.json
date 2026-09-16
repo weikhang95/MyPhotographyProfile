@@ -9,7 +9,12 @@
     "watch": "ng build --watch --configuration development",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.js",
     "preview": "ng build && wrangler dev",
-    "deploy": "ng build && wrangler deploy"
+    "deploy": "ng build && tsc -p worker/tsconfig.json && wrangler deploy",
+    "dev:api": "wrangler dev --port 8787",
+    "db:migrate:local": "wrangler d1 migrations apply chong-db --local",
+    "db:migrate:remote": "wrangler d1 migrations apply chong-db --remote",
+    "typecheck:worker": "tsc -p worker/tsconfig.json",
+    "cf-typegen": "wrangler types worker/worker-configuration.d.ts"
   },
   "private": true,
   "dependencies": {
