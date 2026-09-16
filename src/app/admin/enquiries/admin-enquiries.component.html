@@ -1,0 +1,89 @@
+<div class="container mx-auto px-3 sm:px-4">
+  <div class="flex items-center justify-between gap-4 pt-6 sm:pt-8 pb-6">
+    <h1 class="text-2xl sm:text-3xl md:text-4xl font-semibold font-signika tracking-wider">ENQUIRIES</h1>
+    <button type="button" (click)="logout()"
+            class="text-sm font-medium underline underline-offset-4 decoration-accent hover:text-accent transition-colors duration-200">
+      Sign out
+    </button>
+  </div>
+
+  <div role="tablist" aria-label="Filter enquiries by status" class="flex flex-wrap gap-2 border-b border-border mb-6">
+    @for (tab of tabs; track tab.label) {
+      <button type="button" role="tab"
+              [attr.aria-selected]="status() === tab.status"
+              (click)="selectTab(tab)"
+              class="px-3 py-2 -mb-px text-sm font-medium border-b-2 transition-colors duration-200"
+              [class.border-accent]="status() === tab.status"
+              [class.text-ink]="status() === tab.status"
+              [class.border-transparent]="status() !== tab.status"
+              [class.text-ink-muted]="status() !== tab.status">
+        {{ tab.label }}
+        <span class="ml-1 text-xs tabular-nums text-ink-muted">{{ tabCount(tab) }}</span>
+      </button>
+    }
+  </div>
+
+  @if (error()) {
+    <p role="alert" class="mb-4 text-sm text-red-700 dark:text-red-400">
+      {{ error() }}
+      <button type="button" (click)="load()" class="ml-2 underline underline-offset-4">Retry</button>
+    </p>
+  }
+
+  @if (loading() && !data()) {
+    <p class="text-ink-muted">Loading…</p>
+  } @else if (data(); as page) {
+    @if (page.items.length === 0) {
+      <p class="py-10 text-center text-ink-muted">No enquiries here.</p>
+    } @else {
+      <ul class="divide-y divide-border border-y border-border" [class.opacity-60]="loading()">
+        @for (enquiry of page.items; track enquiry.id) {
+          <li>
+            <button type="button" (click)="toggle(enquiry)"
+                    [attr.aria-expanded]="expandedId() === enquiry.id"
+                    [attr.aria-controls]="'enquiry-' + enquiry.id"
+                    class="w-full text-left py-4 px-2 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 hover:bg-surface-raised transition-colors duration-200">
+              <span class="flex items-center gap-2 sm:w-48 shrink-0">
+                @if (enquiry.status === 'new') {
+                  <span class="h-2 w-2 rounded-full bg-accent" aria-label="Unread"></span>
+                }
+                <span class="truncate" [class.font-semibold]="enquiry.status === 'new'">{{ enquiry.name }}</span>
+              </span>
+              <span class="flex-1 truncate" [class.font-semibold]="enquiry.status === 'new'">{{ enquiry.subject }}</span>
+              <time class="text-xs text-ink-muted tabular-nums shrink-0" [attr.datetime]="enquiry.created_at">
+                {{ enquiry.created_at | date: 'd MMM y, h:mm a' }}
+              </time>
+            </button>
+
+            @if (expandedId() === enquiry.id) {
+              <div [id]="'enquiry-' + enquiry.id" class="px-2 pb-5">
+                <p class="text-sm text-ink-muted mb-3">
+                  <a [href]="replyLink(enquiry)" class="underline underline-offset-4 decoration-accent hover:text-accent">{{ enquiry.email }}</a>
+                </p>
+                <p class="whitespace-pre-line leading-relaxed max-w-prose mb-5">{{ enquiry.message }}</p>
+                <div class="flex flex-wrap gap-2">
+                  <a [href]="replyLink(enquiry)" class="action">Reply by email</a>
+                  @if (enquiry.status !== 'new') {
+                    <button type="button" class="action" (click)="setStatus(enquiry, 'new')">Mark as unread</button>
+                  }
+                  @if (enquiry.status !== 'archived') {
+                    <button type="button" class="action" (click)="setStatus(enquiry, 'archived')">Archive</button>
+                  }
+                  <button type="button" class="action action-danger" (click)="remove(enquiry)">Delete</button>
+                </div>
+              </div>
+            }
+          </li>
+        }
+      </ul>
+
+      @if (totalPages() > 1) {
+        <nav aria-label="Pagination" class="flex items-center justify-between py-6 text-sm">
+          <button type="button" class="action" [disabled]="page.page <= 1" (click)="goToPage(page.page - 1)">Previous</button>
+          <span class="text-ink-muted tabular-nums">Page {{ page.page }} of {{ totalPages() }}</span>
+          <button type="button" class="action" [disabled]="page.page >= totalPages()" (click)="goToPage(page.page + 1)">Next</button>
+        </nav>
+      }
+    }
+  }
+</div>

@@ -1,0 +1,24 @@
+<div class="mx-auto max-w-sm px-3 sm:px-4 py-10">
+  <h1 class="text-2xl sm:text-3xl font-semibold font-signika tracking-wider mb-2">ADMIN</h1>
+  <p class="text-ink-muted mb-8">Sign in to read enquiries.</p>
+
+  <form (ngSubmit)="submit()" class="space-y-5">
+    <div>
+      <label for="password" class="block mb-2 text-sm font-medium">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required
+             [(ngModel)]="password"
+             [attr.aria-invalid]="!!error()"
+             [attr.aria-describedby]="error() ? 'login-error' : null"
+             class="block w-full px-3 py-2.5 text-base rounded-md border border-border bg-surface text-ink focus:outline-none focus:border-accent">
+    </div>
+
+    @if (error()) {
+      <p id="login-error" role="alert" class="text-sm text-red-700 dark:text-red-400">{{ error() }}</p>
+    }
+
+    <button type="submit" [disabled]="sending() || !password"
+            class="w-full px-6 py-3 text-sm font-medium rounded-md bg-ink text-surface hover:opacity-90 disabled:opacity-60 transition-opacity duration-200">
+      {{ sending() ? 'Signing in…' : 'Sign in' }}
+    </button>
+  </form>
+</div>

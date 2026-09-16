@@ -1,0 +1,48 @@
+// Uses the raw design tokens from styles.scss (Tailwind's @theme inline does not emit CSS variables).
+$error-light: #b91c1c;
+$error-dark: #f87171;
+
+.field {
+  display: block;
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid rgb(var(--border));
+  border-radius: 6px;
+  background-color: rgb(var(--surface));
+  color: rgb(var(--ink));
+  transition: border-color 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  &:focus {
+    outline: none;
+    border-color: rgb(var(--accent));
+  }
+
+  &[aria-invalid='true'] {
+    border-color: $error-light;
+  }
+}
+
+.field-error {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: $error-light;
+}
+
+:host-context(.dark) {
+  .field[aria-invalid='true'] {
+    border-color: $error-dark;
+  }
+
+  .field-error {
+    color: $error-dark;
+  }
+}
+
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
