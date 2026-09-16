@@ -5,6 +5,70 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* =========================================================================
+ * Design tokens — single source of truth for color, motion, and depth.
+ * Consumed via Tailwind utilities (bg-surface, text-ink, text-accent, …).
+ * See .impeccable.md for intent.
+ * ========================================================================= */
+:root {
+  /* Warm-neutral palette, light surface. RGB triplets for alpha support. */
+  --surface: 251 249 244;          /* #FBF9F4 cream */
+  --surface-raised: 244 241 234;   /* #F4F1EA bone */
+  --ink: 27 26 23;                 /* #1B1A17 charcoal */
+  --ink-muted: 94 90 82;           /* #5E5A52 warm gray */
+  --accent: 176 137 104;           /* #B08968 clay */
+  --border: 229 224 214;           /* #E5E0D6 */
+  --focus-ring: 176 137 104;       /* same as accent, used at 0.7 alpha */
+  --shadow: 27 26 23;              /* ink-based, alpha applied at use */
+}
+
+.dark {
+  --surface: 18 17 16;             /* #121110 warm near-black */
+  --surface-raised: 28 26 24;      /* #1C1A18 */
+  --ink: 232 228 220;              /* #E8E4DC bone */
+  --ink-muted: 138 133 123;        /* #8A857B */
+  --accent: 210 168 120;           /* #D2A878 warmer clay for dark */
+  --border: 42 39 34;              /* #2A2722 */
+  --focus-ring: 210 168 120;
+  --shadow: 0 0 0;
+}
+
+@theme inline {
+  --color-surface: rgb(var(--surface));
+  --color-surface-raised: rgb(var(--surface-raised));
+  --color-ink: rgb(var(--ink));
+  --color-ink-muted: rgb(var(--ink-muted));
+  --color-accent: rgb(var(--accent));
+  --color-border: rgb(var(--border));
+
+  --font-display: 'Signika', system-ui, sans-serif;
+  --font-script: 'Nothing You Could Do', cursive;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+
+  --radius-sm: 2px;
+  --radius: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  --duration-fast: 120ms;
+  --duration-base: 220ms;
+  --duration-slow: 360ms;
+  --ease-editorial: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  --container-prose: 65ch;
+
+  --shadow-soft: 0 1px 2px rgb(var(--shadow) / 0.6), 0 8px 24px rgb(var(--shadow) / 0.4);
+}
+
+/* Token-driven focus ring, applied globally where :focus-visible fires. */
+:focus-visible {
+  outline: 2px solid rgb(var(--focus-ring) / 0.7);
+  outline-offset: 2px;
+}
+
 // Material theme
 $light-theme: mat.define-theme((
   typography: (
