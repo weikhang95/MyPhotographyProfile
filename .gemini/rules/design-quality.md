@@ -92,7 +92,23 @@ When building flowcharts, pipelines, event streams, or multi-node topologies:
 
 ---
 
-## 6. Automated Verification Pipeline
+## 6. SVG Typography Scale & Minimum Legibility Floor
+
+To prevent diagrams from rendering illegibly small when scaled down inside article containers or mobile screens:
+
+1. **Strict Minimum Floor (No Micro-Fonts)**:
+   - **Never** use `font-size="8"` or `font-size="9"` in any SVG schematic.
+   - Lowest allowable font size for micro-offsets or badges is **10.5px / 11px**.
+2. **Standard Scale**:
+   - **Node Titles & Headers**: `font-size="13"` to `font-size="14"`, `font-weight="600"` / `700`.
+   - **Body Key-Values & Code Payloads**: `font-size="12"` to `font-size="12.5"`.
+   - **Sub-labels & Secondary Descriptions**: `font-size="11"` to `font-size="11.5"`.
+   - **Header Meta & Timeline Markers**: `font-size="11"` to `font-size="12"`.
+   - **Focal Symbols**: `font-size="18"` to `font-size="20"`.
+
+---
+
+## 7. Automated Verification Pipeline
 
 Prior to merging any commit:
 1. `npm test -- --watch=false` — 100% of test suites must pass (zero regressions in WebMCP, Topbar, Blog, Portfolio).
