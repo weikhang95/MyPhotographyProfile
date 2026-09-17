@@ -1,6 +1,6 @@
 # MyPhotographyProfile
 
-This project uses [Angular CLI](https://github.com/angular/angular-cli) 21 and Angular Material 21.
+This project uses [Angular CLI](https://github.com/angular/angular-cli) 22, Angular Material 22, and [Angular WebMCP](https://angular.dev/ai/webmcp).
 
 ## Development server
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Fancybox } from "@fancyapps/ui";
 import { NgOptimizedImage } from '@angular/common';
 
@@ -29,6 +29,7 @@ const IMAGE_CONFIG = {
   templateUrl: './portfolio.component.html',
   styleUrls: ['./portfolio.component.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [NgOptimizedImage]
 })
 export class PortfolioComponent implements OnInit, AfterViewInit, OnDestroy {

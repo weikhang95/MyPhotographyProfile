@@ -1,4 +1,5 @@
 import { provideZoneChangeDetection } from "@angular/core";
+import { provideExperimentalWebMcpForms } from "@angular/forms/signals";
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideRouter, Routes } from '@angular/router';
@@ -6,6 +7,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { AppComponent } from './app/app.component';
 import { passthroughImageLoaderProvider } from './app/image-loader';
 import { adminGuard } from './app/admin/admin.guard';
+import { providePortfolioWebMcp } from './app/webmcp/portfolio-webmcp.tools';
 
 const routes: Routes = [
   { path: '', loadComponent: () => import('./app/portfolio/portfolio.component').then(m => m.PortfolioComponent) },
@@ -18,9 +20,12 @@ const routes: Routes = [
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection(),passthroughImageLoaderProvider,
+    provideZoneChangeDetection(),
+    passthroughImageLoaderProvider,
     provideRouter(routes),
     provideHttpClient(withFetch()),
     provideAnimationsAsync(),
+    provideExperimentalWebMcpForms(),
+    providePortfolioWebMcp(),
   ]
 }).catch(err => console.error(err));

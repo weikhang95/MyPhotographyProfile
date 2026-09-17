@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import type { ApiError, Enquiry, EnquiryPage, EnquiryStatus } from '../../../../shared/api-types';
 import { AdminApiService } from '../admin-api.service';
@@ -15,6 +15,7 @@ interface Tab {
   standalone: true,
   imports: [DatePipe],
   templateUrl: './admin-enquiries.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './admin-enquiries.component.scss',
 })
 export class AdminEnquiriesComponent {

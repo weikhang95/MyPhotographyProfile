@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ENQUIRY_LIMITS, type ApiError, type EnquiryField } from '../../../shared/api-types';
 
@@ -10,6 +10,7 @@ type SubmitState = 'idle' | 'sending' | 'sent' | 'error';
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './contact.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './contact.component.scss'
 })
 export class ContactComponent {

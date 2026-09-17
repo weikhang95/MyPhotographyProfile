@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import type { ApiError } from '../../../../shared/api-types';
@@ -9,6 +9,7 @@ import { AdminApiService } from '../admin-api.service';
   selector: 'app-admin-login',
   standalone: true,
   imports: [FormsModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './admin-login.component.html',
 })
 export class AdminLoginComponent {

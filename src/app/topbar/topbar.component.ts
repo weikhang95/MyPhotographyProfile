@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
@@ -16,6 +16,7 @@ import { ThemeService } from '../theme.service';
 ],
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   animations: [
     trigger('slideMenu', [
       transition(':enter', [
