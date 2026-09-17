@@ -1,0 +1,269 @@
+<div class="editorial-graphic-container">
+  <figure>
+    <svg viewBox="0 0 800 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" [attr.aria-label]="label() || 'System Architecture Schematic'">
+      <defs>
+        <!-- Background Architectural Dot Matrix -->
+        <pattern id="editorial-grid-dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="1.2" fill="var(--eg-dot)" />
+        </pattern>
+
+        <!-- Subtle Gradients -->
+        <linearGradient id="gradient-accent-clay" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="var(--eg-accent-clay)" stop-opacity="0.9" />
+          <stop offset="100%" stop-color="var(--eg-accent-sand)" stop-opacity="0.8" />
+        </linearGradient>
+
+        <linearGradient id="bus-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="var(--eg-accent-clay)" stop-opacity="0.1" />
+          <stop offset="50%" stop-color="var(--eg-accent-clay)" stop-opacity="0.7" />
+          <stop offset="100%" stop-color="var(--eg-accent-sand)" stop-opacity="0.1" />
+        </linearGradient>
+
+        <!-- Node Drop Shadow Filter (subtle) -->
+        <filter id="soft-shadow" x="-8%" y="-8%" width="120%" height="120%">
+          <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0, 0, 0, 0.05)" />
+        </filter>
+      </defs>
+
+      <!-- Grid Background -->
+      <rect width="800" height="420" fill="var(--eg-bg)" />
+      <rect width="800" height="420" fill="url(#editorial-grid-dots)" />
+
+      <!-- Top Header Bar with Technical Meta -->
+      <g class="header-meta" opacity="0.8">
+        <line x1="40" y1="48" x2="760" y2="48" stroke="var(--eg-border)" stroke-width="1" />
+        <rect x="40" y="32" width="10" height="10" fill="var(--eg-accent-clay)" rx="2" />
+        <text x="60" y="41" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11" letter-spacing="1">
+          SCHEMATIC // {{ variant().toUpperCase() }}
+        </text>
+        @if (label()) {
+          <text x="760" y="41" text-anchor="end" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">
+            {{ label() }}
+          </text>
+        }
+      </g>
+
+      <!-- =================================================================== -->
+      <!-- VARIANT: DECOUPLED (Brain & Hands / Subsystem Decoupling)          -->
+      <!-- =================================================================== -->
+      @if (variant() === 'decoupled') {
+        <!-- Left Block: Orchestration & Brain -->
+        <g class="subsystem-left" filter="url(#soft-shadow)">
+          <rect x="70" y="100" width="250" height="250" rx="8" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <rect x="70" y="100" width="250" height="40" rx="8" fill="var(--eg-bg)" stroke="var(--eg-border)" stroke-width="1" />
+          <text x="92" y="126" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="14" font-weight="600">
+            AGENT HARNESS (BRAIN)
+          </text>
+          <circle cx="295" cy="120" r="4" fill="var(--eg-accent-clay)" />
+
+          <!-- Inner state modules -->
+          <rect x="92" y="160" width="206" height="42" rx="4" fill="var(--eg-bg)" stroke="var(--eg-stroke-dim)" />
+          <text x="108" y="185" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="12">LLM Decision Loop</text>
+
+          <rect x="92" y="214" width="206" height="42" rx="4" fill="var(--eg-bg)" stroke="var(--eg-stroke-dim)" />
+          <text x="108" y="239" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="12">Context Management</text>
+
+          <rect x="92" y="268" width="206" height="42" rx="4" fill="var(--eg-bg)" stroke="var(--eg-stroke-dim)" />
+          <text x="108" y="293" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="12">Session Log Interrogator</text>
+        </g>
+
+        <!-- Central Bus / Protocol Bridge -->
+        <g class="protocol-bus">
+          <!-- Flow Lines -->
+          <line x1="320" y1="180" x2="480" y2="180" stroke="var(--eg-accent-clay)" stroke-width="2" [class.anim-flow]="animated()" />
+          <line x1="480" y1="288" x2="320" y2="288" stroke="var(--eg-accent-sand)" stroke-width="2" [class.anim-flow]="animated()" />
+
+          <!-- Bus Protocol Badge -->
+          <rect x="355" y="210" width="90" height="36" rx="18" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <text x="400" y="228" text-anchor="middle" fill="var(--eg-accent-clay)" font-family="var(--eg-font-mono)" font-size="10" font-weight="600">
+            WebMCP / API
+          </text>
+          <text x="400" y="239" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="8">
+            ISOLATED BUS
+          </text>
+
+          <!-- Interface Call Labels -->
+          <text x="400" y="172" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">
+            execute(name, input)
+          </text>
+          <text x="400" y="306" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">
+            return string | error
+          </text>
+        </g>
+
+        <!-- Right Block: Execution Sandbox & Hands -->
+        <g class="subsystem-right" filter="url(#soft-shadow)">
+          <rect x="480" y="100" width="250" height="250" rx="8" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <rect x="480" y="100" width="250" height="40" rx="8" fill="var(--eg-bg)" stroke="var(--eg-border)" stroke-width="1" />
+          <text x="502" y="126" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="14" font-weight="600">
+            SANDBOX TOOLS (HANDS)
+          </text>
+          <circle cx="705" cy="120" r="4" fill="var(--eg-accent-sand)" />
+
+          <!-- Tools / Endpoints list -->
+          <rect x="502" y="160" width="206" height="42" rx="4" fill="var(--eg-bg)" stroke="var(--eg-stroke-dim)" />
+          <text x="518" y="185" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="12">File & Code Runtime</text>
+
+          <rect x="502" y="214" width="206" height="42" rx="4" fill="var(--eg-bg)" stroke="var(--eg-stroke-dim)" />
+          <text x="518" y="239" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="12">MCP Tool Proxies</text>
+
+          <rect x="502" y="268" width="206" height="42" rx="4" fill="var(--eg-bg)" stroke="var(--eg-stroke-dim)" />
+          <text x="518" y="293" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="12">Ephemeral Container</text>
+        </g>
+
+        <!-- Bottom Status Bar -->
+        <rect x="70" y="370" width="660" height="24" rx="4" fill="var(--eg-bg)" stroke="var(--eg-border)" stroke-width="1" />
+        <text x="85" y="386" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">
+          STATUS: Brain = Cattle  ·  Hands = Stateless Containers  ·  Zero Leaked Tokens
+        </text>
+      }
+
+      <!-- =================================================================== -->
+      <!-- VARIANT: STREAM (Append-Only Logs / Event Pipelines)                -->
+      <!-- =================================================================== -->
+      @if (variant() === 'stream') {
+        <!-- Main Timeline Rail -->
+        <line x1="80" y1="210" x2="720" y2="210" stroke="var(--eg-border)" stroke-width="3" />
+        <line x1="80" y1="210" x2="480" y2="210" stroke="var(--eg-accent-clay)" stroke-width="3" />
+
+        <!-- Sequential Event Blocks -->
+        <!-- Event 1 -->
+        <g transform="translate(100, 150)">
+          <rect width="110" height="80" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <circle cx="16" cy="18" r="4" fill="var(--eg-accent-clay)" />
+          <text x="30" y="22" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">e_001</text>
+          <text x="16" y="44" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">user_prompt</text>
+          <text x="16" y="62" fill="var(--eg-stroke-dim)" font-family="var(--eg-font-mono)" font-size="9">tokens: 342</text>
+        </g>
+
+        <!-- Event 2 -->
+        <g transform="translate(240, 130)">
+          <rect width="120" height="100" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-accent-clay)" stroke-width="1.5" />
+          <circle cx="16" cy="18" r="4" fill="var(--eg-accent-clay)" />
+          <text x="30" y="22" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">e_002</text>
+          <text x="16" y="46" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">thought_loop</text>
+          <text x="16" y="66" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">tool_call: run</text>
+          <text x="16" y="86" fill="var(--eg-accent-clay)" font-family="var(--eg-font-mono)" font-size="9">duration: 420ms</text>
+        </g>
+
+        <!-- Event 3 -->
+        <g transform="translate(390, 140)">
+          <rect width="115" height="90" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <circle cx="16" cy="18" r="4" fill="var(--eg-accent-sand)" />
+          <text x="30" y="22" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">e_003</text>
+          <text x="16" y="46" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">tool_result</text>
+          <text x="16" y="66" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">status: ok</text>
+        </g>
+
+        <!-- Active Head Pointer -->
+        <g transform="translate(535, 120)">
+          <rect width="165" height="120" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-stroke-main)" stroke-width="2" stroke-dasharray="4 4" [class.anim-flow]="animated()" />
+          <text x="20" y="30" fill="var(--eg-accent-clay)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">APPEND HEAD (LIVE)</text>
+          <text x="20" y="55" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="13">Interrogation Hook</text>
+          <text x="20" y="75" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">getEvents(since: e_003)</text>
+          <text x="20" y="98" fill="var(--eg-accent-sand)" font-family="var(--eg-font-mono)" font-size="10">durability: guaranteed</text>
+        </g>
+
+        <!-- Bottom Metrics Annotations -->
+        <text x="100" y="300" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">t_0: Ingestion</text>
+        <text x="240" y="300" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">t_1: Reasoning</text>
+        <text x="390" y="300" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">t_2: Execution</text>
+        <text x="535" y="300" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11">t_3: Next Turn (Recoverable)</text>
+      }
+
+      <!-- =================================================================== -->
+      <!-- VARIANT: MATRIX (Multi-Agent Routing & State Graph)                 -->
+      <!-- =================================================================== -->
+      @if (variant() === 'matrix') {
+        <!-- Central Orchestrator Node -->
+        <g transform="translate(340, 160)" filter="url(#soft-shadow)">
+          <rect width="120" height="90" rx="8" fill="var(--eg-node-bg)" stroke="var(--eg-accent-clay)" stroke-width="2" />
+          <circle cx="60" cy="35" r="16" fill="var(--eg-bg)" stroke="var(--eg-accent-clay)" stroke-width="1.5" />
+          <text x="60" y="40" text-anchor="middle" fill="var(--eg-accent-clay)" font-family="var(--eg-font-mono)" font-size="14" font-weight="700">Ω</text>
+          <text x="60" y="70" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="12" font-weight="600">ORCHESTRATOR</text>
+        </g>
+
+        <!-- Peripheral Specialist Nodes -->
+        <!-- North: Research Node -->
+        <line x1="400" y1="160" x2="400" y2="120" stroke="var(--eg-stroke-dim)" stroke-width="1.5" />
+        <g transform="translate(330, 70)">
+          <rect width="140" height="48" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <text x="70" y="28" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11">Research / Read</text>
+        </g>
+
+        <!-- West: Planner Node -->
+        <line x1="340" y1="205" x2="260" y2="205" stroke="var(--eg-accent-clay)" stroke-width="1.5" [class.anim-flow]="animated()" />
+        <g transform="translate(110, 180)">
+          <rect width="150" height="52" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <text x="75" y="26" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">Planner Agent</text>
+          <text x="75" y="42" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">Step decomposition</text>
+        </g>
+
+        <!-- East: Tool Specialist -->
+        <line x1="460" y1="205" x2="540" y2="205" stroke="var(--eg-accent-sand)" stroke-width="1.5" [class.anim-flow]="animated()" />
+        <g transform="translate(540, 180)">
+          <rect width="150" height="52" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <text x="75" y="26" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">Coder / Tool Exec</text>
+          <text x="75" y="42" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">Sandboxed Actions</text>
+        </g>
+
+        <!-- South: Evaluator / Critic -->
+        <line x1="400" y1="250" x2="400" y2="300" stroke="var(--eg-stroke-dim)" stroke-width="1.5" />
+        <g transform="translate(325, 300)">
+          <rect width="150" height="52" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <text x="75" y="26" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">Verifier / Critic</text>
+          <text x="75" y="42" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">Regression check</text>
+        </g>
+      }
+
+      <!-- =================================================================== -->
+      <!-- VARIANT: LAYERS (Architectural Planes & Isolation Boundaries)       -->
+      <!-- =================================================================== -->
+      @if (variant() === 'layers') {
+        <g transform="translate(100, 80)">
+          <!-- Layer 4: Client & User Intent -->
+          <rect x="0" y="0" width="600" height="48" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <text x="24" y="29" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="13" font-weight="600">
+            APPLICATION LAYER
+          </text>
+          <text x="580" y="29" text-anchor="end" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">
+            Browser UI  ·  Chat  ·  WebMCP Consumers
+          </text>
+
+          <!-- Layer 3: Agent Harness (Orchestration) -->
+          <rect x="0" y="68" width="600" height="56" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-accent-clay)" stroke-width="1.5" />
+          <text x="24" y="98" fill="var(--eg-accent-clay)" font-family="var(--eg-font-sans)" font-size="13" font-weight="600">
+            ORCHESTRATION & HARNESS LAYER
+          </text>
+          <text x="24" y="114" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">
+            Context Compaction  ·  Tool Dispatch  ·  Stateless Reboots
+          </text>
+
+          <!-- Layer 2: Durable State Plane -->
+          <rect x="0" y="144" width="600" height="52" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <text x="24" y="174" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="13" font-weight="600">
+            DURABLE SESSION STORE
+          </text>
+          <text x="580" y="174" text-anchor="end" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">
+            Immutable Append-Only Log  ·  Cloudflare D1 / SQLite
+          </text>
+
+          <!-- Layer 1: Isolated Execution Sandboxes -->
+          <rect x="0" y="216" width="600" height="64" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <text x="24" y="246" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="13" font-weight="600">
+            EXECUTION SANDBOX (HANDS)
+          </text>
+          <text x="24" y="264" fill="var(--eg-accent-sand)" font-family="var(--eg-font-mono)" font-size="10">
+            Zero Credentials in Container  ·  Disposable Cattle  ·  Ephemeral Tool Proxies
+          </text>
+        </g>
+      }
+    </svg>
+
+    @if (caption()) {
+      <figcaption class="caption-text">
+        {{ caption() }}
+      </figcaption>
+    }
+  </figure>
+</div>
