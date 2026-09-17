@@ -9,6 +9,7 @@ Angular 22 photography portfolio for **Chong Wei Khang** (Penang, Malaysia). Bei
 ## How to work in this repo
 
 - Defer to `.impeccable.md` for all design decisions. The five principles there override taste arguments.
+- Follow `.gemini/rules/design-quality.md` for all editorial graphics, schematics, and diagrams (4-quadrant visual QA gate, canvas isolation, grounded connectors, token fidelity).
 - Prefer editing existing files over creating new ones. Do not introduce abstractions ahead of need.
 - Keep visual changes inside the tokens defined in `.impeccable.md` (warm-neutral palette, Signika + mono, Phosphor icons).
 - Do **not** reintroduce the blue→purple gradient brand, Material Icons font, MUI (`@mui/material`), or Roboto. Those are being retired.

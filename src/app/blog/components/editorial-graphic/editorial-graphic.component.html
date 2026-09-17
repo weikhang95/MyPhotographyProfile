@@ -134,66 +134,141 @@
       <!-- VARIANT: STREAM (Append-Only Logs / Event Pipelines)                -->
       <!-- =================================================================== -->
       @if (variant() === 'stream') {
-        <!-- Main Timeline Rail -->
-        <line x1="80" y1="210" x2="720" y2="210" stroke="var(--eg-border)" stroke-width="3" />
-        <line x1="80" y1="210" x2="480" y2="210" stroke="var(--eg-accent-clay)" stroke-width="3" />
+        <!-- Inter-card Connector Arrows (centered at y=160) -->
+        <g class="stream-connectors">
+          <!-- Connector 1 -> 2 -->
+          <line x1="205" y1="160" x2="231" y2="160" stroke="var(--eg-accent-clay)" stroke-width="1.5" />
+          <polygon points="231,156 237,160 231,164" fill="var(--eg-accent-clay)" />
 
-        <!-- Sequential Event Blocks -->
-        <!-- Event 1 -->
-        <g transform="translate(100, 150)">
-          <rect width="110" height="80" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
-          <circle cx="16" cy="18" r="4" fill="var(--eg-accent-clay)" />
-          <text x="30" y="22" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">e_001</text>
-          <text x="16" y="44" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">user_prompt</text>
-          <text x="16" y="62" fill="var(--eg-stroke-dim)" font-family="var(--eg-font-mono)" font-size="9">tokens: 342</text>
+          <!-- Connector 2 -> 3 -->
+          <line x1="375" y1="160" x2="401" y2="160" stroke="var(--eg-accent-clay)" stroke-width="1.5" />
+          <polygon points="401,156 407,160 401,164" fill="var(--eg-accent-clay)" />
+
+          <!-- Connector 3 -> 4 (Head) -->
+          <line x1="540" y1="160" x2="566" y2="160" stroke="var(--eg-accent-sand)" stroke-width="1.5" [class.anim-flow]="animated()" />
+          <polygon points="566,156 572,160 566,164" fill="var(--eg-accent-sand)" />
         </g>
 
-        <!-- Event 2 -->
-        <g transform="translate(240, 130)">
-          <rect width="120" height="100" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-accent-clay)" stroke-width="1.5" />
-          <circle cx="16" cy="18" r="4" fill="var(--eg-accent-clay)" />
-          <text x="30" y="22" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">e_002</text>
-          <text x="16" y="46" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">thought_loop</text>
-          <text x="16" y="66" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">tool_call: run</text>
-          <text x="16" y="86" fill="var(--eg-accent-clay)" font-family="var(--eg-font-mono)" font-size="9">duration: 420ms</text>
+        <!-- Event Card 1 -->
+        <g transform="translate(70, 90)" filter="url(#soft-shadow)">
+          <rect width="135" height="140" rx="8" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <rect width="135" height="32" rx="8" fill="var(--eg-bg)" stroke="var(--eg-border)" stroke-width="1" />
+          <circle cx="16" cy="16" r="4" fill="var(--eg-accent-clay)" />
+          <text x="28" y="20" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">e_001</text>
+          <text x="122" y="20" text-anchor="end" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">COMMITTED</text>
+          
+          <text x="14" y="54" fill="var(--eg-accent-clay)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">USER_PROMPT</text>
+          <text x="14" y="74" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">tokens: 342</text>
+          <text x="14" y="94" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">role: user</text>
+          <text x="14" y="118" fill="var(--eg-stroke-dim)" font-family="var(--eg-font-mono)" font-size="9">offset: 0x0001</text>
         </g>
 
-        <!-- Event 3 -->
-        <g transform="translate(390, 140)">
-          <rect width="115" height="90" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
-          <circle cx="16" cy="18" r="4" fill="var(--eg-accent-sand)" />
-          <text x="30" y="22" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">e_003</text>
-          <text x="16" y="46" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">tool_result</text>
-          <text x="16" y="66" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">status: ok</text>
+        <!-- Event Card 2 -->
+        <g transform="translate(237, 90)" filter="url(#soft-shadow)">
+          <rect width="138" height="140" rx="8" fill="var(--eg-node-bg)" stroke="var(--eg-accent-clay)" stroke-width="1.5" />
+          <rect width="138" height="32" rx="8" fill="var(--eg-bg)" stroke="var(--eg-border)" stroke-width="1" />
+          <circle cx="16" cy="16" r="4" fill="var(--eg-accent-clay)" />
+          <text x="28" y="20" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">e_002</text>
+          <text x="124" y="20" text-anchor="end" fill="var(--eg-accent-clay)" font-family="var(--eg-font-mono)" font-size="9">COMMITTED</text>
+          
+          <text x="14" y="54" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">THOUGHT_LOOP</text>
+          <text x="14" y="74" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">tool_call: run</text>
+          <text x="14" y="94" fill="var(--eg-accent-clay)" font-family="var(--eg-font-mono)" font-size="10">duration: 420ms</text>
+          <text x="14" y="118" fill="var(--eg-stroke-dim)" font-family="var(--eg-font-mono)" font-size="9">offset: 0x0002</text>
         </g>
 
-        <!-- Active Head Pointer -->
-        <g transform="translate(535, 120)">
-          <rect width="165" height="120" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-stroke-main)" stroke-width="2" stroke-dasharray="4 4" [class.anim-flow]="animated()" />
-          <text x="20" y="30" fill="var(--eg-accent-clay)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">
-            {{ isChinese() ? '实时追加位点 (LIVE)' : 'APPEND HEAD (LIVE)' }}
+        <!-- Event Card 3 -->
+        <g transform="translate(407, 90)" filter="url(#soft-shadow)">
+          <rect width="133" height="140" rx="8" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <rect width="133" height="32" rx="8" fill="var(--eg-bg)" stroke="var(--eg-border)" stroke-width="1" />
+          <circle cx="16" cy="16" r="4" fill="var(--eg-accent-sand)" />
+          <text x="28" y="20" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">e_003</text>
+          <text x="120" y="20" text-anchor="end" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">COMMITTED</text>
+          
+          <text x="14" y="54" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">TOOL_RESULT</text>
+          <text x="14" y="74" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">status: ok</text>
+          <text x="14" y="94" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">bytes: 1.2 KB</text>
+          <text x="14" y="118" fill="var(--eg-stroke-dim)" font-family="var(--eg-font-mono)" font-size="9">offset: 0x0003</text>
+        </g>
+
+        <!-- Active Append Head (Card 4) -->
+        <g transform="translate(572, 90)" filter="url(#soft-shadow)">
+          <rect width="158" height="140" rx="8" fill="var(--eg-node-bg)" stroke="var(--eg-stroke-main)" stroke-width="1.5" stroke-dasharray="4 4" [class.anim-flow]="animated()" />
+          <rect width="158" height="32" rx="8" fill="var(--eg-bg)" stroke="var(--eg-border)" stroke-width="1" />
+          <circle cx="16" cy="16" r="4" fill="var(--eg-accent-clay)" class="anim-glow" />
+          <text x="28" y="20" fill="var(--eg-accent-clay)" font-family="var(--eg-font-mono)" font-size="10" font-weight="700">
+            {{ isChinese() ? '● 实时追加位点' : '● APPEND HEAD' }}
           </text>
-          <text x="20" y="55" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="13">
+          
+          <text x="14" y="54" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="12" font-weight="600">
             {{ isChinese() ? '断点检索钩子' : 'Interrogation Hook' }}
           </text>
-          <text x="20" y="75" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">getEvents(since: e_003)</text>
-          <text x="20" y="98" fill="var(--eg-accent-sand)" font-family="var(--eg-font-mono)" font-size="10">
+          <text x="14" y="74" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">getEvents(since: e_003)</text>
+          <text x="14" y="94" fill="var(--eg-accent-sand)" font-family="var(--eg-font-mono)" font-size="10">
             {{ isChinese() ? '持久性: 强保证' : 'durability: guaranteed' }}
           </text>
+          <text x="14" y="118" fill="var(--eg-stroke-dim)" font-family="var(--eg-font-mono)" font-size="9">cursor: head_live</text>
         </g>
 
-        <!-- Bottom Metrics Annotations -->
-        <text x="100" y="300" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">
-          {{ isChinese() ? 't_0: 摄入输入' : 't_0: Ingestion' }}
-        </text>
-        <text x="240" y="300" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">
-          {{ isChinese() ? 't_1: 深度推理' : 't_1: Reasoning' }}
-        </text>
-        <text x="390" y="300" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">
-          {{ isChinese() ? 't_2: 沙箱执行' : 't_2: Execution' }}
-        </text>
-        <text x="535" y="300" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11">
-          {{ isChinese() ? 't_3: 下轮唤醒 (无损恢复)' : 't_3: Next Turn (Recoverable)' }}
+        <!-- Timeline Axis & Ticks at y=275 -->
+        <g class="timeline-axis">
+          <!-- Horizontal Timeline Rail -->
+          <line x1="70" y1="275" x2="710" y2="275" stroke="var(--eg-border)" stroke-width="2" />
+          
+          <!-- Origin Node on left -->
+          <circle cx="70" cy="275" r="4" fill="var(--eg-stroke-sub)" />
+          <text x="70" y="295" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">t_genesis</text>
+
+          <!-- Vertical Guides from Cards to Timeline -->
+          <!-- Guide 1 -->
+          <line x1="137" y1="230" x2="137" y2="275" stroke="var(--eg-border)" stroke-dasharray="3 3" stroke-width="1" />
+          <circle cx="137" cy="275" r="3" fill="var(--eg-accent-clay)" />
+          <text x="137" y="300" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="10" font-weight="600">
+            {{ isChinese() ? 't_0: 输入摄入' : 't_0: Ingestion' }}
+          </text>
+          <text x="137" y="315" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">
+            {{ isChinese() ? '写入事件' : 'Append e_001' }}
+          </text>
+
+          <!-- Guide 2 -->
+          <line x1="306" y1="230" x2="306" y2="275" stroke="var(--eg-border)" stroke-dasharray="3 3" stroke-width="1" />
+          <circle cx="306" cy="275" r="3" fill="var(--eg-accent-clay)" />
+          <text x="306" y="300" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="10" font-weight="600">
+            {{ isChinese() ? 't_1: 深度推理' : 't_1: Reasoning' }}
+          </text>
+          <text x="306" y="315" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">
+            {{ isChinese() ? '生成决策' : 'Decision turn' }}
+          </text>
+
+          <!-- Guide 3 -->
+          <line x1="473" y1="230" x2="473" y2="275" stroke="var(--eg-border)" stroke-dasharray="3 3" stroke-width="1" />
+          <circle cx="473" cy="275" r="3" fill="var(--eg-accent-sand)" />
+          <text x="473" y="300" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="10" font-weight="600">
+            {{ isChinese() ? 't_2: 沙箱执行' : 't_2: Execution' }}
+          </text>
+          <text x="473" y="315" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">
+            {{ isChinese() ? '工具返回结果' : 'Tool output' }}
+          </text>
+
+          <!-- Guide 4 (Append Head) -->
+          <line x1="651" y1="230" x2="651" y2="275" stroke="var(--eg-border)" stroke-dasharray="3 3" stroke-width="1" />
+          <circle cx="651" cy="275" r="3" fill="var(--eg-accent-clay)" />
+          <text x="651" y="300" text-anchor="middle" fill="var(--eg-accent-clay)" font-family="var(--eg-font-mono)" font-size="10" font-weight="600">
+            {{ isChinese() ? 't_3: 下轮唤醒' : 't_3: Next Turn' }}
+          </text>
+          <text x="651" y="315" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">
+            {{ isChinese() ? '无损状态恢复' : 'Stateless reboot' }}
+          </text>
+
+          <!-- Forward Arrowhead on right at x=715 -->
+          <polygon points="710,271 718,275 710,279" fill="var(--eg-stroke-sub)" />
+          <text x="718" y="295" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">t_{{ 'n+1' }} →</text>
+        </g>
+
+        <!-- Bottom Status Bar -->
+        <rect x="70" y="370" width="660" height="24" rx="4" fill="var(--eg-bg)" stroke="var(--eg-border)" stroke-width="1" />
+        <text x="85" y="386" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">
+          {{ isChinese() ? '系统状态: 日志模式 = 只增不减 · 状态恢复 = 位置切片 · 重放 = 强确定性' : 'STATUS: Log Mode = Append-Only  ·  State = Positional Slices  ·  Replay = Guaranteed Determinism' }}
         </text>
       }
 
