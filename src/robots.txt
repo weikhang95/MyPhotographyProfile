@@ -3,8 +3,7 @@
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
-# 1. ALLOW ON-DEMAND USER-PROMPTED AI BROWSING (Simon Willison pattern)
-# Allows interactive AI assistants to summarize pages when explicitly requested by a human visitor.
+# 1. User-requested AI browsing & live page summarization
 # ------------------------------------------------------------------------------
 User-agent: ChatGPT-User
 Disallow: /admin/
@@ -15,8 +14,7 @@ Disallow: /admin/
 Disallow: /api/
 
 # ------------------------------------------------------------------------------
-# 2. BLOCK MASS AI TRAINING CRAWLERS & IMAGE SCRAPERS (Sam Alive pattern)
-# Protects photography and creative work from unauthorized AI model ingestion and dataset building.
+# 2. Block bulk AI model training crawlers & image dataset scrapers
 # ------------------------------------------------------------------------------
 User-agent: AI2Bot
 User-agent: Ai2Bot-Dolma
