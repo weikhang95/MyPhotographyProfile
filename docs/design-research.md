@@ -13,8 +13,18 @@
 | 04 | [Bilingual typography](./design-research/04-bilingual-typography.md): EN/简体中文 fonts, CJK rules, switcher, tokens | ~275 |
 | 05 | [Current UI audit](./design-research/05-current-ui-audit.md): repo audit with file:line references, blockers, Material removal, redesign order | ~420 |
 | 06 | [Playful zone](./design-research/06-playful-3d-pixel.md): three.js / pixel / game-like / anime-inspired, phased plan | ~215 |
+| 07 | [**Visual review**](./design-research/07-visual-review.md): screenshots of the current site (post Angular 22 / i18n / blog commits) vs samalive, Anthropic, Simon, Soth, Kander, sspai; gap analysis, bugs, 3 direction options | ~190 |
 
 ---
+
+## 🆕 2026-09-17 visual review: headline
+
+The site currently has **two competing visual voices**: a calm editorial shell and **cyber-terminal / HUD** blog figures and eyebrows (`SCHEMATIC // …`, `STATUS: …`, dot grids). Rendered references (Anthropic, samalive) win by *leaving things out*. Recommended direction: **A "Darkroom Editorial"**, with the terminal energy kept for the playful zone. Also found:
+- mobile double-nav bug (Material CSS beats Tailwind `hidden`);
+- all Jest suites broken since Angular 22;
+- clipped diagram labels.
+
+See [07](./design-research/07-visual-review.md).
 
 ## ⚠️ Found during research — needs owner attention
 
