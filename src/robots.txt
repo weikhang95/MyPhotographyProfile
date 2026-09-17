@@ -1,0 +1,60 @@
+# ==============================================================================
+# robots.txt for Chong Wei Khang (Photography Portfolio & AI Blog)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. ALLOW ON-DEMAND USER-PROMPTED AI BROWSING (Simon Willison pattern)
+# Allows interactive AI assistants to summarize pages when explicitly requested by a human visitor.
+# ------------------------------------------------------------------------------
+User-agent: ChatGPT-User
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: PerplexityBot
+Disallow: /admin/
+Disallow: /api/
+
+# ------------------------------------------------------------------------------
+# 2. BLOCK MASS AI TRAINING CRAWLERS & IMAGE SCRAPERS (Sam Alive pattern)
+# Protects photography and creative work from unauthorized AI model ingestion and dataset building.
+# ------------------------------------------------------------------------------
+User-agent: AI2Bot
+User-agent: Ai2Bot-Dolma
+User-agent: aiHitBot
+User-agent: Amazonbot
+User-agent: anthropic-ai
+User-agent: Applebot-Extended
+User-agent: Bytespider
+User-agent: CCBot
+User-agent: Claude-Web
+User-agent: ClaudeBot
+User-agent: cohere-ai
+User-agent: cohere-training-data-crawler
+User-agent: Diffbot
+User-agent: DuckAssistBot
+User-agent: FacebookBot
+User-agent: Google-Extended
+User-agent: GoogleOther
+User-agent: GoogleOther-Image
+User-agent: GoogleOther-Video
+User-agent: GPTBot
+User-agent: img2dataset
+User-agent: Meta-ExternalAgent
+User-agent: MyCentralAIScraperBot
+User-agent: omgili
+User-agent: omgilibot
+User-agent: Perplexity-WebCrawler
+User-agent: Quora-Bot
+User-agent: Scrapy
+User-agent: TikTokSpider
+User-agent: YouBot
+Disallow: /
+
+# ------------------------------------------------------------------------------
+# 3. GENERAL SEARCH ENGINES (Google, Bing, DuckDuckGo, etc.)
+# Standard web indexing allowed for discovery; private admin routes and backend APIs protected.
+# ------------------------------------------------------------------------------
+User-agent: *
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
