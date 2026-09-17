@@ -48,10 +48,12 @@ describe('WebMCP Tools', () => {
     it('should return profile information about Chong Wei Khang', async () => {
       const profile = (await getPhotographerProfileTool.execute()) as {
         name: string;
+        chineseName: string;
         location: string;
         cameraGear: { body: string };
       };
       expect(profile.name).toBe('Chong Wei Khang');
+      expect(profile.chineseName).toBe('张炜康');
       expect(profile.location).toContain('Penang');
       expect(profile.cameraGear.body).toBe('Nikon Z5');
     });

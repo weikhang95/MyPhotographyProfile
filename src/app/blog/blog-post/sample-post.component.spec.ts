@@ -50,6 +50,6 @@ describe('SamplePostComponent', () => {
       '解耦思考与行动'
     );
     expect(el.querySelector('.post-lead')?.textContent).toContain('大模型能力快速迭代');
-    expect(el.querySelector('.author-badge')?.textContent).toContain('庄伟康');
+    expect(el.querySelector('.author-badge')?.textContent).toContain('张炜康');
   });
 });

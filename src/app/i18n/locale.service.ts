@@ -24,6 +24,7 @@ export interface TranslationDictionary {
     readonly title: string;
     readonly lead: string;
     readonly author: string;
+    readonly authorName: string;
     readonly publishDate: string;
     readonly readTime: string;
     readonly tag: string;
@@ -69,6 +70,7 @@ const EN_DICTIONARY: TranslationDictionary = {
     title: 'Decoupling the Brain from the Hands: Architectural Patterns for Reliable AI Agents',
     lead: 'Harnesses encode assumptions that go stale as models improve. Building reliable, long-horizon agents requires treating execution sandboxes as disposable cattle and decoupling the reasoning loop from ephemeral runtime state.',
     author: 'By Chong Wei Khang',
+    authorName: 'Chong Wei Khang',
     publishDate: 'Published Sep 17, 2026',
     readTime: '6 min read',
     tag: 'Angular 22 · WebMCP',
@@ -113,7 +115,8 @@ const ZH_DICTIONARY: TranslationDictionary = {
     category: '工程架构 // AGENT 架构设计',
     title: '解耦思考与行动：构建高可靠 AI Agent 系统的架构模式',
     lead: '当底层大模型能力快速迭代时，把推理决策与执行环境绑死会导致系统过早老化。构建长期可靠的智能体系统，核心在于将执行沙箱视为可替换的“消耗品”（Cattle），并将核心决策回路与瞬态运行状态彻底解耦。',
-    author: '作者：Chong Wei Khang (庄伟康)',
+    author: '作者：张炜康 (Chong Wei Khang)',
+    authorName: '张炜康 (Chong Wei Khang)',
     publishDate: '发布于 2026年9月17日',
     readTime: '6 分钟阅读',
     tag: 'Angular 22 · WebMCP',

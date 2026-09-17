@@ -200,6 +200,7 @@ export const getPhotographerProfileTool = {
   execute: async () => {
     return {
       name: 'Chong Wei Khang',
+      chineseName: '张炜康',
       location: 'Penang, Malaysia',
       role: 'Senior Full Stack Developer & Photographer',
       biography:

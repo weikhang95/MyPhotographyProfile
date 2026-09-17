@@ -4,7 +4,7 @@ Shared instructions for AI coding agents (Claude Code, Codex, Cursor, etc.) work
 
 ## Project
 
-Angular 22 photography portfolio for **Chong Wei Khang** (Penang, Malaysia). Being expanded into a dual-identity site: photography portfolio **plus** an AI blog (agent build logs, tutorials, opinion essays). Stack: Angular 22 (standalone components, WebMCP tools enabled), Tailwind CSS 4, Angular Material 22, `@fancyapps/ui` lightbox, Jest. Hosted on Cloudflare Workers (static assets, `wrangler.jsonc`). Routes: `/` (portfolio), `/about`, `/contact`, and (planned) `/blog`.
+Angular 22 photography portfolio for **Chong Wei Khang (张炜康)** (Penang, Malaysia). Being expanded into a dual-identity site: photography portfolio **plus** an AI blog (agent build logs, tutorials, opinion essays). Stack: Angular 22 (standalone components, WebMCP tools enabled), Tailwind CSS 4, Angular Material 22, `@fancyapps/ui` lightbox, Jest. Hosted on Cloudflare Workers (static assets, `wrangler.jsonc`). Routes: `/` (portfolio), `/about`, `/contact`, and (planned) `/blog`.
 
 ## How to work in this repo
 

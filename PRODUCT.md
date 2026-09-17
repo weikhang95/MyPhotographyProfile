@@ -22,7 +22,7 @@ Three words: **Calm · Cinematic · Editorial.**
 - **Cinematic** — photography is the protagonist; chrome recedes; widescreen framing and intentional cropping.
 - **Editorial** — print-inspired typographic hierarchy, restrained type scale, captions and metadata treated as first-class.
 
-Voice: first-person, sparing, technical when warranted, never flashy. Owner: Chong Wei Khang, based in Penang, Malaysia.
+Voice: first-person, sparing, technical when warranted, never flashy. Owner: Chong Wei Khang (张炜康), based in Penang, Malaysia.
 
 ### Aesthetic Direction
 
