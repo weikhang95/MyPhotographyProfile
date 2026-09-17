@@ -1,37 +1,127 @@
-<div class="container mx-auto px-3 sm:px-4">
-  <h1 class="text-2xl sm:text-3xl md:text-4xl pt-6 sm:pt-8 md:pt-10 pb-4 sm:pb-6 md:pb-8 font-semibold font-signika tracking-wider">ABOUT ME</h1>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 md:gap-14 lg:gap-20">
-    <div class="col-span-1">
-      <div
-        class="bg-white dark:bg-neutral-900 p-4 sm:p-5 pb-20 sm:pb-24 md:pb-28 mx-auto sm:m-6 md:m-12 max-w-sm shadow-lg border border-neutral-100 dark:border-neutral-800 hover:rotate-0 transition duration-500 -rotate-3 sm:-rotate-6 relative">
-        <img [ngSrc]="getCloudinaryUrl(profileImage.filename, profileImage.width, profileImage.height)"
-          [alt]="profileImage.alt"
-          [width]="profileImage.width" 
-          [height]="profileImage.height" 
-          priority
-          class="flex flex-col w-full aspect-square object-cover h-auto opacity-100">
-        <div class="absolute bottom-0 left-0 right-0 text-center">
-          <p class="text-neutral-700 dark:text-neutral-300 pb-4 sm:pb-6 md:pb-7 h-full text-4xl sm:text-5xl md:text-6xl font-nothingyoucoulddo">me</p>
+<div class="about-container">
+  <!-- 1. Header & Lead -->
+  <header class="about-header">
+    <div class="header-pretitle">
+      <span class="dot-indicator">●</span>
+      <span class="pretitle-text">BIOGRAPHY & PERSPECTIVE</span>
+    </div>
+    <h1 class="about-title">{{ localeService.dict().about.title }}</h1>
+    <p class="about-lead">{{ localeService.dict().about.subtitle }}</p>
+  </header>
+
+  <!-- 2. Dual-Track Hero: Portrait + Narrative -->
+  <div class="about-hero-grid">
+    <!-- Left: Portrait & Quick Meta -->
+    <aside class="portrait-column">
+      <div class="portrait-card">
+        <div class="portrait-frame">
+          <img 
+            [src]="getCloudinaryUrl(profileImage.filename, profileImage.width, profileImage.height)"
+            [alt]="profileImage.alt"
+            [width]="profileImage.width"
+            [height]="profileImage.height"
+            loading="eager"
+            decoding="async"
+            class="portrait-img" />
+        </div>
+        <div class="portrait-caption">
+          <span class="caption-name">Chong Wei Khang · 张炜康</span>
+          <span class="caption-location">Penang, Malaysia (5.4164° N, 100.3327° E)</span>
         </div>
       </div>
-    </div>
-    <section class="font-normal text-center md:text-start mx-auto md:mx-3 col-span-1 my-6 md:my-auto max-w-xl">
-      <div class="block md:hidden">
-        <h2 class="text-2xl sm:text-3xl font-signika font-semibold mb-1">Hello there,</h2>
-        <h2 class="text-2xl sm:text-3xl font-signika font-semibold mb-4 sm:mb-6">I'm Wei Khang <span class="animate-wave">👋</span></h2>
+
+      <div class="quick-facts-card">
+        <div class="fact-item">
+          <span class="fact-label">LOCATION</span>
+          <span class="fact-value">Penang, Malaysia</span>
+        </div>
+        <div class="fact-item">
+          <span class="fact-label">PRIMARY ROLE</span>
+          <span class="fact-value">Senior Full Stack Developer</span>
+        </div>
+        <div class="fact-item">
+          <span class="fact-label">CAMERA SYSTEM</span>
+          <span class="fact-value">Nikon Z Mirrorless</span>
+        </div>
       </div>
-      <h2 class="hidden md:block text-2xl sm:text-3xl font-signika font-semibold mb-4 sm:mb-6">Hello there, I'm Wei Khang
-        <span class="animate-wave">👋</span>
-      </h2>
-      <p class="mb-5 text-base sm:text-lg text-neutral-700 dark:text-neutral-300 leading-relaxed">
-        I'm a Mechatronic Engineer turned Senior Full Stack Developer at ViTrox Corporation Berhad since 2019. Based in Penang, Malaysia, I combine technical expertise with creativity to build impactful digital solutions.
-      </p>
-      <p class="mb-5 text-base sm:text-lg text-neutral-700 dark:text-neutral-300 leading-relaxed">
-        Photography is my creative outlet. With my Nikon Z5 and Z24-120 and Z40 lenses, I capture life's special moments and tell stories through images. From street scenes to landscapes, each shot is an opportunity to share a unique perspective.
-      </p>
-      <p class="text-base sm:text-lg text-neutral-700 dark:text-neutral-300 leading-relaxed">
-        Beyond tech and photography, I'm passionate about coffee and anime. I believe in continuous learning and meaningful connections. Whether it's coding or creating visual stories, I'm always excited to collaborate on new adventures!
-      </p>
+    </aside>
+
+    <!-- Right: The Dual-Track Narrative -->
+    <main class="narrative-column">
+      <!-- Track 1: The Builder -->
+      <section class="narrative-block">
+        <div class="block-tag">
+          <span class="tag-number">01</span>
+          <span class="tag-label">ENGINEERING ARCHITECTURE</span>
+        </div>
+        <h2 class="block-heading">{{ localeService.dict().about.builderTitle }}</h2>
+        <p class="block-text">{{ localeService.dict().about.builderText }}</p>
+      </section>
+
+      <!-- Track 2: The Observer -->
+      <section class="narrative-block">
+        <div class="block-tag">
+          <span class="tag-number">02</span>
+          <span class="tag-label">VISUAL OBSERVATION</span>
+        </div>
+        <h2 class="block-heading">{{ localeService.dict().about.observerTitle }}</h2>
+        <p class="block-text">{{ localeService.dict().about.observerText }}</p>
+      </section>
+    </main>
+  </div>
+
+  <!-- 3. Structured Information Modules -->
+  <div class="modules-grid">
+    <!-- Equipment & Tools -->
+    <section class="info-card gear-card">
+      <div class="card-header">
+        <span class="card-icon">⚙</span>
+        <h3 class="card-title">{{ localeService.dict().about.gearTitle }}</h3>
+      </div>
+      <div class="card-body">
+        <div class="spec-row">
+          <span class="spec-title">{{ localeService.dict().about.cameraGearLabel }}</span>
+          <p class="spec-desc font-mono">{{ localeService.dict().about.cameraGear }}</p>
+        </div>
+        <div class="spec-row">
+          <span class="spec-title">{{ localeService.dict().about.techStackLabel }}</span>
+          <p class="spec-desc font-mono">{{ localeService.dict().about.techStack }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Journey & Milestones -->
+    <section class="info-card timeline-card">
+      <div class="card-header">
+        <span class="card-icon">⏱</span>
+        <h3 class="card-title">{{ localeService.dict().about.milestonesTitle }}</h3>
+      </div>
+      <div class="card-body timeline-list">
+        <div class="timeline-item">
+          <div class="timeline-year">{{ localeService.dict().about.milestone1Year }}</div>
+          <div class="timeline-content">
+            <h4 class="timeline-role">{{ localeService.dict().about.milestone1Title }}</h4>
+            <p class="timeline-desc">{{ localeService.dict().about.milestone1Desc }}</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">{{ localeService.dict().about.milestone2Year }}</div>
+          <div class="timeline-content">
+            <h4 class="timeline-role">{{ localeService.dict().about.milestone2Title }}</h4>
+            <p class="timeline-desc">{{ localeService.dict().about.milestone2Desc }}</p>
+          </div>
+        </div>
+      </div>
     </section>
   </div>
+
+  <!-- 4. Colophon (Handcrafted Architecture) -->
+  <footer class="colophon-section">
+    <div class="colophon-card">
+      <div class="colophon-header">
+        <span class="colophon-tag">COLOPHON // 网站架构手记</span>
+      </div>
+      <p class="colophon-text">{{ localeService.dict().about.colophonText }}</p>
+    </div>
+  </footer>
 </div>

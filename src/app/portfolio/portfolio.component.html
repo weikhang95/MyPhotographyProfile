@@ -1,28 +1,111 @@
-<div>
-  <div class="container mx-auto px-3 sm:px-4">
-    <h1 class="text-2xl sm:text-3xl md:text-4xl pt-6 sm:pt-8 md:pt-10 pb-4 sm:pb-6 md:pb-8 font-semibold font-signika tracking-wider">PORTFOLIO</h1>
-    <section class="text-neutral-700 dark:text-neutral-300">
-      <div class="w-full">
-        <div class="columns-1 sm:columns-2 lg:columns-3 gap-3 sm:gap-4">
-          @for (image of portfolioImages; track image; let i = $index) {
-            <div class="reveal-image relative mb-3 sm:mb-4 break-inside-avoid group">
-              <div class="overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-500">
-                <a [href]="getFullSizeUrl(image)"
-                  data-fancybox="gallery"
-                  class="block aspect-auto relative">
-                  <img [ngSrc]="getDisplayUrl(image)"
-                    [width]="getDisplayWidth(image)"
-                    [height]="getDisplayHeight(image)"
-                    [alt]="image.alt"
-                    [priority]="i < 3"
-                    class="w-full h-auto object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]">
-                  <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500"></div>
-                </a>
+<div class="portfolio-container">
+  <!-- 1. Editorial Identity Strip -->
+  <header class="portfolio-header">
+    <div class="identity-strip">
+      <h1 class="identity-statement">
+        {{ localeService.dict().home.introStatement }}
+      </h1>
+      <p class="identity-meta">
+        <span class="meta-indicator">●</span>
+        <span>{{ localeService.dict().home.introMeta }}</span>
+      </p>
+    </div>
+
+    <!-- 2. Curation Filter Tabs -->
+    <div class="curation-bar">
+      <nav class="curation-filters" aria-label="Photo series filter">
+        <button 
+          type="button" 
+          class="filter-pill" 
+          [class.active]="selectedCategory() === 'all'"
+          (click)="setCategory('all')">
+          {{ localeService.dict().home.filterAll }}
+          <span class="filter-count">{{ portfolioImages.length }}</span>
+        </button>
+        <button 
+          type="button" 
+          class="filter-pill" 
+          [class.active]="selectedCategory() === 'street'"
+          (click)="setCategory('street')">
+          {{ localeService.dict().home.filterStreet }}
+        </button>
+        <button 
+          type="button" 
+          class="filter-pill" 
+          [class.active]="selectedCategory() === 'travel'"
+          (click)="setCategory('travel')">
+          {{ localeService.dict().home.filterTravel }}
+        </button>
+        <button 
+          type="button" 
+          class="filter-pill" 
+          [class.active]="selectedCategory() === 'still_life'"
+          (click)="setCategory('still_life')">
+          {{ localeService.dict().home.filterQuiet }}
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 3. Editorial Photo Grid -->
+  <main class="gallery-wrapper" aria-label="Photo gallery">
+    <div class="editorial-masonry">
+      @for (image of filteredImages(); track image.id; let i = $index) {
+        <article class="gallery-card reveal-image">
+          <div class="photo-frame">
+            <a 
+              [href]="getFullSizeUrl(image)"
+              data-fancybox="gallery"
+              [attr.data-caption]="getImageCaption(image)"
+              class="photo-link"
+              [attr.aria-label]="getImageCaption(image)">
+              <img 
+                [src]="getDisplayUrl(image)"
+                [width]="getDisplayWidth(image)"
+                [height]="getDisplayHeight(image)"
+                [alt]="image.alt"
+                loading="lazy"
+                decoding="async"
+                class="gallery-img" />
+              <div class="photo-overlay">
+                <span class="overlay-icon">⤢</span>
               </div>
+            </a>
+          </div>
+
+          <!-- Editorial Caption / EXIF Formula -->
+          <footer class="photo-meta">
+            <div class="meta-headline">
+              <span class="photo-title">{{ getImageTitle(image) }}</span>
+              <span class="photo-year">{{ image.year }}</span>
             </div>
-          }
-        </div>
+            <div class="meta-subline">
+              <span class="photo-location">{{ getImageLocation(image) }}</span>
+              <span class="meta-dot">/</span>
+              <span class="photo-gear">{{ image.gear }}</span>
+            </div>
+          </footer>
+        </article>
+      }
+    </div>
+  </main>
+
+  <!-- 4. Dual Identity Bridge: Latest Writing Section -->
+  <section class="latest-writing-section" aria-label="Latest engineering essay">
+    <div class="writing-bridge-card">
+      <div class="writing-bridge-header">
+        <span class="badge-dot"></span>
+        <span class="badge-text">{{ localeService.dict().home.latestWritingTag }}</span>
       </div>
-    </section>
-  </div>
+      <h2 class="writing-bridge-title">
+        <a routerLink="/blog">{{ localeService.dict().home.latestWritingTitle }}</a>
+      </h2>
+      <div class="writing-bridge-footer">
+        <span class="writing-bridge-meta">{{ localeService.dict().home.latestWritingMeta }}</span>
+        <a routerLink="/blog" class="writing-bridge-link">
+          {{ localeService.dict().home.readEssay }}
+        </a>
+      </div>
+    </div>
+  </section>
 </div>

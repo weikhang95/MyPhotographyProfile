@@ -46,6 +46,40 @@ export interface TranslationDictionary {
     readonly conclusionP: string;
     readonly authorBio: string;
   };
+  readonly home: {
+    readonly introStatement: string;
+    readonly introMeta: string;
+    readonly filterAll: string;
+    readonly filterStreet: string;
+    readonly filterTravel: string;
+    readonly filterQuiet: string;
+    readonly latestWritingTag: string;
+    readonly latestWritingTitle: string;
+    readonly latestWritingMeta: string;
+    readonly readEssay: string;
+  };
+  readonly about: {
+    readonly title: string;
+    readonly subtitle: string;
+    readonly builderTitle: string;
+    readonly builderText: string;
+    readonly observerTitle: string;
+    readonly observerText: string;
+    readonly gearTitle: string;
+    readonly cameraGearLabel: string;
+    readonly cameraGear: string;
+    readonly techStackLabel: string;
+    readonly techStack: string;
+    readonly milestonesTitle: string;
+    readonly milestone1Year: string;
+    readonly milestone1Title: string;
+    readonly milestone1Desc: string;
+    readonly milestone2Year: string;
+    readonly milestone2Title: string;
+    readonly milestone2Desc: string;
+    readonly colophonTitle: string;
+    readonly colophonText: string;
+  };
 }
 
 const EN_DICTIONARY: TranslationDictionary = {
@@ -92,6 +126,40 @@ const EN_DICTIONARY: TranslationDictionary = {
     conclusionP: 'By designing systems around small, stable interfaces—decoupling the brain from the hands and the session log from the context window—we build architectures that outlast any single model generation. As models improve, the harness doesn\'t need to be rewritten; it simply orchestrates smarter tools.',
     authorBio: 'Senior Full Stack Developer at ViTrox & Photographer in Penang, Malaysia. Exploring agentic patterns, WebMCP, and modern frontend architecture.',
   },
+  home: {
+    introStatement: 'Chong Wei Khang (张炜康) is a senior software engineer and photographer based in Penang, Malaysia. Capturing quiet street light, travel atmospheres, and building reliable agentic software.',
+    introMeta: 'Penang, MY  ·  Nikon Z5  ·  Full Stack & AI  ·  Bilingual Notes',
+    filterAll: 'All Works',
+    filterStreet: 'Street & Heritage',
+    filterTravel: 'Travel & Scenery',
+    filterQuiet: 'Quiet & Coffee',
+    latestWritingTag: 'LATEST ESSAY // ARCHITECTURE',
+    latestWritingTitle: 'Decoupling the Brain from the Hands: Architectural Patterns for Reliable AI Agents',
+    latestWritingMeta: '6 min read · WebMCP · Event Streams',
+    readEssay: 'Read Essay →',
+  },
+  about: {
+    title: 'About Me',
+    subtitle: 'Building software with engineering rigor, observing the world through quiet photographic frames.',
+    builderTitle: 'The Builder — Code & Systems',
+    builderText: 'With a background in Mechatronics Engineering, I evolved into a Senior Full Stack Developer at ViTrox Corporation in Penang since 2019. I design distributed systems, robust web interfaces, and agentic workflows using Angular 22, TypeScript, Python, and the emerging WebMCP protocol.',
+    observerTitle: 'The Observer — Light & Moments',
+    observerText: 'Photography is my way of slowing down. With a Nikon Z5, a 40mm prime, and a 24-120mm zoom, I look for quiet geometry in Penang\'s heritage streets, the calm stillness of specialty coffee bars, and the shifting atmospheres of travels across Southeast Asia and Europe.',
+    gearTitle: 'Tools & Equipment',
+    cameraGearLabel: 'Camera & Optics',
+    cameraGear: 'Nikon Z5 · NIKKOR Z 24-120mm f/4 S · NIKKOR Z 40mm f/2',
+    techStackLabel: 'Engineering Stack',
+    techStack: 'Angular 22 · TypeScript · Python · WebMCP · Tailwind CSS · Cloudflare Workers',
+    milestonesTitle: 'Journey & Timeline',
+    milestone1Year: '2019 — Present',
+    milestone1Title: 'Senior Full Stack Developer · ViTrox',
+    milestone1Desc: 'Leading full-stack web and platform architecture, engineering data services, and prototyping modern agentic workflows.',
+    milestone2Year: '2015 — 2019',
+    milestone2Title: 'B.Eng. in Mechatronics Engineering',
+    milestone2Desc: 'Graduated with first-class engineering foundations in embedded control, automation, and software integration.',
+    colophonTitle: 'Colophon & Architecture',
+    colophonText: 'This personal digital garden is designed and hand-crafted with Angular 22 standalone components, Tailwind CSS 4, and custom WebMCP tooling. Fully bilingual with responsive CJK typography and zero tracking scripts. Hosted on Cloudflare Workers edge network.',
+  },
 };
 
 const ZH_DICTIONARY: TranslationDictionary = {
@@ -137,6 +205,40 @@ const ZH_DICTIONARY: TranslationDictionary = {
     h2_conclusion: '总结与核心思考',
     conclusionP: '通过设计简洁且稳定的边界契约——将决策大脑与执行双手解耦，将持久会话与临时上下文解耦——我们能够构建出超越单代模型生命周期的健壮系统。未来模型变得更聪明时，架构基座无需重写，只需接入更精准的工具。',
     authorBio: 'ViTrox 资深全栈开发工程师，现居马来西亚槟城，独立摄影师。专注探索 Agent 架构、WebMCP 与现代前端工程演进。',
+  },
+  home: {
+    introStatement: '张炜康 (Chong Wei Khang) — 现居马来西亚槟城的全栈开发工程师与独立摄影师。记录街道上的沉静光影与旅途氛围，同时构建高可靠性的智能体软件。',
+    introMeta: '马来西亚·槟城  ·  Nikon Z5  ·  全栈架构与 AI  ·  双语手记',
+    filterAll: '全部作品',
+    filterStreet: '街头纪实',
+    filterTravel: '旅途光影',
+    filterQuiet: '静物咖啡',
+    latestWritingTag: '最新技术专栏 // 智能体架构',
+    latestWritingTitle: '解耦思考与行动：构建高可靠 AI Agent 系统的架构模式',
+    latestWritingMeta: '6 分钟深度阅读 · WebMCP · 只增不减事件流',
+    readEssay: '阅读全文 →',
+  },
+  about: {
+    title: '关于我',
+    subtitle: '以工程师的严谨构建系统，以观察者的从容捕捉光影。',
+    builderTitle: '构建者 — 代码与系统架构',
+    builderText: '机电一体化工程背景出身，自 2019 年起在马来西亚槟城 ViTrox 担任资深全栈开发工程师。专注设计分布式系统、现代化高响应 Web 架构以及基于 WebMCP 协议的可靠智能体工作流。',
+    observerTitle: '观察者 — 光线与静止瞬间',
+    observerText: '摄影是我让世界慢下来的方式。手持一台 Nikon Z5，挂载 40mm 定焦与 24-120mm 变焦，我在槟城老街寻找沉静的几何线条，在独立精品咖啡馆里记录光影散落，在跨越欧亚的旅途中捕捉没有修饰的真实温度。',
+    gearTitle: '工具与装备箱',
+    cameraGearLabel: '相机与镜头光学',
+    cameraGear: 'Nikon Z5 · NIKKOR Z 24-120mm f/4 S · NIKKOR Z 40mm f/2',
+    techStackLabel: '工程技术栈',
+    techStack: 'Angular 22 · TypeScript · Python · WebMCP · Tailwind CSS · Cloudflare Workers',
+    milestonesTitle: '经历与时间线',
+    milestone1Year: '2019 — 至今',
+    milestone1Title: '资深全栈开发工程师 · ViTrox',
+    milestone1Desc: '主导全栈 Web 架构与企业级平台研发，设计高性能数据处理服务，落地前沿智能体自动化系统。',
+    milestone2Year: '2015 — 2019',
+    milestone2Title: '机电一体化工程学士学位 (B.Eng.)',
+    milestone2Desc: '以一等工程学识背景毕业，系统掌握嵌入式控制、自动化工程与软件系统集成。',
+    colophonTitle: '关于本站与设计理念',
+    colophonText: '本站基于 Angular 22 独立组件、Tailwind CSS 4 与实验性 WebMCP 智能体工具链纯手工构建。全站原生双语驱动，针对中文排版进行 CJK 标点与行距优化，零外部追踪代码。部署于 Cloudflare Workers 全球边缘网络。',
   },
 };
 
