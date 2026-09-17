@@ -43,4 +43,13 @@ describe('EditorialGraphicComponent', () => {
     expect(el.textContent).toContain('ORCHESTRATION & HARNESS LAYER');
     expect(el.textContent).toContain('DURABLE SESSION STORE');
   });
+
+  it('should render Chinese labels when locale is zh', () => {
+    component.localeService?.setLocale('zh');
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.textContent).toContain('智能体调度中枢');
+    expect(el.textContent).toContain('执行工具沙箱');
+  });
 });

@@ -123,6 +123,35 @@ p {
   line-height: 1.7;
 }
 
+/* =========================================================================
+ * Chinese / CJK Typography Rules (:lang(zh), html.lang-zh)
+ * Adheres to docs/design-research.md typographic specifications
+ * ========================================================================= */
+:lang(zh), html.lang-zh {
+  --font-display: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Signika", sans-serif;
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Signika", sans-serif;
+    letter-spacing: 0.01em;
+    font-weight: 600;
+  }
+
+  p {
+    line-height: 1.85;
+    letter-spacing: 0;
+  }
+
+  // Avoid pseudo-italics on Chinese glyphs
+  em {
+    font-style: normal;
+    font-weight: 600;
+  }
+}
+
 // Reduced motion: respect user preference
 @media (prefers-reduced-motion: reduce) {
   *,

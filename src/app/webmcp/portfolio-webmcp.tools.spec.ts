@@ -7,9 +7,11 @@ import {
   getPhotographerProfileTool,
   navigateSiteTool,
   toggleThemeTool,
+  switchLanguageTool,
   providePortfolioWebMcp,
 } from './portfolio-webmcp.tools';
 import { ThemeService } from '../theme.service';
+import { LocaleService } from '../i18n/locale.service';
 
 describe('WebMCP Tools', () => {
   describe('searchPortfolioTool', () => {
@@ -91,6 +93,31 @@ describe('WebMCP Tools', () => {
         const result = (await toggleThemeTool.execute({})) as { activeTheme: string };
         expect(mockThemeService.toggleTheme).toHaveBeenCalled();
         expect(result.activeTheme).toBeDefined();
+      });
+    });
+  });
+
+  describe('switchLanguageTool', () => {
+    it('should switch language between en and zh using LocaleService', async () => {
+      const mockLocaleService = {
+        locale: jest.fn().mockReturnValue('zh'),
+        isChinese: jest.fn().mockReturnValue(true),
+        setLocale: jest.fn(),
+        toggleLocale: jest.fn(),
+      };
+
+      TestBed.configureTestingModule({
+        providers: [{ provide: LocaleService, useValue: mockLocaleService }],
+      });
+
+      await TestBed.runInInjectionContext(async () => {
+        const result = (await switchLanguageTool.execute({ lang: 'zh' })) as {
+          activeLanguage: string;
+          isChinese: boolean;
+        };
+        expect(mockLocaleService.setLocale).toHaveBeenCalledWith('zh');
+        expect(result.activeLanguage).toBe('zh');
+        expect(result.isChinese).toBe(true);
       });
     });
   });

@@ -1,4 +1,5 @@
-import { Component, ChangeDetectionStrategy, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, inject, computed } from '@angular/core';
+import { LocaleService } from '../../../i18n/locale.service';
 
 export type GraphicArchetype = 'decoupled' | 'stream' | 'matrix' | 'layers';
 
@@ -10,6 +11,8 @@ export type GraphicArchetype = 'decoupled' | 'stream' | 'matrix' | 'layers';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditorialGraphicComponent {
+  readonly localeService = inject(LocaleService, { optional: true });
+  readonly isChinese = computed(() => this.localeService?.isChinese() ?? false);
   /**
    * The architectural visual archetype to render:
    * - 'decoupled': Brain & Hands / Separated subsystems with interface bus (Anthropic Managed Agents style)

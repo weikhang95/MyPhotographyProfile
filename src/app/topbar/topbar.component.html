@@ -19,47 +19,15 @@
     </button>
     <a class="ml-4 text-xl font-signika font-bold" href="/">WEI KHANG</a>
 
-    <!-- Theme toggle on mobile -->
-    <button (click)="toggleTheme()"
-            [attr.aria-label]="isDarkTheme ? 'Switch to light mode' : 'Switch to dark mode'"
-            class="ml-auto text-black dark:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-md p-1">
-      @if (isDarkTheme) {
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
-      }
-      @if (!isDarkTheme) {
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-        </svg>
-      }
-    </button>
-  </div>
-
-  <!-- Mobile menu -->
-  @if (isMobileMenuOpen) {
-    <div @slideMenu id="mobile-menu" role="navigation" class="lg:hidden bg-white dark:bg-neutral-900 fixed top-16 left-0 right-0 z-50 shadow-md py-4">
-      <nav class="flex flex-col space-y-4 px-4" aria-label="Mobile navigation">
-        <a class="text-base font-signika font-medium tracking-wider py-2 border-b border-neutral-200 dark:border-neutral-800 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/" routerLinkActive="text-blue-500 dark:text-blue-400" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu()">PORTFOLIO</a>
-        <a class="text-base font-signika font-medium tracking-wider py-2 border-b border-neutral-200 dark:border-neutral-800 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/blog" routerLinkActive="text-blue-500 dark:text-blue-400" (click)="closeMobileMenu()">WRITINGS</a>
-        <a class="text-base font-signika font-medium tracking-wider py-2 border-b border-neutral-200 dark:border-neutral-800 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/about" routerLinkActive="text-blue-500 dark:text-blue-400" (click)="closeMobileMenu()">ABOUT ME</a>
-        <a class="text-base font-signika font-medium tracking-wider py-2 border-b border-neutral-200 dark:border-neutral-800 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/contact" routerLinkActive="text-blue-500 dark:text-blue-400" (click)="closeMobileMenu()">CONTACT</a>
-      </nav>
-    </div>
-  }
-
-  <!-- Desktop navigation -->
-  <mat-toolbar class="hidden lg:flex dark:!bg-neutral-900 !bg-white !py-4 text-black dark:!text-white">
-    <a class="text-2xl font-signika font-bold tracking-wide" href="/">WEI KHANG</a>
-    <nav class="flex flex-1 justify-end gap-8" aria-label="Main navigation">
-      <a class="text-base font-signika font-medium tracking-wider hover:text-blue-500 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/" routerLinkActive="text-blue-500 dark:text-blue-400" [routerLinkActiveOptions]="{ exact: true }">PORTFOLIO</a>
-      <a class="text-base font-signika font-medium tracking-wider hover:text-blue-500 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/blog" routerLinkActive="text-blue-500 dark:text-blue-400">WRITINGS</a>
-      <a class="text-base font-signika font-medium tracking-wider hover:text-blue-500 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/about" routerLinkActive="text-blue-500 dark:text-blue-400">ABOUT ME</a>
-      <a class="text-base font-signika font-medium tracking-wider hover:text-blue-500 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/contact" routerLinkActive="text-blue-500 dark:text-blue-400">CONTACT</a>
-
-      <!-- Theme toggle on desktop -->
+    <!-- Controls on mobile: Language switcher + Theme toggle -->
+    <div class="ml-auto flex items-center gap-2">
+      <button (click)="toggleLocale()"
+              [attr.aria-label]="localeService.dict().lang.toggleLabel"
+              class="text-xs font-semibold px-2 py-1 rounded border border-neutral-300 dark:border-neutral-700 text-black dark:text-white hover:border-neutral-500 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+        {{ localeService.dict().lang.switchButtonText }}
+      </button>
       <button (click)="toggleTheme()"
-              [attr.aria-label]="isDarkTheme ? 'Switch to light mode' : 'Switch to dark mode'"
+              [attr.aria-label]="isDarkTheme ? localeService.dict().theme.toLight : localeService.dict().theme.toDark"
               class="text-black dark:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-md p-1">
         @if (isDarkTheme) {
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -72,6 +40,53 @@
           </svg>
         }
       </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  @if (isMobileMenuOpen) {
+    <div @slideMenu id="mobile-menu" role="navigation" class="lg:hidden bg-white dark:bg-neutral-900 fixed top-16 left-0 right-0 z-50 shadow-md py-4">
+      <nav class="flex flex-col space-y-4 px-4" aria-label="Mobile navigation">
+        <a class="text-base font-signika font-medium tracking-wider py-2 border-b border-neutral-200 dark:border-neutral-800 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/" routerLinkActive="text-blue-500 dark:text-blue-400" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu()">{{ localeService.dict().nav.portfolio }}</a>
+        <a class="text-base font-signika font-medium tracking-wider py-2 border-b border-neutral-200 dark:border-neutral-800 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/blog" routerLinkActive="text-blue-500 dark:text-blue-400" (click)="closeMobileMenu()">{{ localeService.dict().nav.writings }}</a>
+        <a class="text-base font-signika font-medium tracking-wider py-2 border-b border-neutral-200 dark:border-neutral-800 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/about" routerLinkActive="text-blue-500 dark:text-blue-400" (click)="closeMobileMenu()">{{ localeService.dict().nav.about }}</a>
+        <a class="text-base font-signika font-medium tracking-wider py-2 border-b border-neutral-200 dark:border-neutral-800 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/contact" routerLinkActive="text-blue-500 dark:text-blue-400" (click)="closeMobileMenu()">{{ localeService.dict().nav.contact }}</a>
+      </nav>
+    </div>
+  }
+
+  <!-- Desktop navigation -->
+  <mat-toolbar class="hidden lg:flex dark:!bg-neutral-900 !bg-white !py-4 text-black dark:!text-white">
+    <a class="text-2xl font-signika font-bold tracking-wide" href="/">WEI KHANG</a>
+    <nav class="flex flex-1 items-center justify-end gap-8" aria-label="Main navigation">
+      <a class="text-base font-signika font-medium tracking-wider hover:text-blue-500 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/" routerLinkActive="text-blue-500 dark:text-blue-400" [routerLinkActiveOptions]="{ exact: true }">{{ localeService.dict().nav.portfolio }}</a>
+      <a class="text-base font-signika font-medium tracking-wider hover:text-blue-500 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/blog" routerLinkActive="text-blue-500 dark:text-blue-400">{{ localeService.dict().nav.writings }}</a>
+      <a class="text-base font-signika font-medium tracking-wider hover:text-blue-500 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/about" routerLinkActive="text-blue-500 dark:text-blue-400">{{ localeService.dict().nav.about }}</a>
+      <a class="text-base font-signika font-medium tracking-wider hover:text-blue-500 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 rounded-sm" routerLink="/contact" routerLinkActive="text-blue-500 dark:text-blue-400">{{ localeService.dict().nav.contact }}</a>
+
+      <!-- Controls on desktop: Language switcher + Theme toggle -->
+      <div class="flex items-center gap-3">
+        <button (click)="toggleLocale()"
+                [attr.aria-label]="localeService.dict().lang.toggleLabel"
+                class="text-xs font-semibold px-2 py-1 rounded border border-neutral-300 dark:border-neutral-700 text-black dark:text-white hover:border-neutral-500 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+          {{ localeService.dict().lang.switchButtonText }}
+        </button>
+
+        <button (click)="toggleTheme()"
+                [attr.aria-label]="isDarkTheme ? localeService.dict().theme.toLight : localeService.dict().theme.toDark"
+                class="text-black dark:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-md p-1">
+          @if (isDarkTheme) {
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          }
+          @if (!isDarkTheme) {
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          }
+        </button>
+      </div>
     </nav>
   </mat-toolbar>
 </header>

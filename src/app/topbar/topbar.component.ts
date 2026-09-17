@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { trigger, transition, style, animate } from '@angular/animations';
 import { ThemeService } from '../theme.service';
+import { LocaleService } from '../i18n/locale.service';
 
 @Component({
   selector: 'app-topbar',
@@ -33,12 +34,19 @@ export class TopbarComponent implements OnInit {
   isMobileMenuOpen = false;
   isDarkTheme = false;
 
-  constructor(private themeService: ThemeService) {}
+  constructor(
+    private themeService: ThemeService,
+    public localeService: LocaleService
+  ) {}
 
   ngOnInit(): void {
     this.themeService.isDarkTheme$.subscribe(isDark => {
       this.isDarkTheme = isDark;
     });
+  }
+
+  toggleLocale(): void {
+    this.localeService.toggleLocale();
   }
 
   toggleMobileMenu(): void {

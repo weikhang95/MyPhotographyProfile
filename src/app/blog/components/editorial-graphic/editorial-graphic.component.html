@@ -51,20 +51,26 @@
         <g class="subsystem-left" filter="url(#soft-shadow)">
           <rect x="70" y="100" width="250" height="250" rx="8" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
           <rect x="70" y="100" width="250" height="40" rx="8" fill="var(--eg-bg)" stroke="var(--eg-border)" stroke-width="1" />
-          <text x="92" y="126" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="14" font-weight="600">
-            AGENT HARNESS (BRAIN)
+          <text x="92" y="126" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="13" font-weight="600">
+            {{ isChinese() ? '智能体调度中枢 (BRAIN)' : 'AGENT HARNESS (BRAIN)' }}
           </text>
           <circle cx="295" cy="120" r="4" fill="var(--eg-accent-clay)" />
 
           <!-- Inner state modules -->
           <rect x="92" y="160" width="206" height="42" rx="4" fill="var(--eg-bg)" stroke="var(--eg-stroke-dim)" />
-          <text x="108" y="185" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="12">LLM Decision Loop</text>
+          <text x="108" y="185" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11">
+            {{ isChinese() ? 'LLM 决策推理回路' : 'LLM Decision Loop' }}
+          </text>
 
           <rect x="92" y="214" width="206" height="42" rx="4" fill="var(--eg-bg)" stroke="var(--eg-stroke-dim)" />
-          <text x="108" y="239" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="12">Context Management</text>
+          <text x="108" y="239" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11">
+            {{ isChinese() ? '上下文压缩管理' : 'Context Management' }}
+          </text>
 
           <rect x="92" y="268" width="206" height="42" rx="4" fill="var(--eg-bg)" stroke="var(--eg-stroke-dim)" />
-          <text x="108" y="293" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="12">Session Log Interrogator</text>
+          <text x="108" y="293" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11">
+            {{ isChinese() ? '会话日志检索器' : 'Session Log Interrogator' }}
+          </text>
         </g>
 
         <!-- Central Bus / Protocol Bridge -->
@@ -95,26 +101,32 @@
         <g class="subsystem-right" filter="url(#soft-shadow)">
           <rect x="480" y="100" width="250" height="250" rx="8" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
           <rect x="480" y="100" width="250" height="40" rx="8" fill="var(--eg-bg)" stroke="var(--eg-border)" stroke-width="1" />
-          <text x="502" y="126" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="14" font-weight="600">
-            SANDBOX TOOLS (HANDS)
+          <text x="502" y="126" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="13" font-weight="600">
+            {{ isChinese() ? '执行工具沙箱 (HANDS)' : 'SANDBOX TOOLS (HANDS)' }}
           </text>
           <circle cx="705" cy="120" r="4" fill="var(--eg-accent-sand)" />
 
           <!-- Tools / Endpoints list -->
           <rect x="502" y="160" width="206" height="42" rx="4" fill="var(--eg-bg)" stroke="var(--eg-stroke-dim)" />
-          <text x="518" y="185" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="12">File & Code Runtime</text>
+          <text x="518" y="185" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11">
+            {{ isChinese() ? '代码与文件运行环境' : 'File & Code Runtime' }}
+          </text>
 
           <rect x="502" y="214" width="206" height="42" rx="4" fill="var(--eg-bg)" stroke="var(--eg-stroke-dim)" />
-          <text x="518" y="239" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="12">MCP Tool Proxies</text>
+          <text x="518" y="239" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11">
+            {{ isChinese() ? 'MCP 工具调用代理' : 'MCP Tool Proxies' }}
+          </text>
 
           <rect x="502" y="268" width="206" height="42" rx="4" fill="var(--eg-bg)" stroke="var(--eg-stroke-dim)" />
-          <text x="518" y="293" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="12">Ephemeral Container</text>
+          <text x="518" y="293" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11">
+            {{ isChinese() ? '瞬态执行沙箱容器' : 'Ephemeral Container' }}
+          </text>
         </g>
 
         <!-- Bottom Status Bar -->
         <rect x="70" y="370" width="660" height="24" rx="4" fill="var(--eg-bg)" stroke="var(--eg-border)" stroke-width="1" />
         <text x="85" y="386" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">
-          STATUS: Brain = Cattle  ·  Hands = Stateless Containers  ·  Zero Leaked Tokens
+          {{ isChinese() ? '系统状态: 大脑 = 消耗品 (Cattle)  ·  双手 = 无状态容器  ·  零凭证泄漏' : 'STATUS: Brain = Cattle  ·  Hands = Stateless Containers  ·  Zero Leaked Tokens' }}
         </text>
       }
 
@@ -158,17 +170,31 @@
         <!-- Active Head Pointer -->
         <g transform="translate(535, 120)">
           <rect width="165" height="120" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-stroke-main)" stroke-width="2" stroke-dasharray="4 4" [class.anim-flow]="animated()" />
-          <text x="20" y="30" fill="var(--eg-accent-clay)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">APPEND HEAD (LIVE)</text>
-          <text x="20" y="55" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="13">Interrogation Hook</text>
+          <text x="20" y="30" fill="var(--eg-accent-clay)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">
+            {{ isChinese() ? '实时追加位点 (LIVE)' : 'APPEND HEAD (LIVE)' }}
+          </text>
+          <text x="20" y="55" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="13">
+            {{ isChinese() ? '断点检索钩子' : 'Interrogation Hook' }}
+          </text>
           <text x="20" y="75" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">getEvents(since: e_003)</text>
-          <text x="20" y="98" fill="var(--eg-accent-sand)" font-family="var(--eg-font-mono)" font-size="10">durability: guaranteed</text>
+          <text x="20" y="98" fill="var(--eg-accent-sand)" font-family="var(--eg-font-mono)" font-size="10">
+            {{ isChinese() ? '持久性: 强保证' : 'durability: guaranteed' }}
+          </text>
         </g>
 
         <!-- Bottom Metrics Annotations -->
-        <text x="100" y="300" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">t_0: Ingestion</text>
-        <text x="240" y="300" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">t_1: Reasoning</text>
-        <text x="390" y="300" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">t_2: Execution</text>
-        <text x="535" y="300" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11">t_3: Next Turn (Recoverable)</text>
+        <text x="100" y="300" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">
+          {{ isChinese() ? 't_0: 摄入输入' : 't_0: Ingestion' }}
+        </text>
+        <text x="240" y="300" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">
+          {{ isChinese() ? 't_1: 深度推理' : 't_1: Reasoning' }}
+        </text>
+        <text x="390" y="300" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">
+          {{ isChinese() ? 't_2: 沙箱执行' : 't_2: Execution' }}
+        </text>
+        <text x="535" y="300" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11">
+          {{ isChinese() ? 't_3: 下轮唤醒 (无损恢复)' : 't_3: Next Turn (Recoverable)' }}
+        </text>
       }
 
       <!-- =================================================================== -->
@@ -180,39 +206,55 @@
           <rect width="120" height="90" rx="8" fill="var(--eg-node-bg)" stroke="var(--eg-accent-clay)" stroke-width="2" />
           <circle cx="60" cy="35" r="16" fill="var(--eg-bg)" stroke="var(--eg-accent-clay)" stroke-width="1.5" />
           <text x="60" y="40" text-anchor="middle" fill="var(--eg-accent-clay)" font-family="var(--eg-font-mono)" font-size="14" font-weight="700">Ω</text>
-          <text x="60" y="70" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="12" font-weight="600">ORCHESTRATOR</text>
+          <text x="60" y="70" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="12" font-weight="600">
+            {{ isChinese() ? '中枢调度器' : 'ORCHESTRATOR' }}
+          </text>
         </g>
 
         <!-- Peripheral Specialist Nodes -->
         <!-- North: Research Node -->
         <line x1="400" y1="160" x2="400" y2="120" stroke="var(--eg-stroke-dim)" stroke-width="1.5" />
-        <g transform="translate(330, 70)">
-          <rect width="140" height="48" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
-          <text x="70" y="28" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11">Research / Read</text>
+        <g transform="translate(320, 70)">
+          <rect width="160" height="48" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <text x="80" y="28" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11">
+            {{ isChinese() ? '文献调研 / 检索' : 'Research / Read' }}
+          </text>
         </g>
 
         <!-- West: Planner Node -->
         <line x1="340" y1="205" x2="260" y2="205" stroke="var(--eg-accent-clay)" stroke-width="1.5" [class.anim-flow]="animated()" />
         <g transform="translate(110, 180)">
           <rect width="150" height="52" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
-          <text x="75" y="26" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">Planner Agent</text>
-          <text x="75" y="42" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">Step decomposition</text>
+          <text x="75" y="26" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">
+            {{ isChinese() ? '规划智能体' : 'Planner Agent' }}
+          </text>
+          <text x="75" y="42" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">
+            {{ isChinese() ? '任务分解与路径规划' : 'Step decomposition' }}
+          </text>
         </g>
 
         <!-- East: Tool Specialist -->
         <line x1="460" y1="205" x2="540" y2="205" stroke="var(--eg-accent-sand)" stroke-width="1.5" [class.anim-flow]="animated()" />
         <g transform="translate(540, 180)">
           <rect width="150" height="52" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
-          <text x="75" y="26" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">Coder / Tool Exec</text>
-          <text x="75" y="42" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">Sandboxed Actions</text>
+          <text x="75" y="26" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">
+            {{ isChinese() ? '执行与代码专员' : 'Coder / Tool Exec' }}
+          </text>
+          <text x="75" y="42" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">
+            {{ isChinese() ? '沙箱受控调用' : 'Sandboxed Actions' }}
+          </text>
         </g>
 
         <!-- South: Evaluator / Critic -->
         <line x1="400" y1="250" x2="400" y2="300" stroke="var(--eg-stroke-dim)" stroke-width="1.5" />
         <g transform="translate(325, 300)">
           <rect width="150" height="52" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
-          <text x="75" y="26" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">Verifier / Critic</text>
-          <text x="75" y="42" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">Regression check</text>
+          <text x="75" y="26" text-anchor="middle" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="11" font-weight="600">
+            {{ isChinese() ? '校验与反思专员' : 'Verifier / Critic' }}
+          </text>
+          <text x="75" y="42" text-anchor="middle" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="9">
+            {{ isChinese() ? '结果评估与回归验证' : 'Regression check' }}
+          </text>
         </g>
       }
 
@@ -224,7 +266,7 @@
           <!-- Layer 4: Client & User Intent -->
           <rect x="0" y="0" width="600" height="48" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
           <text x="24" y="29" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="13" font-weight="600">
-            APPLICATION LAYER
+            {{ isChinese() ? '应用接入层 (APPLICATION)' : 'APPLICATION LAYER' }}
           </text>
           <text x="580" y="29" text-anchor="end" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">
             Browser UI  ·  Chat  ·  WebMCP Consumers
@@ -233,35 +275,36 @@
           <!-- Layer 3: Agent Harness (Orchestration) -->
           <rect x="0" y="68" width="600" height="56" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-accent-clay)" stroke-width="1.5" />
           <text x="24" y="98" fill="var(--eg-accent-clay)" font-family="var(--eg-font-sans)" font-size="13" font-weight="600">
-            ORCHESTRATION & HARNESS LAYER
+            {{ isChinese() ? '编排与调度层 (HARNESS)' : 'ORCHESTRATION & HARNESS LAYER' }}
           </text>
           <text x="24" y="114" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">
-            Context Compaction  ·  Tool Dispatch  ·  Stateless Reboots
+            {{ isChinese() ? '上下文压缩  ·  工具分发调度  ·  无状态唤醒' : 'Context Compaction  ·  Tool Dispatch  ·  Stateless Reboots' }}
           </text>
 
-          <!-- Layer 2: Durable State Plane -->
-          <rect x="0" y="144" width="600" height="52" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
-          <text x="24" y="174" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="13" font-weight="600">
-            DURABLE SESSION STORE
+          <!-- Layer 2: Sandbox Isolation Plane -->
+          <rect x="0" y="144" width="600" height="56" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-accent-sand)" stroke-width="1.5" />
+          <text x="24" y="174" fill="var(--eg-accent-sand)" font-family="var(--eg-font-sans)" font-size="13" font-weight="600">
+            {{ isChinese() ? '沙箱环境隔离层 (SANDBOX)' : 'SANDBOX ISOLATION LAYER' }}
           </text>
-          <text x="580" y="174" text-anchor="end" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">
-            Immutable Append-Only Log  ·  Cloudflare D1 / SQLite
+          <text x="24" y="190" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10">
+            {{ isChinese() ? '瞬态容器  ·  权限隔离  ·  超时保护' : 'Ephemeral Containers  ·  Zero Leaked Secrets  ·  Hard Timeout Guard' }}
           </text>
 
-          <!-- Layer 1: Isolated Execution Sandboxes -->
-          <rect x="0" y="216" width="600" height="64" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
-          <text x="24" y="246" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="13" font-weight="600">
-            EXECUTION SANDBOX (HANDS)
+          <!-- Layer 1: Durable Session Store -->
+          <rect x="0" y="220" width="600" height="48" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <text x="24" y="249" fill="var(--eg-stroke-main)" font-family="var(--eg-font-sans)" font-size="13" font-weight="600">
+            {{ isChinese() ? '持久化会话存储层 (EVENT LOG)' : 'DURABLE SESSION STORE' }}
           </text>
-          <text x="24" y="264" fill="var(--eg-accent-sand)" font-family="var(--eg-font-mono)" font-size="10">
-            Zero Credentials in Container  ·  Disposable Cattle  ·  Ephemeral Tool Proxies
+          <text x="580" y="249" text-anchor="end" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11">
+            Append-Only Log  ·  Event Replay
           </text>
         </g>
       }
     </svg>
 
+    <!-- Optional Caption -->
     @if (caption()) {
-      <figcaption class="caption-text">
+      <figcaption class="editorial-caption">
         {{ caption() }}
       </figcaption>
     }

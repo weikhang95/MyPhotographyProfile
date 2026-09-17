@@ -21,4 +21,21 @@ describe('TopbarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should toggle language between EN and 中文', () => {
+    expect(component.localeService.locale()).toBe('en');
+    component.toggleLocale();
+    expect(component.localeService.locale()).toBe('zh');
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.textContent).toContain('作品集');
+    expect(el.textContent).toContain('专栏文章');
+
+    component.toggleLocale();
+    expect(component.localeService.locale()).toBe('en');
+    fixture.detectChanges();
+    expect(el.textContent).toContain('PORTFOLIO');
+    expect(el.textContent).toContain('WRITINGS');
+  });
 });

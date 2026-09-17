@@ -40,4 +40,16 @@ describe('SamplePostComponent', () => {
     const backLink = el.querySelector('.back-link');
     expect(backLink?.getAttribute('routerLink')).toBe('/');
   });
+
+  it('should reactively switch content to Chinese when locale changes', () => {
+    component.localeService.setLocale('zh');
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('.post-title')?.textContent).toContain(
+      '解耦思考与行动'
+    );
+    expect(el.querySelector('.post-lead')?.textContent).toContain('大模型能力快速迭代');
+    expect(el.querySelector('.author-badge')?.textContent).toContain('庄伟康');
+  });
 });

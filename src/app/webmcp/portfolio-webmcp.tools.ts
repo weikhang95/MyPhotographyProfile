@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { ThemeService } from '../theme.service';
+import { LocaleService } from '../i18n/locale.service';
 
 let fallbackInjector: Injector | null = null;
 
@@ -323,6 +324,34 @@ export const toggleThemeTool = {
   },
 };
 
+export const switchLanguageTool = {
+  name: 'switch_language',
+  description: 'Switch or query the current display language between English (en) and Simplified Chinese (zh).',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      lang: {
+        type: 'string',
+        enum: ['toggle', 'en', 'zh'],
+        description: 'Language to switch to, or toggle between English and Chinese (defaults to toggle)',
+      },
+    },
+  } as const,
+  execute: async (args: { lang?: 'toggle' | 'en' | 'zh' }) => {
+    const localeService = safeInject(LocaleService);
+    if (args.lang === 'en' || args.lang === 'zh') {
+      localeService.setLocale(args.lang);
+    } else {
+      localeService.toggleLocale();
+    }
+    return {
+      activeLanguage: localeService.locale(),
+      isChinese: localeService.isChinese(),
+      htmlLang: typeof document !== 'undefined' ? document.documentElement.lang : 'unknown',
+    };
+  },
+};
+
 import {
   declareExperimentalWebMcpTool,
   makeEnvironmentProviders,
@@ -336,6 +365,7 @@ export const ALL_WEBMCP_TOOLS = [
   navigateSiteTool,
   submitContactInquiryTool,
   toggleThemeTool,
+  switchLanguageTool,
 ];
 
 export function providePortfolioWebMcp(): EnvironmentProviders {
@@ -350,6 +380,7 @@ export function providePortfolioWebMcp(): EnvironmentProviders {
       declareExperimentalWebMcpTool(navigateSiteTool);
       declareExperimentalWebMcpTool(submitContactInquiryTool);
       declareExperimentalWebMcpTool(toggleThemeTool);
+      declareExperimentalWebMcpTool(switchLanguageTool);
     }),
   ]);
 }
