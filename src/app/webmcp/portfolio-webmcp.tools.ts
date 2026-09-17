@@ -1,8 +1,21 @@
-import { inject } from '@angular/core';
+import { inject, Injector, ProviderToken } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { ThemeService } from '../theme.service';
+
+let fallbackInjector: Injector | null = null;
+
+function safeInject<T>(token: ProviderToken<T>): T {
+  try {
+    return inject(token);
+  } catch {
+    if (fallbackInjector) {
+      return fallbackInjector.get(token);
+    }
+    throw new Error(`Cannot resolve ${String(token)} outside injection context`);
+  }
+}
 
 export interface PortfolioPhotoItem {
   readonly filename: string;
@@ -220,7 +233,7 @@ export const navigateSiteTool = {
     required: ['destination'],
   } as const,
   execute: async (args: { destination: 'portfolio' | 'about' | 'contact' }) => {
-    const router = inject(Router);
+    const router = safeInject(Router);
     const pathMap = {
       portfolio: '/',
       about: '/about',
@@ -251,7 +264,7 @@ export const submitContactInquiryTool = {
     required: ['name', 'email', 'subject', 'message'],
   } as const,
   execute: async (args: { name: string; email: string; subject: string; message: string }) => {
-    const http = inject(HttpClient);
+    const http = safeInject(HttpClient);
     try {
       const response = await firstValueFrom(
         http.post<{ success: boolean; id?: string }>('/api/enquiries', {
@@ -291,7 +304,7 @@ export const toggleThemeTool = {
     },
   } as const,
   execute: async (args: { mode?: 'toggle' | 'light' | 'dark' }) => {
-    const themeService = inject(ThemeService);
+    const themeService = safeInject(ThemeService);
     if (args.mode === 'light') {
       if (document.documentElement.classList.contains('dark')) {
         themeService.toggleTheme();
@@ -317,9 +330,21 @@ import {
   EnvironmentProviders,
 } from '@angular/core';
 
+export const ALL_WEBMCP_TOOLS = [
+  searchPortfolioTool,
+  getPhotographerProfileTool,
+  navigateSiteTool,
+  submitContactInquiryTool,
+  toggleThemeTool,
+];
+
 export function providePortfolioWebMcp(): EnvironmentProviders {
   return makeEnvironmentProviders([
     provideEnvironmentInitializer(() => {
+      fallbackInjector = inject(Injector);
+      if (typeof window !== 'undefined') {
+        (window as unknown as Record<string, unknown>)['__WEBMCP_TOOLS__'] = ALL_WEBMCP_TOOLS;
+      }
       declareExperimentalWebMcpTool(searchPortfolioTool);
       declareExperimentalWebMcpTool(getPhotographerProfileTool);
       declareExperimentalWebMcpTool(navigateSiteTool);
