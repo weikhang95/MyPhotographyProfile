@@ -1,0 +1,152 @@
+<article class="post-wrapper">
+  <!-- Navigation back link -->
+  <div class="post-nav-bar">
+    <a routerLink="/" class="back-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      <span>Back to Portfolio</span>
+    </a>
+  </div>
+
+  <!-- Category & Breadcrumbs -->
+  <div class="post-category">
+    <span>ENGINEERING</span>
+    <span>//</span>
+    <span>AGENT ARCHITECTURE</span>
+  </div>
+
+  <!-- Main Headline -->
+  <h1 class="post-title">
+    Decoupling the Brain from the Hands: Architectural Patterns for Reliable AI Agents
+  </h1>
+
+  <!-- Executive Summary (Anthropic Lead Style) -->
+  <div class="post-lead">
+    Harnesses encode assumptions that go stale as models improve. 
+    Building reliable, long-horizon agents requires treating execution sandboxes as disposable cattle 
+    and decoupling the reasoning loop from ephemeral runtime state.
+  </div>
+
+  <!-- Meta Row -->
+  <div class="post-meta">
+    <div class="meta-item author-badge">By Chong Wei Khang</div>
+    <div class="meta-item">Published Sep 17, 2026</div>
+    <div class="meta-item">6 min read</div>
+    <div class="meta-item">Angular 22 · WebMCP</div>
+  </div>
+
+  <!-- Post Body Content -->
+  <div class="post-body">
+    <p>
+      A common architectural trap when building AI agents is placing all components—the model harness, 
+      the session history, and the execution environment—inside a single container. While tempting for rapid prototyping, 
+      this introduces what infrastructure engineers describe as the <em>“pet problem”</em>: the server becomes a delicate, 
+      irreplaceable pet that must be continually nursed when an execution loop stalls.
+    </p>
+
+    <div class="editorial-callout">
+      <div class="callout-title">The Cattle Principle</div>
+      <p>
+        If an agent’s sandbox dies or hits an unrecoverable timeout, the orchestrator should never crash with it. 
+        Treat execution environments as interchangeable cattle: catch the tool-call error, teardown the container, 
+        and re-provision from a standard recipe.
+      </p>
+    </div>
+
+    <h2>1. The Decoupled Tools Boundary</h2>
+
+    <p>
+      The structural solution is to decouple what we consider the <strong>“Brain”</strong> (the LLM reasoning loop and harness) 
+      from the <strong>“Hands”</strong> (the execution sandbox, file system, and API proxies). 
+      The harness communicates across an isolated interface bus using a strict, schema-driven contract:
+    </p>
+
+    <!-- Visual Artifact: Decoupled Schematic -->
+    <app-editorial-graphic 
+      variant="decoupled"
+      label="VIRTUALIZATION // HARNESS_V1"
+      caption="Figure 1: Decoupling the decision loop (Brain) from ephemeral execution sandboxes (Hands). Zero credentials leak into the sandbox.">
+    </app-editorial-graphic>
+
+    <p>
+      Under this architecture, the agent harness does not care whether the sandbox is a local Docker container, 
+      a Cloudflare Worker, or a WebMCP browser endpoint. The interface remains uniform: <code>execute(name, input) → string</code>.
+    </p>
+
+    <!-- Code Block Artifact -->
+    <div class="code-window">
+      <div class="code-header">
+        <div class="code-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <span>agent-contract.ts</span>
+      </div>
+      <pre><code>// The stateless boundary between Brain and Hands
+interface AgentToolContract&lt;TInput = unknown, TOutput = unknown&gt; &#123;
+  readonly name: string;
+  readonly description: string;
+  readonly inputSchema: JsonSchema;
+  execute(args: TInput, client: &#123; signal: AbortSignal &#125;): Promise&lt;TOutput&gt;;
+&#125;
+
+// In Angular 22, registered automatically via WebMCP:
+provideExperimentalWebMcpTools([
+  searchPortfolioTool,
+  submitContactInquiryTool
+]);</code></pre>
+    </div>
+
+    <h2>2. The Session is Not the Context Window</h2>
+
+    <p>
+      Another critical mistake is conflating the model’s ephemeral context window with the durable session state. 
+      Models have token limits; sessions have infinite horizons. 
+      Instead of irreversible in-place context trimming, we maintain an <strong>append-only event stream</strong> 
+      that lives completely outside the model’s active window:
+    </p>
+
+    <!-- Visual Artifact: Stream Schematic -->
+    <app-editorial-graphic 
+      variant="stream"
+      label="EVENT_STREAM // DURABLE_LOG"
+      caption="Figure 2: The append-only event stream. The model interrogates positional slices without destroying raw historical context.">
+    </app-editorial-graphic>
+
+    <p>
+      When an agent reboots after a crash or resumes on a subsequent day, it calls <code>wake(sessionId)</code>, 
+      fetches the event stream from the append head, and resumes without state loss.
+    </p>
+
+    <h2>3. Multi-Agent Specialization</h2>
+
+    <p>
+      As intelligence scales, single monolithic agents struggle with cognitive overload. 
+      The multi-agent pattern delegates distinct responsibilities to specialized nodes under a central orchestrator:
+    </p>
+
+    <!-- Visual Artifact: Matrix Schematic -->
+    <app-editorial-graphic 
+      variant="matrix"
+      label="TOPOLOGY // ORCHESTRATION_MESH"
+      caption="Figure 3: Multi-agent coordination matrix. The central orchestrator decomposes tasks into specialized planner, executor, and evaluator steps.">
+    </app-editorial-graphic>
+
+    <h2>Conclusion & Key Takeaways</h2>
+
+    <p>
+      By designing systems around small, stable interfaces—decoupling the brain from the hands and the session log from the context window—we 
+      build architectures that outlast any single model generation. As models improve, the harness doesn't need to be rewritten; 
+      it simply orchestrates smarter tools.
+    </p>
+  </div>
+
+  <!-- Author Footer Card -->
+  <div class="post-footer-author">
+    <div class="author-info">
+      <h4>Chong Wei Khang</h4>
+      <p>Senior Full Stack Developer at ViTrox & Photographer in Penang, Malaysia. Exploring agentic patterns, WebMCP, and modern frontend architecture.</p>
+    </div>
+  </div>
+</article>

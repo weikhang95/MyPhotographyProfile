@@ -1,0 +1,320 @@
+.post-wrapper {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 5rem;
+}
+
+// Navigation back link
+.post-nav-bar {
+  margin-bottom: 2rem;
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #716d66;
+    text-decoration: none;
+    transition: color 0.15s ease, transform 0.15s ease;
+
+    svg {
+      transition: transform 0.15s ease;
+    }
+
+    &:hover {
+      color: #bd5932;
+
+      svg {
+        transform: translateX(-3px);
+      }
+    }
+
+    :host-context(.dark) & {
+      color: #9c978f;
+
+      &:hover {
+        color: #e0744a;
+      }
+    }
+  }
+}
+
+// Category / Topic Tag
+.post-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "JetBrains Mono", monospace;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #bd5932;
+  margin-bottom: 1.25rem;
+
+  :host-context(.dark) & {
+    color: #e0744a;
+  }
+}
+
+// Headline
+.post-title {
+  font-family: "Signika", system-ui, sans-serif;
+  font-size: 2.375rem;
+  line-height: 1.18;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #1a1917;
+  margin-bottom: 1.25rem;
+
+  :host-context(.dark) & {
+    color: #ede9e1;
+  }
+
+  @media (min-width: 640px) {
+    font-size: 2.875rem;
+  }
+}
+
+// Executive Summary Lead (Anthropic style)
+.post-lead {
+  font-size: 1.1875rem;
+  line-height: 1.6;
+  color: #4a4742;
+  border-left: 3px solid #bd5932;
+  padding-left: 1.25rem;
+  margin-bottom: 2rem;
+
+  :host-context(.dark) & {
+    color: #b5b0a6;
+    border-left-color: #e0744a;
+  }
+}
+
+// Meta Row
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid #e5e0d6;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "JetBrains Mono", monospace;
+  font-size: 0.8125rem;
+  color: #7a756d;
+
+  :host-context(.dark) & {
+    border-bottom-color: #282622;
+    color: #8c8880;
+  }
+
+  .meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .author-badge {
+    color: #1a1917;
+    font-weight: 600;
+
+    :host-context(.dark) & {
+      color: #ede9e1;
+    }
+  }
+}
+
+// Body Typography
+.post-body {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: #262421;
+
+  :host-context(.dark) & {
+    color: #d1ccbf;
+  }
+
+  p {
+    margin-bottom: 1.5rem;
+  }
+
+  h2 {
+    font-family: "Signika", system-ui, sans-serif;
+    font-size: 1.625rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #1a1917;
+    margin-top: 3rem;
+    margin-bottom: 1.125rem;
+    letter-spacing: -0.01em;
+
+    :host-context(.dark) & {
+      color: #ede9e1;
+    }
+  }
+
+  h3 {
+    font-family: "Signika", system-ui, sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a1917;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+
+    :host-context(.dark) & {
+      color: #ede9e1;
+    }
+  }
+
+  // Inline code tokens
+  code:not([class*="language-"]) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "JetBrains Mono", monospace;
+    font-size: 0.875em;
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+    background-color: #ede8df;
+    color: #1a1917;
+
+    :host-context(.dark) & {
+      background-color: #262420;
+      color: #e0744a;
+    }
+  }
+}
+
+// Editorial Callout (The "Key Lesson" Box)
+.editorial-callout {
+  margin: 2.25rem 0;
+  padding: 1.25rem 1.5rem;
+  border-radius: 0.5rem;
+  background-color: #f7f3eb;
+  border: 1px solid #e5dfd3;
+  border-left: 4px solid #bd5932;
+
+  :host-context(.dark) & {
+    background-color: #1c1a17;
+    border-color: #2e2b26;
+    border-left-color: #e0744a;
+  }
+
+  .callout-title {
+    font-family: "Signika", system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #1a1917;
+
+    :host-context(.dark) & {
+      color: #ede9e1;
+    }
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: #59554e;
+
+    :host-context(.dark) & {
+      color: #a8a398;
+    }
+  }
+}
+
+// Styled Code Block Window
+.code-window {
+  margin: 2.25rem 0;
+  border-radius: 0.625rem;
+  overflow: hidden;
+  background-color: #141311;
+  border: 1px solid #282622;
+
+  .code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #1c1a17;
+    border-bottom: 1px solid #282622;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.75rem;
+    color: #8c8880;
+
+    .code-dots {
+      display: flex;
+      gap: 0.35rem;
+
+      span {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #3b3833;
+      }
+    }
+  }
+
+  pre {
+    margin: 0;
+    padding: 1.25rem;
+    overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: #e8e4dc;
+
+    code {
+      background: transparent;
+      padding: 0;
+      color: inherit;
+    }
+  }
+}
+
+// Author Footer Note
+.post-footer-author {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e5e0d6;
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+
+  :host-context(.dark) & {
+    border-top-color: #282622;
+  }
+
+  .author-avatar {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #bd5932;
+  }
+
+  .author-info {
+    h4 {
+      font-family: "Signika", system-ui, sans-serif;
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0 0 0.25rem;
+      color: #1a1917;
+
+      :host-context(.dark) & {
+        color: #ede9e1;
+      }
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.875rem;
+      color: #7a756d;
+      line-height: 1.4;
+
+      :host-context(.dark) & {
+        color: #9c978d;
+      }
+    }
+  }
+}

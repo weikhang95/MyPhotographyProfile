@@ -11,6 +11,7 @@ import { providePortfolioWebMcp } from './app/webmcp/portfolio-webmcp.tools';
 
 const routes: Routes = [
   { path: '', loadComponent: () => import('./app/portfolio/portfolio.component').then(m => m.PortfolioComponent) },
+  { path: 'blog', loadComponent: () => import('./app/blog/blog-post/sample-post.component').then(m => m.SamplePostComponent) },
   { path: 'about', loadComponent: () => import('./app/about/about.component').then(m => m.AboutComponent) },
   { path: 'contact', loadComponent: () => import('./app/contact/contact.component').then(m => m.ContactComponent) },
   { path: 'admin/login', loadComponent: () => import('./app/admin/login/admin-login.component').then(m => m.AdminLoginComponent) },
