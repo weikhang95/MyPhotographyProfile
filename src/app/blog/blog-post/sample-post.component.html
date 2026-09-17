@@ -1,53 +1,143 @@
 <article class="post-wrapper">
-  <!-- Navigation back link -->
   <div class="post-nav-bar">
-    <a routerLink="/" class="back-link">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="19" y1="12" x2="5" y2="12"></line>
-        <polyline points="12 19 5 12 12 5"></polyline>
+    <a routerLink="/blog" class="back-link">
+      <svg class="back-icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+        <path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"/>
       </svg>
-      <span>{{ localeService.dict().nav.backToPortfolio }}</span>
+      <span>{{ localeService.dict().nav.backToWritings }}</span>
     </a>
   </div>
 
-  <!-- Category -->
-  <div class="post-category">
-    <span>{{ localeService.dict().post.category }}</span>
-  </div>
+  <div class="post-layout-grid">
+    <!-- Desktop Left Column: Sticky / METADATA & Series Roadmap Rail -->
+    <aside class="desktop-series-sidebar" [attr.aria-label]="localeService.dict().post.seriesLabel">
+      <div class="sticky-panel">
+        <!-- Stripe-inspired / METADATA Section -->
+        <div class="rail-section">
+          <div class="rail-header">
+            <span class="slash">/</span> Metadata
+          </div>
 
-  <!-- Headline -->
-  <h1 class="post-title">
-    {{ localeService.dict().post.title }}
-  </h1>
+          <dl class="metadata-list">
+            <div class="meta-row">
+              <dt class="meta-dt">Date:</dt>
+              <dd class="meta-dd">{{ localeService.dict().post.publishDate }}</dd>
+            </div>
 
-  <!-- Lead -->
-  <div class="post-lead">
-    {{ localeService.dict().post.lead }}
-  </div>
+            <div class="meta-row">
+              <dt class="meta-dt">Author:</dt>
+              <dd class="meta-dd author-badge">{{ localeService.dict().post.author }}</dd>
+            </div>
 
-  <!-- Meta Row -->
-  <div class="post-meta">
-    <div class="meta-item author-badge">{{ localeService.dict().post.author }}</div>
-    <div class="meta-item">{{ localeService.dict().post.publishDate }}</div>
-    <div class="meta-item">{{ localeService.dict().post.readTime }}</div>
-    <div class="meta-item">{{ localeService.dict().post.tags }}</div>
-  </div>
+            <div class="meta-row">
+              <dt class="meta-dt">Read time:</dt>
+              <dd class="meta-dd">{{ localeService.dict().post.readTime }}</dd>
+            </div>
 
-  <!-- Post Body -->
-  <div class="post-body">
-    <!-- Opening -->
-    <p>{{ localeService.dict().post.pIntro }}</p>
+            <div class="meta-row">
+              <dt class="meta-dt">Series:</dt>
+              <dd class="meta-dd">{{ localeService.dict().post.seriesTag }}</dd>
+            </div>
 
-    <!-- Section 1: Free Text -->
-    <h2>{{ localeService.dict().post.h2Mode1 }}</h2>
-    <p>{{ localeService.dict().post.pMode1Intro }}</p>
+            <div class="meta-row meta-row-agents">
+              <dt class="meta-dt">Agents:</dt>
+              <dd class="meta-dd">
+                <button
+                  type="button"
+                  class="agent-pill-btn"
+                  [class.is-copied]="copiedForLlm()"
+                  (click)="copyForLlm()"
+                  title="Copy formatted markdown prompt for LLMs"
+                >
+                  <svg class="pill-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="5" y="5" width="8" height="9" rx="1.5" />
+                    <path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-5A1.5 1.5 0 0 0 3 3.5v7A1.5 1.5 0 0 0 4.5 12H5" />
+                  </svg>
+                  <span>{{ copiedForLlm() ? 'Copied to Clipboard' : 'Copy for LLM' }}</span>
+                </button>
+              </dd>
+            </div>
+          </dl>
+        </div>
 
-    <div class="code-window">
-      <div class="code-header">
-        <div class="code-dots"><span></span><span></span><span></span></div>
-        <span>response.json</span>
+        <!-- Series Roadmap Timeline -->
+        <div class="rail-section">
+          <div class="rail-header">
+            <span class="slash">/</span> {{ localeService.dict().post.seriesRoadmapTitle }}
+          </div>
+
+          <div class="sidebar-timeline">
+            @for (post of seriesPosts(); track post.id) {
+              <div class="sidebar-node-row" [class.is-current]="post.id === '01'">
+                <div class="node-indicator">
+                  <span class="node-dot"></span>
+                  <span class="node-connector"></span>
+                </div>
+                <div class="node-content">
+                  <div class="node-header">
+                    <span class="node-ep">EP.{{ post.episode }}</span>
+                    @if (post.id === '01') {
+                      <span class="node-reading-now">{{ localeService.dict().post.readingNowBadge }}</span>
+                    } @else {
+                      <span class="node-upcoming-pill">{{ post.date }}</span>
+                    }
+                  </div>
+                  <div class="node-title">
+                    {{ post.title }}
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
       </div>
-      <pre><code>&#123;
+    </aside>
+
+    <!-- Main Right Column: Article Content -->
+    <div class="post-main-column">
+      <div class="article-section-header">
+        <span class="slash">/</span> Article
+      </div>
+
+      <!-- Hero Header with Architectural Corner Registration Marks -->
+      <header class="hero-block">
+        <span class="crosshair crosshair-tl" aria-hidden="true">+</span>
+        <span class="crosshair crosshair-tr" aria-hidden="true">+</span>
+        <span class="crosshair crosshair-bl" aria-hidden="true">+</span>
+        <span class="crosshair crosshair-br" aria-hidden="true">+</span>
+
+        <p class="post-kicker">{{ localeService.dict().post.seriesTag }}</p>
+
+        <h1 class="post-title">
+          {{ localeService.dict().post.title }}
+        </h1>
+
+        <p class="post-lead">
+          {{ localeService.dict().post.lead }}
+        </p>
+      </header>
+
+      <!-- Mobile-only metadata bar -->
+      <div class="post-meta mobile-meta-bar">
+        <div class="meta-item author-badge">{{ localeService.dict().post.author }}</div>
+        <div class="meta-item">{{ localeService.dict().post.publishDate }}</div>
+        <div class="meta-item">{{ localeService.dict().post.readTime }}</div>
+      </div>
+
+      <div class="post-body">
+        <p>{{ localeService.dict().post.pIntro }}</p>
+
+        <app-editorial-graphic
+          variant="replies"
+          [label]="localeService.isChinese() ? '三种回答模式' : 'Three reply modes'"
+        />
+
+        <h2>{{ localeService.dict().post.h2Mode1 }}</h2>
+        <p>{{ localeService.dict().post.pMode1Intro }}</p>
+
+        <figure class="code-window">
+          <figcaption class="code-header">{{ localeService.dict().post.codeCaptionReply }}</figcaption>
+          <pre><code>&#123;
   "role": "assistant",
   "content": [
     &#123;
@@ -57,20 +147,16 @@
   ],
   "stop_reason": "end_turn"
 &#125;</code></pre>
-    </div>
+        </figure>
 
-    <p>{{ localeService.dict().post.pMode1Explain }}</p>
+        <p>{{ localeService.dict().post.pMode1Explain }}</p>
 
-    <!-- Section 2: Structured JSON -->
-    <h2>{{ localeService.dict().post.h2Mode2 }}</h2>
-    <p>{{ localeService.dict().post.pMode2Intro }}</p>
+        <h2>{{ localeService.dict().post.h2Mode2 }}</h2>
+        <p>{{ localeService.dict().post.pMode2Intro }}</p>
 
-    <div class="code-window">
-      <div class="code-header">
-        <div class="code-dots"><span></span><span></span><span></span></div>
-        <span>request &mdash; response schema</span>
-      </div>
-      <pre><code>"response_schema": &#123;
+        <figure class="code-window">
+          <figcaption class="code-header">{{ localeService.dict().post.codeCaptionSchema }}</figcaption>
+          <pre><code>"response_schema": &#123;
   "type": "object",
   "properties": &#123;
     "location":    &#123; "type": "string" &#125;,
@@ -81,16 +167,13 @@
   &#125;,
   "required": ["location", "time_of_day", "mood"]
 &#125;</code></pre>
-    </div>
+        </figure>
 
-    <p>{{ localeService.dict().post.pMode2Constrained }}</p>
+        <p>{{ localeService.dict().post.pMode2Constrained }}</p>
 
-    <div class="code-window">
-      <div class="code-header">
-        <div class="code-dots"><span></span><span></span><span></span></div>
-        <span>response &mdash; constrained output</span>
-      </div>
-      <pre><code>&#123;
+        <figure class="code-window">
+          <figcaption class="code-header">{{ localeService.dict().post.codeCaptionFilled }}</figcaption>
+          <pre><code>&#123;
   "role": "assistant",
   "content": [
     &#123;
@@ -102,20 +185,31 @@
   ],
   "stop_reason": "end_turn"
 &#125;</code></pre>
-    </div>
+        </figure>
 
-    <p>{{ localeService.dict().post.pMode2Explain }}</p>
+        <p>{{ localeService.dict().post.pMode2Explain }}</p>
 
-    <!-- Section 3: Tool Use -->
-    <h2>{{ localeService.dict().post.h2Mode3 }}</h2>
-    <p>{{ localeService.dict().post.pMode3Intro }}</p>
+        <h2>{{ localeService.dict().post.h2Mode3 }}</h2>
+        <p>{{ localeService.dict().post.pMode3Intro }}</p>
 
-    <div class="code-window">
-      <div class="code-header">
-        <div class="code-dots"><span></span><span></span><span></span></div>
-        <span>tool definition</span>
-      </div>
-      <pre><code>&#123;
+        <dl class="term-list">
+          <div class="term-row">
+            <dt>{{ localeService.dict().post.termName }}</dt>
+            <dd>{{ localeService.dict().post.termNameDesc }}</dd>
+          </div>
+          <div class="term-row">
+            <dt>{{ localeService.dict().post.termDesc }}</dt>
+            <dd>{{ localeService.dict().post.termDescDesc }}</dd>
+          </div>
+          <div class="term-row">
+            <dt>{{ localeService.dict().post.termSchema }}</dt>
+            <dd>{{ localeService.dict().post.termSchemaDesc }}</dd>
+          </div>
+        </dl>
+
+        <figure class="code-window">
+          <figcaption class="code-header">{{ localeService.dict().post.codeCaptionTool }}</figcaption>
+          <pre><code>&#123;
   name: "get_weather",
   description: "Get current weather for a city.
                 Call when the user asks about weather.",
@@ -128,17 +222,13 @@
     required: ["city"]
   &#125;
 &#125;</code></pre>
-    </div>
+        </figure>
 
-    <p>{{ localeService.dict().post.pMode3ThreePieces }}</p>
-    <p>{{ localeService.dict().post.pMode3Explain }}</p>
+        <p>{{ localeService.dict().post.pMode3Explain }}</p>
 
-    <div class="code-window">
-      <div class="code-header">
-        <div class="code-dots"><span></span><span></span><span></span></div>
-        <span>response &mdash; tool_use</span>
-      </div>
-      <pre><code>&#123;
+        <figure class="code-window">
+          <figcaption class="code-header">{{ localeService.dict().post.codeCaptionRequest }}</figcaption>
+          <pre><code>&#123;
   "role": "assistant",
   "content": [
     &#123;
@@ -154,88 +244,100 @@
   ],
   "stop_reason": "tool_use"
 &#125;</code></pre>
-    </div>
+        </figure>
 
-    <!-- Callout -->
-    <div class="editorial-callout">
-      <div class="callout-title">{{ localeService.dict().post.calloutTitle }}</div>
-      <p>{{ localeService.dict().post.calloutBody }}</p>
-    </div>
+        <aside class="editorial-callout">
+          <p class="callout-title">{{ localeService.dict().post.calloutTitle }}</p>
+          <p>{{ localeService.dict().post.calloutBody }}</p>
+        </aside>
 
-    <!-- Section 4: The Loop -->
-    <h2>{{ localeService.dict().post.h2Loop }}</h2>
+        <h2>{{ localeService.dict().post.h2Loop }}</h2>
+        <ol class="loop-steps">
+          <li>{{ localeService.dict().post.loopStep1 }}</li>
+          <li>{{ localeService.dict().post.loopStep2 }}</li>
+          <li>{{ localeService.dict().post.loopStep3 }}</li>
+          <li>{{ localeService.dict().post.loopStep4 }}</li>
+        </ol>
+        <p>{{ localeService.dict().post.pLoop }}</p>
 
-    <div class="code-window">
-      <div class="code-header">
-        <div class="code-dots"><span></span><span></span><span></span></div>
-        <span>the agent loop</span>
+        <h2>{{ localeService.dict().post.h2Closing }}</h2>
+
+        <div class="comparison-table">
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>{{ localeService.dict().post.tableColTalk }}</th>
+                <th>{{ localeService.dict().post.tableColForm }}</th>
+                <th>{{ localeService.dict().post.tableColAsk }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="row-label">{{ localeService.dict().post.tableRowSee }}</td>
+                <td>{{ localeService.dict().post.tableSeeTalk }}</td>
+                <td>{{ localeService.dict().post.tableSeeForm }}</td>
+                <td>{{ localeService.dict().post.tableSeeAsk }}</td>
+              </tr>
+              <tr>
+                <td class="row-label">{{ localeService.dict().post.tableRowApi }}</td>
+                <td><code>{{ localeService.dict().post.tableApiTalk }}</code></td>
+                <td><code>{{ localeService.dict().post.tableApiForm }}</code></td>
+                <td><code>{{ localeService.dict().post.tableApiAsk }}</code></td>
+              </tr>
+              <tr>
+                <td class="row-label">{{ localeService.dict().post.tableRowStop }}</td>
+                <td><code>{{ localeService.dict().post.tableStopTalk }}</code></td>
+                <td><code>{{ localeService.dict().post.tableStopForm }}</code></td>
+                <td><code>{{ localeService.dict().post.tableStopAsk }}</code></td>
+              </tr>
+              <tr>
+                <td class="row-label">{{ localeService.dict().post.tableRowWho }}</td>
+                <td>{{ localeService.dict().post.tableWhoTalk }}</td>
+                <td>{{ localeService.dict().post.tableWhoForm }}</td>
+                <td>{{ localeService.dict().post.tableWhoAsk }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>{{ localeService.dict().post.pClosing }}</p>
+        <p class="next-note">{{ localeService.dict().post.pNextPost }}</p>
       </div>
-      <pre><code>User:     "What's the weather in Penang?"
-               &darr;
-Model:    "I need get_weather"           &larr; stop_reason: "tool_use"
-               &darr;
-System:   runs get_weather("Penang")     &larr; your code
-               &darr;
-          returns "31&deg;C, Partly cloudy"
-               &darr;
-Model:    "It's 31&deg;C and partly cloudy   &larr; stop_reason: "end_turn"
-           in Penang right now."</code></pre>
-    </div>
 
-    <p>{{ localeService.dict().post.pLoop }}</p>
+      <!-- Mobile Series List (visible on narrow screens) -->
+      <section class="mobile-series-section" [attr.aria-label]="localeService.dict().post.seriesLabel">
+        <div class="mobile-series-header">
+          <span class="slash">/</span>
+          <h3 class="mobile-series-title">{{ localeService.dict().post.seriesRoadmapTitle }}</h3>
+        </div>
+        <div class="mobile-series-list">
+          @for (post of seriesPosts(); track post.id) {
+            <div class="mobile-series-card" [class.is-current]="post.id === '01'">
+              <div class="card-meta">
+                <span class="ep-badge">EP.{{ post.episode }}</span>
+                @if (post.id === '01') {
+                  <span class="current-badge">{{ localeService.dict().post.readingNowBadge }}</span>
+                } @else {
+                  <span class="upcoming-badge">{{ post.date }}</span>
+                }
+              </div>
+              <div class="card-title">{{ post.title }}</div>
+            </div>
+          }
+        </div>
+      </section>
 
-    <!-- Section 5: Closing -->
-    <h2>{{ localeService.dict().post.h2Closing }}</h2>
-
-    <!-- Summary Table -->
-    <div class="comparison-table">
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>Free Text</th>
-            <th>Structured JSON</th>
-            <th>Tool Use</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="row-label">Block type</td>
-            <td><code>text</code></td>
-            <td><code>text</code> (JSON string)</td>
-            <td><code>text</code> + <code>tool_use</code></td>
-          </tr>
-          <tr>
-            <td class="row-label">Stop reason</td>
-            <td><code>end_turn</code></td>
-            <td><code>end_turn</code></td>
-            <td><code>tool_use</code></td>
-          </tr>
-          <tr>
-            <td class="row-label">Schema?</td>
-            <td>None</td>
-            <td><code>response_schema</code></td>
-            <td><code>input_schema</code></td>
-          </tr>
-          <tr>
-            <td class="row-label">Who acts?</td>
-            <td>Nobody</td>
-            <td>Your parser</td>
-            <td>Your executor</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p>{{ localeService.dict().post.pClosing }}</p>
-    <p><em>{{ localeService.dict().post.pNextPost }}</em></p>
-  </div>
-
-  <!-- Author Footer -->
-  <div class="post-footer-author">
-    <div class="author-info">
-      <h4>{{ localeService.dict().post.authorName }}</h4>
-      <p>{{ localeService.dict().post.authorBio }}</p>
+      <!-- About Author Section with Slashed Header -->
+      <div class="post-footer-author">
+        <div class="author-section-header">
+          <span class="slash">/</span> About the Author
+        </div>
+        <div class="author-info">
+          <h4>{{ localeService.dict().post.authorName }}</h4>
+          <p>{{ localeService.dict().post.authorBio }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </article>

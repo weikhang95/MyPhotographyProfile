@@ -1,0 +1,52 @@
+<figure class="chart-card">
+  <h2 class="chart-title">{{ headline() }}</h2>
+  <p class="chart-sub">{{ localeService.dict().blogList.chartSubtitle }}</p>
+
+  <svg
+    #chart
+    class="chart-svg"
+    viewBox="0 0 640 260"
+    preserveAspectRatio="xMidYMid meet"
+    role="img"
+    [attr.aria-label]="ariaLabel()"
+    (click)="replay()">
+    <line class="floor" x1="36" y1="200" x2="604" y2="200" />
+
+    @for (col of columns(); track col.id) {
+      <g class="column" [class.is-live]="col.live" [class.is-upcoming]="!col.live">
+        <title>{{ col.tooltip }}</title>
+
+        @for (rung of col.rungs; track $index) {
+          <line
+            class="rung"
+            [attr.x1]="rung.x1"
+            [attr.x2]="rung.x2"
+            [attr.y1]="rung.y"
+            [attr.y2]="rung.y"
+            [attr.opacity]="rung.opacity"
+            [style.animation-delay.s]="rung.delay" />
+        }
+
+        @for (dot of col.dots; track $index) {
+          <circle class="minute-dot fade" [attr.cx]="dot.x1" [attr.cy]="dot.y" r="1.2" [style.animation-delay.s]="dot.delay" />
+        }
+
+        <text
+          class="value fade"
+          [attr.x]="col.x"
+          [attr.y]="col.topY - 12"
+          text-anchor="middle"
+          [style.animation-delay.s]="0.5 + col.delay">{{ col.live ? col.minutes : '~' + col.minutes }}</text>
+
+        <text class="episode fade" [attr.x]="col.x" y="219" text-anchor="middle" [style.animation-delay.s]="col.delay">{{ col.episode }}</text>
+        <text class="track fade" [attr.x]="col.x" y="233" text-anchor="middle" [style.animation-delay.s]="col.delay">{{ col.track }}</text>
+      </g>
+    }
+
+    <text class="footnote fade" x="320" y="254" text-anchor="middle" style="animation-delay: 1s">
+      {{ localeService.dict().blogList.chartFootnote }}
+    </text>
+  </svg>
+
+  <figcaption class="chart-src">{{ localeService.dict().blogList.chartSource }}</figcaption>
+</figure>

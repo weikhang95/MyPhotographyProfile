@@ -37,10 +37,21 @@ describe('SamplePostComponent', () => {
     expect(table).toBeTruthy();
   });
 
-  it('should render the portfolio back link', () => {
+  it('should render the writings back link', () => {
     const el = fixture.nativeElement as HTMLElement;
     const backLink = el.querySelector('.back-link');
-    expect(backLink?.getAttribute('routerLink')).toBe('/');
+    expect(backLink?.getAttribute('routerLink')).toBe('/blog');
+  });
+
+  it('should render desktop series sidebar and mobile series section', () => {
+    const el = fixture.nativeElement as HTMLElement;
+    const sidebar = el.querySelector('.desktop-series-sidebar');
+    const mobileSection = el.querySelector('.mobile-series-section');
+    expect(sidebar).toBeTruthy();
+    expect(mobileSection).toBeTruthy();
+    expect(sidebar?.textContent).toContain('How agents work');
+    expect(sidebar?.textContent).toContain('01');
+    expect(sidebar?.textContent).toContain('05');
   });
 
   it('should reactively switch content to Chinese when locale changes', () => {
@@ -49,9 +60,9 @@ describe('SamplePostComponent', () => {
 
     const el = fixture.nativeElement as HTMLElement;
     expect(el.querySelector('.post-title')?.textContent).toContain(
-      '大模型输出的三种形态'
+      '大模型回答你的三种方式'
     );
-    expect(el.querySelector('.post-lead')?.textContent).toContain('大多数人以为大模型只是在“打字吐字”');
+    expect(el.querySelector('.post-lead')?.textContent).toContain('你问聊天机器人一个问题');
     expect(el.querySelector('.author-badge')?.textContent).toContain('张炜康');
   });
 });

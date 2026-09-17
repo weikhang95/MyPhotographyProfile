@@ -360,6 +360,6 @@ export class PortfolioComponent implements OnInit, AfterViewInit, OnDestroy {
   getImageCaption(image: PortfolioImage): string {
     const title = this.getImageTitle(image);
     const location = this.getImageLocation(image);
-    return `${title} — ${location}, ${image.year} (${image.gear})`;
+    return `${title}, ${location}, ${image.year} (${image.gear})`;
   }
 }

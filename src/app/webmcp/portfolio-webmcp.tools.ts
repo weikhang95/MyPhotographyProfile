@@ -192,7 +192,7 @@ export const searchPortfolioTool = {
 
 export const getPhotographerProfileTool = {
   name: 'get_photographer_profile',
-  description: 'Retrieve Chong Wei Khang\'s biography, location, photography equipment, full-stack engineer background, and contact details.',
+  description: 'Retrieve Chong Wei Khang\'s biography, photography equipment, full-stack engineer background, and contact details.',
   inputSchema: {
     type: 'object',
     properties: {},
@@ -201,10 +201,9 @@ export const getPhotographerProfileTool = {
     return {
       name: 'Chong Wei Khang',
       chineseName: '张炜康',
-      location: 'Penang, Malaysia',
-      role: 'Senior Full Stack Developer & Photographer',
+      role: 'Software engineer and photographer',
       biography:
-        'Mechatronic Engineer turned Senior Full Stack Developer at ViTrox Corporation Berhad since 2019. Combines technical engineering with creative photography, capturing street, travel, landscapes, and coffee culture.',
+        'Full-stack engineer at ViTrox in Penang since 2019. Started in mechatronics. Photographs street and travel, mostly with a Nikon Z5.',
       cameraGear: {
         body: 'Nikon Z5',
         lenses: ['NIKKOR Z 24-120mm f/4 S', 'NIKKOR Z 40mm f/2'],

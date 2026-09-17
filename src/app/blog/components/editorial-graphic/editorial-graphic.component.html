@@ -387,6 +387,113 @@
           </text>
         </g>
       }
+      <!-- =================================================================== -->
+      <!-- VARIANT: REPLIES (Three LLM Reply Shapes)                           -->
+      <!-- =================================================================== -->
+      @if (variant() === 'replies') {
+        <!-- One prompt branches into three distinct response shapes -->
+        <g>
+          <rect x="290" y="62" width="220" height="38" rx="6" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+          <circle cx="310" cy="81" r="4" fill="var(--eg-stroke-sub)" />
+          <text x="324" y="85" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="12" font-weight="700">
+            {{ isChinese() ? '同一个问题' : 'ONE QUESTION' }}
+          </text>
+
+          <line x1="400" y1="100" x2="400" y2="114" stroke="var(--eg-stroke-dim)" stroke-width="1.5" />
+          <line x1="160" y1="114" x2="640" y2="114" stroke="var(--eg-stroke-dim)" stroke-width="1.5" />
+          <line x1="160" y1="114" x2="160" y2="121" stroke="var(--eg-accent-clay)" stroke-width="1.5" />
+          <polygon points="156,121 164,121 160,126" fill="var(--eg-accent-clay)" />
+          <line x1="400" y1="114" x2="400" y2="121" stroke="var(--eg-accent-sand)" stroke-width="1.5" />
+          <polygon points="396,121 404,121 400,126" fill="var(--eg-accent-sand)" />
+          <line x1="640" y1="114" x2="640" y2="121" stroke="var(--eg-accent-clay)" stroke-width="1.5" />
+          <polygon points="636,121 644,121 640,126" fill="var(--eg-accent-clay)" />
+        </g>
+
+        <g transform="translate(60, 126)">
+          <!-- Card 1: Talk -->
+          <g filter="url(#soft-shadow)">
+            <rect width="200" height="190" rx="8" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+            <rect width="200" height="40" rx="8" fill="var(--eg-bg)" stroke="var(--eg-border)" stroke-width="1" />
+            <circle cx="18" cy="20" r="4" fill="var(--eg-accent-clay)" />
+            <text x="32" y="24" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="12" font-weight="700">
+              {{ isChinese() ? '方式一 · 说话' : 'MODE 1 · TALK' }}
+            </text>
+            <text x="18" y="70" fill="var(--eg-accent-clay)" font-family="var(--eg-font-sans)" font-size="13" font-weight="700">
+              {{ isChinese() ? '你看到的' : 'What you see' }}
+            </text>
+            <text x="18" y="90" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11.5" font-weight="500">
+              {{ isChinese() ? '一段话，像在打字' : 'A paragraph, streaming' }}
+            </text>
+            <text x="18" y="118" fill="var(--eg-accent-clay)" font-family="var(--eg-font-sans)" font-size="13" font-weight="700">
+              API
+            </text>
+            <text x="18" y="138" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="10.5" font-weight="500" textLength="164" lengthAdjust="spacingAndGlyphs">
+              role=assistant, content[text]
+            </text>
+            <text x="18" y="164" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11.5" font-weight="500">
+              stop_reason=end_turn
+            </text>
+          </g>
+
+          <!-- Card 2: Fill a form -->
+          <g transform="translate(240, 0)" filter="url(#soft-shadow)">
+            <rect width="200" height="190" rx="8" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+            <rect width="200" height="40" rx="8" fill="var(--eg-bg)" stroke="var(--eg-border)" stroke-width="1" />
+            <circle cx="18" cy="20" r="4" fill="var(--eg-accent-sand)" />
+            <text x="32" y="24" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="12" font-weight="700">
+              {{ isChinese() ? '方式二 · 填表' : 'MODE 2 · FORM' }}
+            </text>
+            <text x="18" y="70" fill="var(--eg-accent-sand)" font-family="var(--eg-font-sans)" font-size="13" font-weight="700">
+              {{ isChinese() ? '你看到的' : 'What you see' }}
+            </text>
+            <text x="18" y="90" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11.5" font-weight="500">
+              {{ isChinese() ? '整齐字段，像表单' : 'Neat fields, like a form' }}
+            </text>
+            <text x="18" y="118" fill="var(--eg-accent-sand)" font-family="var(--eg-font-sans)" font-size="13" font-weight="700">
+              API
+            </text>
+            <text x="18" y="138" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11.5" font-weight="500">
+              text shaped as JSON
+            </text>
+            <text x="18" y="164" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11.5" font-weight="500">
+              stop_reason=end_turn
+            </text>
+          </g>
+
+          <!-- Card 3: Ask your code to act -->
+          <g transform="translate(480, 0)" filter="url(#soft-shadow)">
+            <rect width="200" height="190" rx="8" fill="var(--eg-node-bg)" stroke="var(--eg-border)" stroke-width="1.5" />
+            <rect width="200" height="40" rx="8" fill="var(--eg-bg)" stroke="var(--eg-border)" stroke-width="1" />
+            <circle cx="18" cy="20" r="4" fill="var(--eg-accent-clay)" class="anim-glow" />
+            <text x="32" y="24" fill="var(--eg-stroke-main)" font-family="var(--eg-font-mono)" font-size="12" font-weight="700">
+              {{ isChinese() ? '方式三 · 求助' : 'MODE 3 · ASK' }}
+            </text>
+            <text x="18" y="70" fill="var(--eg-accent-clay)" font-family="var(--eg-font-sans)" font-size="13" font-weight="700">
+              {{ isChinese() ? '你看到的' : 'What you see' }}
+            </text>
+            <text x="18" y="90" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11.5" font-weight="500">
+              {{ isChinese() ? '先停一下，再给答案' : 'A pause, then an answer' }}
+            </text>
+            <text x="18" y="118" fill="var(--eg-accent-clay)" font-family="var(--eg-font-sans)" font-size="13" font-weight="700">
+              API
+            </text>
+            <text x="18" y="138" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11.5" font-weight="500">
+              text + tool_use block
+            </text>
+            <text x="18" y="164" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11.5" font-weight="500">
+              stop_reason=tool_use
+            </text>
+          </g>
+        </g>
+
+        <!-- Bottom Status Bar -->
+        <rect x="60" y="340" width="680" height="32" rx="4" fill="var(--eg-bg)" stroke="var(--eg-border)" stroke-width="1" />
+        <text x="76" y="361" fill="var(--eg-stroke-sub)" font-family="var(--eg-font-mono)" font-size="11.5" font-weight="500">
+          {{ isChinese()
+            ? '问题不变 · 返回的块类型和停止原因决定下一步'
+            : 'Same question  ·  Response blocks and stop reason determine what happens next' }}
+        </text>
+      }
     </svg>
   </div>
 

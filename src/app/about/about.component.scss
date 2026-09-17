@@ -57,10 +57,6 @@
     font-weight: 500;
     color: rgb(var(--ink));
   }
-
-  .meta-coord {
-    opacity: 0.7;
-  }
 }
 
 // Textual Column (Prose & Hairline Tables)
@@ -93,13 +89,10 @@
 }
 
 .author-descriptor {
-  font-family: var(--font-mono, monospace);
-  font-size: 0.8125rem;
+  font-size: 1rem;
   font-weight: 500;
-  letter-spacing: 0.06em;
-  color: rgb(var(--accent));
-  margin: 0.875rem 0 0;
-  text-transform: uppercase;
+  color: rgb(var(--ink-muted));
+  margin: 0.75rem 0 0;
 }
 
 .statement-body {
@@ -126,12 +119,10 @@
 }
 
 .section-label {
-  font-family: var(--font-mono, monospace);
-  font-size: 0.75rem;
+  font-family: var(--font-display, "Signika", sans-serif);
+  font-size: 1.125rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgb(var(--accent));
+  color: rgb(var(--ink));
   margin: 0 0 1.25rem;
 }
 

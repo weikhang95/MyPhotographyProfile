@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, input, inject, computed } from '@angular/core';
 import { LocaleService } from '../../../i18n/locale.service';
 
-export type GraphicArchetype = 'decoupled' | 'stream' | 'matrix' | 'layers';
+export type GraphicArchetype = 'decoupled' | 'stream' | 'matrix' | 'layers' | 'replies';
 
 @Component({
   selector: 'app-editorial-graphic',
@@ -19,6 +19,7 @@ export class EditorialGraphicComponent {
    * - 'stream': Append-only event logs / Token flow / Sequence pipeline
    * - 'matrix': State graph / Multi-agent routing network / Topological mesh
    * - 'layers': Stack abstractions / Sandbox isolation planes / Virtualization
+   * - 'replies': Three LLM reply shapes (talk, fill a form, ask your code to act)
    */
   readonly variant = input<GraphicArchetype>('decoupled');
 

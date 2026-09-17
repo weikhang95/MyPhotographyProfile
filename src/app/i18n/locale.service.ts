@@ -9,6 +9,7 @@ export interface TranslationDictionary {
     readonly about: string;
     readonly contact: string;
     readonly backToPortfolio: string;
+    readonly backToWritings: string;
   };
   readonly theme: {
     readonly toDark: string;
@@ -28,6 +29,10 @@ export interface TranslationDictionary {
     readonly publishDate: string;
     readonly readTime: string;
     readonly tags: string;
+    readonly seriesTag: string;
+    readonly seriesRoadmapTitle: string;
+    readonly seriesLabel: string;
+    readonly readingNowBadge: string;
     readonly pIntro: string;
     readonly h2Mode1: string;
     readonly pMode1Intro: string;
@@ -38,16 +43,82 @@ export interface TranslationDictionary {
     readonly pMode2Explain: string;
     readonly h2Mode3: string;
     readonly pMode3Intro: string;
-    readonly pMode3ThreePieces: string;
     readonly pMode3Explain: string;
+    readonly termName: string;
+    readonly termNameDesc: string;
+    readonly termDesc: string;
+    readonly termDescDesc: string;
+    readonly termSchema: string;
+    readonly termSchemaDesc: string;
     readonly calloutTitle: string;
     readonly calloutBody: string;
     readonly h2Loop: string;
     readonly pLoop: string;
+    readonly loopStep1: string;
+    readonly loopStep2: string;
+    readonly loopStep3: string;
+    readonly loopStep4: string;
     readonly h2Closing: string;
     readonly pClosing: string;
     readonly pNextPost: string;
     readonly authorBio: string;
+    readonly codeCaptionReply: string;
+    readonly codeCaptionSchema: string;
+    readonly codeCaptionFilled: string;
+    readonly codeCaptionTool: string;
+    readonly codeCaptionRequest: string;
+    readonly tableColTalk: string;
+    readonly tableColForm: string;
+    readonly tableColAsk: string;
+    readonly tableRowSee: string;
+    readonly tableSeeTalk: string;
+    readonly tableSeeForm: string;
+    readonly tableSeeAsk: string;
+    readonly tableRowApi: string;
+    readonly tableApiTalk: string;
+    readonly tableApiForm: string;
+    readonly tableApiAsk: string;
+    readonly tableRowStop: string;
+    readonly tableStopTalk: string;
+    readonly tableStopForm: string;
+    readonly tableStopAsk: string;
+    readonly tableRowWho: string;
+    readonly tableWhoTalk: string;
+    readonly tableWhoForm: string;
+    readonly tableWhoAsk: string;
+  };
+  readonly blogList: {
+    readonly pageCategory: string;
+    readonly pageTitle: string;
+    readonly pageLead: string;
+    readonly filterAll: string;
+    readonly filterBasics: string;
+    readonly filterArchitecture: string;
+    readonly filterCaseStudies: string;
+    readonly statusPublished: string;
+    readonly statusUpcoming: string;
+    readonly readArticle: string;
+    readonly timelineYear: string;
+    readonly roadmapTitle: string;
+    readonly seriesTitle: string;
+    readonly seriesSubtitle: string;
+    readonly readingNowBadge: string;
+    readonly chartTitle: string;
+    readonly chartSubtitle: string;
+    readonly chartFootnote: string;
+    readonly chartSource: string;
+    readonly posts: readonly {
+      readonly id: string;
+      readonly slug: string;
+      readonly episode: string;
+      readonly title: string;
+      readonly excerpt: string;
+      readonly date: string;
+      readonly readTime: string;
+      readonly category: 'basics' | 'architecture' | 'case-studies';
+      readonly tag: string;
+      readonly status: 'published' | 'upcoming';
+    }[];
   };
   readonly home: {
     readonly introStatement: string;
@@ -92,6 +163,7 @@ const EN_DICTIONARY: TranslationDictionary = {
     about: 'ABOUT ME',
     contact: 'CONTACT',
     backToPortfolio: 'Back to Portfolio',
+    backToWritings: 'Back to Writings',
   },
   theme: {
     toDark: 'Switch to dark mode',
@@ -103,68 +175,188 @@ const EN_DICTIONARY: TranslationDictionary = {
     switchButtonText: '中文',
   },
   post: {
-    category: 'ENGINEERING // AGENT BASICS',
-    title: 'The Three Ways an LLM Responds (And Why It Matters for Agents)',
-    lead: 'Most people think an LLM "types text." But under the API surface, there are three distinct output modes \u2014 and understanding them is the single fastest way to demystify how agents work.',
-    author: 'By Chong Wei Khang (张炜康)',
+    category: 'Note',
+    title: 'The Three Ways an LLM Responds',
+    lead: 'You ask a chatbot a question. Sometimes it writes a paragraph. Sometimes it fills in a form. Sometimes it pauses and asks the computer to look something up. Those three replies are how agents work.',
+    author: 'Chong Wei Khang (张炜康)',
     authorName: 'Chong Wei Khang (张炜康)',
-    publishDate: 'Published Sep 17, 2026',
-    readTime: '5 min read',
-    tags: 'Agent Basics \u00B7 Tool Calling \u00B7 Structured Output',
-    pIntro: 'Ask any LLM what the weather is right now. It\'ll apologize \u2014 it doesn\'t know. Not because it can\'t reason, but because it has no hands. It can think, but it can\'t reach outside its own text and touch the real world. A tool gives it hands. But before we talk about tools, we need to understand something most tutorials skip: what an LLM\'s output actually looks like under the hood.',
-    h2Mode1: '1. Free Text \u2014 The Default',
-    pMode1Intro: 'When you chat with Claude or ChatGPT in a browser, you see flowing text. It feels like the model is \u201Ctyping.\u201D But underneath, the API response is a structured object \u2014 not a string. Here\'s what Claude\'s API actually returns:',
-    pMode1Explain: 'Two things to notice. First, content is an array of typed blocks, not a raw string. Each block has a type \u2014 here it\'s \u201Ctext\u201D. But there are other types, and that\'s the key. Second, stop_reason tells you why the model stopped generating. \u201Cend_turn\u201D means it\'s done talking. But there\'s another stop reason that changes everything.',
-    h2Mode2: '2. Structured JSON \u2014 Schema-Constrained Output',
-    pMode2Intro: 'Sometimes you don\'t want free prose \u2014 you want data in a specific shape. Imagine you\'re building a photo metadata extractor. You want the model to look at a description and return structured fields, not a paragraph. You send a response schema alongside your prompt \u2014 telling the API \u201Crespond in this exact shape\u201D:',
-    pMode2Constrained: 'Now the model\'s output is constrained. It must produce valid JSON matching your schema:',
-    pMode2Explain: 'The type is still \u201Ctext\u201D, the stop_reason is still \u201Cend_turn\u201D \u2014 but the content is guaranteed to be parseable JSON. The model isn\'t \u201Cchoosing\u201D to format nicely; the API enforces this at the token generation level. It literally will not produce a token that violates your schema. This is called constrained decoding, and every major provider (Anthropic, OpenAI, Google) supports it.',
-    h2Mode3: '3. Tool Use \u2014 The Model Requests Action',
-    pMode3Intro: 'This is where things get interesting. The model stops answering you directly and instead says: \u201CI don\'t know the answer, but I\'d like to call a function to find out.\u201D You define tools when calling the API. Each tool has three parts:',
-    pMode3ThreePieces: 'name \u2014 what the model uses to identify the tool. description \u2014 when and why to call it (this is for the model to read, not humans \u2014 this is where the real engineering happens). input_schema \u2014 what arguments to pass (using JSON Schema).',
-    pMode3Explain: 'Now, when a user asks \u201CWhat\'s the weather in Penang?\u201D the model does not return text. It returns something entirely different: a tool_use block. It says: \u201CI want to call get_weather with { city: \"Penang\" }.\u201D Notice the stop_reason: \u201Ctool_use\u201D. The model is saying: \u201CI\'m not done. Go run this, give me the result, and I\'ll finish.\u201D The model didn\'t execute anything. It just asked. Your code does the executing.',
-    calloutTitle: 'The Model Requests, the System Acts',
-    calloutBody: 'This is the most critical mental model in agent engineering: LLMs cannot take actions. They can only output structured text that says "please take this action for me." The execution \u2014 making the API call, querying the database, sending the email \u2014 happens entirely in your code, outside the model.',
-    h2Loop: '4. The Complete Loop',
-    pLoop: 'Every agent framework \u2014 LangChain, CrewAI, Anthropic\'s Agent SDK, Google\'s ADK \u2014 is built on repeating this exact loop until the model returns stop_reason: "end_turn". That is the atom of agent engineering. Everything else is molecules.',
-    h2Closing: 'Three Modes, One Mental Model',
-    pClosing: 'These three modes are the entire vocabulary of how an LLM communicates with the world: free text for humans, structured JSON for machines, and tool use to request actions. Once you see this clearly, the magic disappears \u2014 and engineering begins.',
-    pNextPost: 'Next in this series: What happens when the model has 10 tools to choose from. That\'s where description engineering gets interesting.',
-    authorBio: 'Senior Full Stack Developer at ViTrox & Photographer in Penang, Malaysia. Exploring agentic patterns, WebMCP, and modern frontend architecture.',
+    publishDate: '17 Sep 2026',
+    readTime: '5 min',
+    tags: 'How agents work',
+    seriesTag: 'Part 1 of 5',
+    seriesRoadmapTitle: 'How agents work',
+    seriesLabel: 'This series',
+    readingNowBadge: 'You are here',
+    pIntro: 'Ask ChatGPT what the weather is in Penang right now. It will guess, or apologize. It is not bad at thinking; it just cannot look outside the conversation. A tool is that look outside. Before tools, it helps to see what the model is actually sending back when it appears to type.',
+    h2Mode1: 'Plain text: it just talks',
+    pMode1Intro: 'In a browser chat, you see a paragraph appear. It feels like typing. Behind the page, the service is not returning a loose string. It returns a small object with labeled parts. Here is the same reply as the API sees it.',
+    pMode1Explain: 'Two details matter. First, the words live inside a list of blocks, each with a type. Here the type is text. Other types exist, and that is the whole story. Second, stop_reason says why the model stopped. end_turn means it is finished talking. There is another stop reason, and that one is how agents begin.',
+    h2Mode2: 'A filled-in form: it follows a shape',
+    pMode2Intro: 'Sometimes you do not want a paragraph. You want fields, the way a photo caption card has a place, a time of day, and a mood. You send a shape with the question, and you ask the service to fill only those blanks.',
+    pMode2Constrained: 'Now the model cannot wander. It has to produce JSON that matches the shape.',
+    pMode2Explain: 'The block type is still text, and the stop reason is still end_turn. The difference is the words inside are guaranteed to parse as data. The model is not being polite. The service refuses tokens that break the shape. Engineers call this constrained decoding. Anthropic, OpenAI, and Google all do it.',
+    h2Mode3: 'A request: it asks your code to act',
+    pMode3Intro: 'This is the third reply. The model stops talking to you and writes a request instead: I cannot answer this, please run this function. You list the functions when you call the API. Each one has three parts.',
+    pMode3Explain: 'When someone asks for the weather in Penang, the model does not write a forecast. It writes a tool_use block: call get_weather with city Penang. The stop reason is tool_use, which means I am not done. Run this, give me the result, I will finish. The model did not fetch the weather. Your program did.',
+    termName: 'name',
+    termNameDesc: 'The label the model uses when it wants this function.',
+    termDesc: 'description',
+    termDescDesc: 'A short note for the model, not for people. It says when to ask for this function.',
+    termSchema: 'input_schema',
+    termSchemaDesc: 'The blanks the function needs, written as JSON Schema. Here, a city name.',
+    calloutTitle: 'The model writes a request. Your program does the work.',
+    calloutBody: 'A language model cannot call a weather API, send email, or query a database. It can only produce text that says please do this. The doing happens in your code, outside the model.',
+    h2Loop: 'Then it repeats until it is done',
+    pLoop: 'LangChain, CrewAI, Anthropic\'s Agent SDK, and Google\'s ADK all repeat this same exchange until the model returns end_turn. That loop is the whole mechanism. The rest is packaging.',
+    loopStep1: 'You ask: What is the weather in Penang?',
+    loopStep2: 'The model stops and asks for get_weather. Stop reason: tool_use.',
+    loopStep3: 'Your code runs get_weather("Penang") and gets 31 C, partly cloudy.',
+    loopStep4: 'The model finishes: It is 31 C and partly cloudy in Penang. Stop reason: end_turn.',
+    h2Closing: 'Three replies, one idea',
+    pClosing: 'Talk to a person. Fill a form for a program. Ask your code to act. That is the whole vocabulary. Multi-step agents are these three replies, repeated.',
+    pNextPost: 'Next: what happens when the model has ten tools and has to pick.',
+    authorBio: 'Software engineer at ViTrox, and a photographer. I write about agents and the web tools they use, as plainly as I can, lah.',
+    codeCaptionReply: 'A normal reply',
+    codeCaptionSchema: 'The blanks we asked it to fill',
+    codeCaptionFilled: 'The filled-in form',
+    codeCaptionTool: 'A function the model may request',
+    codeCaptionRequest: 'The model asking for that function',
+    tableColTalk: 'Talk',
+    tableColForm: 'Fill a form',
+    tableColAsk: 'Ask for help',
+    tableRowSee: 'What you see',
+    tableSeeTalk: 'A paragraph',
+    tableSeeForm: 'Neat fields',
+    tableSeeAsk: 'A pause, then an answer',
+    tableRowApi: 'What the API sends',
+    tableApiTalk: 'text',
+    tableApiForm: 'text that is JSON',
+    tableApiAsk: 'text + tool_use',
+    tableRowStop: 'Why it stopped',
+    tableStopTalk: 'end_turn',
+    tableStopForm: 'end_turn',
+    tableStopAsk: 'tool_use',
+    tableRowWho: 'Who does extra work',
+    tableWhoTalk: 'Nobody',
+    tableWhoForm: 'Your parser',
+    tableWhoAsk: 'Your program',
+  },
+  blogList: {
+    pageCategory: 'Notes',
+    pageTitle: 'Writings',
+    pageLead: 'Notes on building AI agents. For a friend who does not write code, and for an engineer who needs the details.',
+    filterAll: 'All',
+    filterBasics: 'Basics',
+    filterArchitecture: 'Systems',
+    filterCaseStudies: 'Build logs',
+    statusPublished: 'Published',
+    statusUpcoming: 'Coming',
+    readArticle: 'Read',
+    timelineYear: '2026',
+    roadmapTitle: 'This series',
+    seriesTitle: 'How agents work',
+    seriesSubtitle: 'Five short notes, from a single reply to a system that can act on its own.',
+    readingNowBadge: 'You are here',
+    chartTitle: '{total} minutes end to end, {live} already live',
+    chartSubtitle: 'Taller means a longer read. Clay is published. Dashed is still coming.',
+    chartFootnote: 'Each line is 30 seconds. A dot marks every 5 minutes.',
+    chartSource: 'Reading time by episode. Coming parts are estimates.',
+    posts: [
+      {
+        id: '01',
+        slug: 'three-ways-an-llm-responds',
+        episode: '01',
+        title: 'The Three Ways an LLM Responds',
+        excerpt: 'A chatbot either talks, fills in a form, or asks your program for help. Those three replies are how agents work.',
+        date: '17 Sep 2026',
+        readTime: '5 min',
+        category: 'basics',
+        tag: 'How agents work',
+        status: 'published',
+      },
+      {
+        id: '02',
+        slug: 'description-engineering',
+        episode: '02',
+        title: 'When the model has ten tools to choose from',
+        excerpt: 'The short note you write on each tool is what the model reads. Write it badly, and it picks the wrong one.',
+        date: 'Oct 2026',
+        readTime: '6 min',
+        category: 'basics',
+        tag: 'Choosing tools',
+        status: 'upcoming',
+      },
+      {
+        id: '03',
+        slug: 'the-autonomous-loop',
+        episode: '03',
+        title: 'Letting the model keep going on its own',
+        excerpt: 'Once tools run without you in the room, you need a stop rule. Otherwise the loop does not know when to quit.',
+        date: '2026',
+        readTime: '8 min',
+        category: 'architecture',
+        tag: 'The loop',
+        status: 'upcoming',
+      },
+      {
+        id: '04',
+        slug: 'github-issue-fixer-case-study',
+        episode: '04',
+        title: 'I tried to make an agent fix GitHub issues',
+        excerpt: 'A local webhook, a cloud sandbox, and the bill. What actually broke, and what I would do again.',
+        date: '2026',
+        readTime: '7 min',
+        category: 'case-studies',
+        tag: 'A build log',
+        status: 'upcoming',
+      },
+      {
+        id: '05',
+        slug: 'decoupling-brain-from-hands',
+        episode: '05',
+        title: 'Keep the brain and the hands in different rooms',
+        excerpt: 'The model decides. A separate program acts. If the acting side dies, the notes should still be there when it comes back.',
+        date: '2026',
+        readTime: '9 min',
+        category: 'architecture',
+        tag: 'WebMCP',
+        status: 'upcoming',
+      },
+    ],
   },
   home: {
-    introStatement: 'Chong Wei Khang (张炜康) is a senior software engineer and photographer based in Penang, Malaysia. Capturing quiet street light, travel atmospheres, and building reliable agentic software.',
-    introMeta: 'Penang, MY  ·  Nikon Z5  ·  Full Stack & AI  ·  Bilingual Notes',
+    introStatement: 'Chong Wei Khang (张炜康). Software engineer and photographer in Penang.',
+    introMeta: 'Nikon Z5, full-stack work, bilingual notes',
     filterAll: 'All Works',
     filterStreet: 'Street & Heritage',
     filterTravel: 'Travel & Scenery',
     filterQuiet: 'Quiet & Coffee',
-    latestWritingTag: 'Latest Technical Essay // Agent Architecture',
-    latestWritingTitle: 'The Three Ways an LLM Responds (And Why It Matters for Agents)',
-    latestWritingMeta: '5 min read · WebMCP · Tool Calling',
-    readEssay: 'Read Full Essay →',
+    latestWritingTag: 'Latest note',
+    latestWritingTitle: 'The Three Ways an LLM Responds',
+    latestWritingMeta: '5 min',
+    readEssay: 'Read',
   },
   about: {
-    title: 'About Me',
-    subtitle: 'Building software with engineering rigor, observing the world through quiet photographic frames.',
-    builderTitle: 'The Builder — Code & Systems',
-    builderText: 'With a background in Mechatronics Engineering, I evolved into a Senior Full Stack Developer at ViTrox Corporation in Penang since 2019. I design distributed systems, robust web interfaces, and agentic workflows using Angular 22, TypeScript, Python, and the emerging WebMCP protocol.',
-    observerTitle: 'The Observer — Light & Moments',
-    observerText: 'Photography is my way of slowing down. With a Nikon Z5, a 40mm prime, and a 24-120mm zoom, I look for quiet geometry in Penang\'s heritage streets, the calm stillness of specialty coffee bars, and the shifting atmospheres of travels across Southeast Asia and Europe.',
-    gearTitle: 'Tools & Equipment',
-    cameraGearLabel: 'Camera & Optics',
-    cameraGear: 'Nikon Z5 · NIKKOR Z 24-120mm f/4 S · NIKKOR Z 40mm f/2',
-    techStackLabel: 'Engineering Stack',
-    techStack: 'Angular 22 · TypeScript · Python · WebMCP · Tailwind CSS · Cloudflare Workers',
-    milestonesTitle: 'Journey & Timeline',
-    milestone1Year: '2019 — Present',
-    milestone1Title: 'Senior Full Stack Developer · ViTrox',
-    milestone1Desc: 'Leading full-stack web and platform architecture, engineering data services, and prototyping modern agentic workflows.',
-    milestone2Year: '2015 — 2019',
-    milestone2Title: 'B.Eng. in Mechatronics Engineering',
-    milestone2Desc: 'Graduated with first-class engineering foundations in embedded control, automation, and software integration.',
-    colophonTitle: 'Colophon & Architecture',
-    colophonText: 'This personal digital garden is designed and hand-crafted with Angular 22 standalone components, Tailwind CSS 4, and custom WebMCP tooling. Fully bilingual with responsive CJK typography and zero tracking scripts. Hosted on Cloudflare Workers edge network.',
+    title: 'About',
+    subtitle: 'Software engineer and photographer',
+    builderTitle: 'Work',
+    builderText: 'I have been a full-stack engineer at ViTrox in Penang since 2019. I started in mechatronics. These days I build web systems, and the small page tools that let an AI agent act without leaving the browser.',
+    observerTitle: 'Photographs',
+    observerText: 'I also take photographs. A Nikon Z5, a 40mm, and a 24-120mm. Street and travel, mostly available light, mostly Penang, sometimes further.',
+    gearTitle: 'Tools',
+    cameraGearLabel: 'Camera',
+    cameraGear: 'Nikon Z5, NIKKOR Z 24-120mm f/4 S, NIKKOR Z 40mm f/2',
+    techStackLabel: 'Software',
+    techStack: 'Angular 22, TypeScript, Python, WebMCP, Tailwind CSS, Cloudflare',
+    milestonesTitle: 'Work',
+    milestone1Year: '2019-present',
+    milestone1Title: 'Senior full-stack engineer, ViTrox',
+    milestone1Desc: 'Web platforms, data services, and the first agent tools we ship internally.',
+    milestone2Year: '2015-2019',
+    milestone2Title: 'B.Eng. Mechatronics',
+    milestone2Desc: 'Embedded systems and the software that sits on top of them.',
+    colophonTitle: 'This site',
+    colophonText: 'Angular 22 and Tailwind. Hosted on Cloudflare. English and Chinese. No tracking.',
   },
 };
 
@@ -175,6 +367,7 @@ const ZH_DICTIONARY: TranslationDictionary = {
     about: '关于我',
     contact: '联系方式',
     backToPortfolio: '返回作品集',
+    backToWritings: '返回专栏',
   },
   theme: {
     toDark: '切换为深色模式',
@@ -186,68 +379,188 @@ const ZH_DICTIONARY: TranslationDictionary = {
     switchButtonText: 'EN',
   },
   post: {
-    category: '工程架构 // AGENT 基础核心',
-    title: '大模型输出的三种形态（以及为什么它对 Agent 至关重要）',
-    lead: '大多数人以为大模型只是在“打字吐字”。但在 API 底层，输出其实只有三种截然不同的模式——理解这三种模式，是彻底看懂所有 Agent 运行机制的最快途径。',
-    author: '作者：张炜康 (Chong Wei Khang)',
+    category: '笔记',
+    title: '大模型回答你的三种方式',
+    lead: '你问聊天机器人一个问题。它有时写一段话，有时填一张表，有时停下来让电脑去查。这三种回答，就是 Agent 在做的事。',
+    author: '张炜康 (Chong Wei Khang)',
     authorName: '张炜康 (Chong Wei Khang)',
-    publishDate: '发布于 2026年9月17日',
-    readTime: '5 分钟阅读',
-    tags: 'Agent 基础 · Tool Calling · 结构化输出',
-    pIntro: '问任何一个大模型现在天气怎么样，它会道歉——它不知道。不是因为它推理不行，而是因为它没有手。它能思考，但无法伸出文字之外去触碰真实世界。Tool（工具）就是给它的手。但在聊 tool 之前，我们得先理解一件大多数教程跳过的事：LLM 的输出在底层到底长什么样。',
-    h2Mode1: '1. 纯文本 — 默认模式',
-    pMode1Intro: '在浏览器里和 Claude 或 ChatGPT 聊天时，你看到的是流动的文字，好像模型在"打字"。但在底层，API 返回的是一个结构化对象——不是字符串。以下是 Claude API 实际返回的内容：',
-    pMode1Explain: '两件事值得注意。第一，content 是一个带类型标签的数组，不是原始字符串。每个 block 有一个 type——这里是 "text"。但还有其他类型，这才是关键。第二，stop_reason 告诉你模型为什么停了下来。"end_turn" 意思是"我说完了"。但还有另一种 stop reason，它改变了一切。',
-    h2Mode2: '2. 结构化 JSON — Schema 约束输出',
-    pMode2Intro: '有时你不需要自由文本——你需要特定结构的数据。比如你在做一个照片元数据提取器，希望模型看了描述后返回结构化字段，而不是一段话。你在请求里附上一个 response schema——告诉 API"请按这个结构回答"：',
-    pMode2Constrained: '现在模型的输出被约束了，必须产出符合你 schema 的合法 JSON：',
-    pMode2Explain: 'type 还是 "text"，stop_reason 还是 "end_turn"——但内容保证是可解析的 JSON。模型不是在"选择"好好格式化；是 API 在 token 生成层面约束了输出，只允许产生符合你 schema 的内容。这叫受约束解码（constrained decoding）——三大主流厂商（Anthropic、OpenAI、Google）都在用它。',
-    h2Mode3: '3. Tool Use — 模型请求行动',
-    pMode3Intro: '第三种模式是最有意思的。模型不再直接回答，而是说："我自己答不了——让我调一个函数。"你在调用 API 时提供一组可用工具。每个 tool 有三个组成部分：',
-    pMode3ThreePieces: 'name — 模型调用它时用的名字。description — 什么时候调用（写给模型看的，不是给人看的——真正的工程细节在这里）。input_schema — 接收什么参数（JSON Schema 格式）。',
-    pMode3Explain: '当用户问"槟城天气怎么样？"时，返回结果彻底变了。出现了新的 block 类型："tool_use"——模型发出了一个结构化的函数调用请求。stop_reason 变成了 "tool_use"——模型在说"我没说完，请执行这个，然后告诉我结果。"模型没有执行任何东西。它只是请求。你的代码负责行动。',
-    calloutTitle: '模型发出请求，系统执行动作',
-    calloutBody: '这是 Agent 工程中最重要的心智模型：LLM 唯一的超能力是决定调用哪个工具、传什么参数。真正的执行——发 API 请求、读文件、查数据库——完全发生在你的代码里，在模型之外。',
-    h2Loop: '4. 完整的循环',
-    pLoop: '所有 agent 框架——LangChain、CrewAI、Anthropic 的 Agent SDK、Google 的 ADK——都只是这个循环的反复执行。模型不断调用 tool，直到 stop_reason 变回 "end_turn" 为止。这就是 agent 工程的原子。其他一切都是分子。',
-    h2Closing: '三种模式，一个心智模型',
-    pClosing: '这三种模式就是 LLM 与外部世界交互的完整词汇表。所有建立在上面的东西——多步骤 agent、chain、orchestration——都是这些原子的组合。',
-    pNextPost: '下一篇：当模型面前有 10 个 tool 时会发生什么。那就是 description 工程开始变有趣的地方。',
-    authorBio: 'ViTrox 资深全栈开发工程师，现居马来西亚槟城，独立摄影师。专注探索 Agent 架构与现代前端工程演进。',
+    publishDate: '2026年9月17日',
+    readTime: '5 分钟',
+    tags: 'Agent 是怎么工作的',
+    seriesTag: '共 5 篇，这是第 1 篇',
+    seriesRoadmapTitle: '智能体是怎么工作的',
+    seriesLabel: '这一组',
+    readingNowBadge: '正在读',
+    pIntro: '问 ChatGPT 槟城现在天气如何。它会猜，或者道歉。它会想，只是看不见对话外面的世界。工具，就是那一次往外看。在讲工具之前，先看清楚模型所谓的「打字」，底层到底回了什么。',
+    h2Mode1: '普通文字：它只是在说话',
+    pMode1Intro: '在网页里聊天，你看到一段字慢慢出现，好像它在打字。页面后面，服务回的是一个标好部分的小对象，不是一串散字。下面是 API 眼里的同一句回答。',
+    pMode1Explain: '两处值得看。第一，字住在一组带类型的块里。这里的类型是 text。还有别的类型，整件事就在这里。第二，stop_reason 说明它为什么停。end_turn 表示说完了。还有另一种停止原因，Agent 就是从那里开始的。',
+    h2Mode2: '填表：它必须按格式来',
+    pMode2Intro: '有时你不要一段话。你要字段，像照片说明卡上的地点、时段、气氛。你把格子和问题一起送出去，请服务只填这些空。',
+    pMode2Constrained: '现在它不能跑题。产出的 JSON 必须对上你给的格子。',
+    pMode2Explain: '块类型还是 text，停止原因还是 end_turn。差别在于里面的字保证能当数据来读。模型不是在讲究礼貌，是服务不让它吐出破坏格式的内容。工程师叫它受约束解码。Anthropic、OpenAI、Google 都这么做。',
+    h2Mode3: '请求：它请你的程序去办事',
+    pMode3Intro: '第三种回答。模型不再对你说话，而是写下一张请求：我答不了，请跑这个函数。你在调用 API 时列出可用的函数。每一个有三部分。',
+    pMode3Explain: '有人问槟城天气时，模型不写预报。它写一个 tool_use 块：用 city Penang 调用 get_weather。停止原因是 tool_use，意思是我还没说完。你先跑，把结果给我，我再收尾。模型没有去查天气。是你的程序查的。',
+    termName: 'name',
+    termNameDesc: '模型想用这个函数时，叫它的名字。',
+    termDesc: 'description',
+    termDescDesc: '写给模型看的短说明，不是写给人看的。告诉它什么时候该开口要这个函数。',
+    termSchema: 'input_schema',
+    termSchemaDesc: '这个函数需要填的空，用 JSON Schema 写。这里是城市名。',
+    calloutTitle: '模型写请求。你的程序办事。',
+    calloutBody: '语言模型不能自己调天气接口、发邮件、查数据库。它只能写出「请做这件事」这样的字。真正去做的，是模型外面的代码。',
+    h2Loop: '然后重复，直到说完',
+    pLoop: 'LangChain、CrewAI、Anthropic 的 Agent SDK、Google 的 ADK，都是把这一来一回重复到模型吐出 end_turn。循环本身就是机制。其余是包装。',
+    loopStep1: '你问：槟城天气怎么样？',
+    loopStep2: '模型停下，要 get_weather。停止原因：tool_use。',
+    loopStep3: '你的代码跑 get_weather("Penang")，得到 31°C，多云。',
+    loopStep4: '模型收尾：槟城现在 31°C，多云。停止原因：end_turn。',
+    h2Closing: '同一个想法，三种样子',
+    pClosing: '对人说话。给程序填表。请你的代码去做事。词汇就这些。多步骤的 Agent，不过是这三种回答在重复。',
+    pNextPost: '下一篇：模型面前有十个工具时，它怎么选。',
+    authorBio: '在 ViTrox 做软件，也拍照。写 Agent，以及它们在网页上用的小工具，尽量写得白话一点啦。',
+    codeCaptionReply: '一句普通回答',
+    codeCaptionSchema: '我们请它填的格子',
+    codeCaptionFilled: '填好的表',
+    codeCaptionTool: '模型可以开口要的函数',
+    codeCaptionRequest: '模型在要那个函数',
+    tableColTalk: '说话',
+    tableColForm: '填表',
+    tableColAsk: '求助',
+    tableRowSee: '你看到的',
+    tableSeeTalk: '一段话',
+    tableSeeForm: '整齐的字段',
+    tableSeeAsk: '先停一下，再给答案',
+    tableRowApi: 'API 送来的',
+    tableApiTalk: 'text',
+    tableApiForm: '其实是 JSON 的 text',
+    tableApiAsk: 'text + tool_use',
+    tableRowStop: '为什么停',
+    tableStopTalk: 'end_turn',
+    tableStopForm: 'end_turn',
+    tableStopAsk: 'tool_use',
+    tableRowWho: '谁多做一步',
+    tableWhoTalk: '没有人',
+    tableWhoForm: '你的解析器',
+    tableWhoAsk: '你的程序',
+  },
+  blogList: {
+    pageCategory: '笔记',
+    pageTitle: '专栏文章',
+    pageLead: '写 AI Agent 的笔记。不写代码的朋友能看懂意思，写代码的朋友能用上细节。',
+    filterAll: '全部',
+    filterBasics: '入门',
+    filterArchitecture: '系统',
+    filterCaseStudies: '实录',
+    statusPublished: '已写',
+    statusUpcoming: '待写',
+    readArticle: '阅读',
+    timelineYear: '2026',
+    roadmapTitle: '这一组',
+    seriesTitle: '智能体是怎么工作的',
+    seriesSubtitle: '五篇短笔记。从一句回答，到能自己做事的系统。',
+    readingNowBadge: '正在读',
+    chartTitle: '全系列约 {total} 分钟，已上线 {live} 分钟',
+    chartSubtitle: '柱子越高，读得越久。实线陶土色是已写的。虚线是还没写的。点击可重播。',
+    chartFootnote: '一条线是 30 秒。圆点每 5 分钟一个。',
+    chartSource: '按篇目的阅读时间。待写篇目是估计。',
+    posts: [
+      {
+        id: '01',
+        slug: 'three-ways-an-llm-responds',
+        episode: '01',
+        title: '大模型回答你的三种方式',
+        excerpt: '聊天机器人要么说话，要么填表，要么请你的程序帮忙。这三种回答，就是 Agent 在做的事。',
+        date: '2026年9月17日',
+        readTime: '5 分钟',
+        category: 'basics',
+        tag: 'Agent 是怎么工作的',
+        status: 'published',
+      },
+      {
+        id: '02',
+        slug: 'description-engineering',
+        episode: '02',
+        title: '模型面前有十个工具时，它怎么选',
+        excerpt: '你写在每个工具上的那句短说明，是模型在读的。写不好，它就会拿错。',
+        date: '2026年10月',
+        readTime: '6 分钟',
+        category: 'basics',
+        tag: '怎么选工具',
+        status: 'upcoming',
+      },
+      {
+        id: '03',
+        slug: 'the-autonomous-loop',
+        episode: '03',
+        title: '让模型自己接着做下去',
+        excerpt: '工具开始在你不在场时运行，你就需要一条停止规则。不然循环不知道何时该停。',
+        date: '2026',
+        readTime: '8 分钟',
+        category: 'architecture',
+        tag: '循环',
+        status: 'upcoming',
+      },
+      {
+        id: '04',
+        slug: 'github-issue-fixer-case-study',
+        episode: '04',
+        title: '我试过让 Agent 修 GitHub Issue',
+        excerpt: '本地 webhook、云端沙箱，还有账单。哪里坏了，哪些我会再做一次。',
+        date: '2026',
+        readTime: '7 分钟',
+        category: 'case-studies',
+        tag: '一篇记录',
+        status: 'upcoming',
+      },
+      {
+        id: '05',
+        slug: 'decoupling-brain-from-hands',
+        episode: '05',
+        title: '脑子和手，放在不同的房间',
+        excerpt: '模型做决定。另一段程序去动手。动手的那边挂了，记录还应该在。',
+        date: '2026',
+        readTime: '9 分钟',
+        category: 'architecture',
+        tag: 'WebMCP',
+        status: 'upcoming',
+      },
+    ],
   },
   home: {
-    introStatement: '张炜康 (Chong Wei Khang) — 现居马来西亚槟城的全栈开发工程师与独立摄影师。记录街道上的沉静光影与旅途氛围，同时构建高可靠性的智能体软件。',
-    introMeta: '马来西亚·槟城  ·  Nikon Z5  ·  全栈架构与 AI  ·  双语手记',
+    introStatement: '张炜康 (Chong Wei Khang)。在槟城写软件，也拍照。',
+    introMeta: 'Nikon Z5，全栈工作，中英笔记',
     filterAll: '全部作品',
     filterStreet: '街头纪实',
     filterTravel: '旅途光影',
     filterQuiet: '静物咖啡',
-    latestWritingTag: '最新技术专栏 // 智能体架构',
-    latestWritingTitle: '大模型输出的三种形态（以及为什么它对 Agent 至关重要）',
-    latestWritingMeta: '5 分钟深度阅读 · WebMCP · Tool Calling',
-    readEssay: '阅读全文 →',
+    latestWritingTag: '最近一篇',
+    latestWritingTitle: '大模型回答你的三种方式',
+    latestWritingMeta: '5 分钟',
+    readEssay: '阅读',
   },
   about: {
-    title: '关于我',
-    subtitle: '以工程师的严谨构建系统，以观察者的从容捕捉光影。',
-    builderTitle: '构建者 — 代码与系统架构',
-    builderText: '机电一体化工程背景出身，自 2019 年起在马来西亚槟城 ViTrox 担任资深全栈开发工程师。专注设计分布式系统、现代化高响应 Web 架构以及基于 WebMCP 协议的可靠智能体工作流。',
-    observerTitle: '观察者 — 光线与静止瞬间',
-    observerText: '摄影是我让世界慢下来的方式。手持一台 Nikon Z5，挂载 40mm 定焦与 24-120mm 变焦，我在槟城老街寻找沉静的几何线条，在独立精品咖啡馆里记录光影散落，在跨越欧亚的旅途中捕捉没有修饰的真实温度。',
-    gearTitle: '工具与装备箱',
-    cameraGearLabel: '相机与镜头光学',
-    cameraGear: 'Nikon Z5 · NIKKOR Z 24-120mm f/4 S · NIKKOR Z 40mm f/2',
-    techStackLabel: '工程技术栈',
-    techStack: 'Angular 22 · TypeScript · Python · WebMCP · Tailwind CSS · Cloudflare Workers',
-    milestonesTitle: '经历与时间线',
-    milestone1Year: '2019 — 至今',
-    milestone1Title: '资深全栈开发工程师 · ViTrox',
-    milestone1Desc: '主导全栈 Web 架构与企业级平台研发，设计高性能数据处理服务，落地前沿智能体自动化系统。',
-    milestone2Year: '2015 — 2019',
-    milestone2Title: '机电一体化工程学士学位 (B.Eng.)',
-    milestone2Desc: '以一等工程学识背景毕业，系统掌握嵌入式控制、自动化工程与软件系统集成。',
-    colophonTitle: '关于本站与设计理念',
-    colophonText: '本站基于 Angular 22 独立组件、Tailwind CSS 4 与实验性 WebMCP 智能体工具链纯手工构建。全站原生双语驱动，针对中文排版进行 CJK 标点与行距优化，零外部追踪代码。部署于 Cloudflare Workers 全球边缘网络。',
+    title: '关于',
+    subtitle: '软件工程师，也拍照',
+    builderTitle: '工作',
+    builderText: '2019 年起在槟城 ViTrox 做全栈工程师。本科学机电一体化。现在做网页系统，也做一些让 AI Agent 不用离开浏览器就能动手的小工具。',
+    observerTitle: '照片',
+    observerText: '我也拍照。一台 Nikon Z5，一支 40mm，一支 24-120mm。街头和旅途，多用现成的光。多数在槟城，偶尔走远一点。',
+    gearTitle: '工具',
+    cameraGearLabel: '相机',
+    cameraGear: 'Nikon Z5, NIKKOR Z 24-120mm f/4 S, NIKKOR Z 40mm f/2',
+    techStackLabel: '软件',
+    techStack: 'Angular 22, TypeScript, Python, WebMCP, Tailwind CSS, Cloudflare',
+    milestonesTitle: '工作',
+    milestone1Year: '2019 至今',
+    milestone1Title: '资深全栈工程师，ViTrox',
+    milestone1Desc: '网页平台、数据服务，以及我们内部开始用的第一批 Agent 工具。',
+    milestone2Year: '2015-2019',
+    milestone2Title: '机电一体化工程学士',
+    milestone2Desc: '嵌入式系统，以及叠在上面的软件。',
+    colophonTitle: '这个网站',
+    colophonText: 'Angular 22 和 Tailwind。放在 Cloudflare。中英双语。没有跟踪脚本。',
   },
 };
 

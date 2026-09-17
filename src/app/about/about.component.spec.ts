@@ -24,8 +24,8 @@ describe('AboutComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.author-name')?.textContent).toContain('Chong Wei Khang');
     expect(compiled.querySelector('.author-subname')?.textContent).toContain('张炜康');
-    expect(compiled.textContent).toContain('Based in Penang, Malaysia');
-    expect(compiled.textContent).toContain('Senior Software Engineer & Photographer');
+    expect(compiled.textContent).toContain('I have been a full-stack engineer at ViTrox');
+    expect(compiled.textContent).toContain('Software engineer and photographer');
   });
 
   it('should reactively render Chinese content when locale changes', () => {
@@ -33,9 +33,9 @@ describe('AboutComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.textContent).toContain('现居马来西亚槟城');
-    expect(compiled.textContent).toContain('全栈系统工程师 · 独立摄影师');
-    expect(compiled.textContent).toContain('器材与技术体系');
+    expect(compiled.textContent).toContain('2019 年起在槟城 ViTrox 做全栈工程师');
+    expect(compiled.textContent).toContain('软件工程师，也拍照');
+    expect(compiled.textContent).toContain('这个网站');
   });
 
   it('should render environmental portrait, optics, timeline, and colophon without template card boxes', () => {

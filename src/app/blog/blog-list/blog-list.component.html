@@ -1,0 +1,187 @@
+<main class="writings-container">
+  <header class="directory-header">
+    <div class="directory-eyebrow">
+      <span class="slash">/</span> {{ localeService.dict().blogList.pageCategory }}
+    </div>
+    <h1 class="page-title">
+      {{ localeService.dict().blogList.pageTitle }}<sup class="title-counter">({{ posts().length }})</sup>
+    </h1>
+    <p class="page-lead">{{ localeService.dict().blogList.pageLead }}</p>
+  </header>
+
+  <!-- Reading-Time Rung Chart -->
+  <section class="chart-section" aria-label="Reading time visualization">
+    <app-series-chart [posts]="posts()" />
+  </section>
+
+  <!-- Filter Bar -->
+  <section class="filters-bar" aria-label="Filter posts by topic">
+    <div class="filter-header">
+      <span class="slash">/</span> Filters
+    </div>
+    <div class="filter-pills" role="tablist">
+      <button
+        type="button"
+        role="tab"
+        class="filter-pill"
+        [class.is-active]="selectedFilter() === 'all'"
+        [attr.aria-selected]="selectedFilter() === 'all'"
+        (click)="setFilter('all')"
+      >
+        <span>{{ localeService.dict().blogList.filterAll }}</span>
+        <span class="pill-count">({{ filterCounts().all }})</span>
+      </button>
+
+      <button
+        type="button"
+        role="tab"
+        class="filter-pill"
+        [class.is-active]="selectedFilter() === 'basics'"
+        [attr.aria-selected]="selectedFilter() === 'basics'"
+        (click)="setFilter('basics')"
+      >
+        <span>{{ localeService.dict().blogList.filterBasics }}</span>
+        <span class="pill-count">({{ filterCounts().basics }})</span>
+      </button>
+
+      <button
+        type="button"
+        role="tab"
+        class="filter-pill"
+        [class.is-active]="selectedFilter() === 'architecture'"
+        [attr.aria-selected]="selectedFilter() === 'architecture'"
+        (click)="setFilter('architecture')"
+      >
+        <span>{{ localeService.dict().blogList.filterArchitecture }}</span>
+        <span class="pill-count">({{ filterCounts().architecture }})</span>
+      </button>
+
+      <button
+        type="button"
+        role="tab"
+        class="filter-pill"
+        [class.is-active]="selectedFilter() === 'case-studies'"
+        [attr.aria-selected]="selectedFilter() === 'case-studies'"
+        (click)="setFilter('case-studies')"
+      >
+        <span>{{ localeService.dict().blogList.filterCaseStudies }}</span>
+        <span class="pill-count">({{ filterCounts()['case-studies'] }})</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Tabular Directory List -->
+  <section class="directory-table" aria-label="Articles directory">
+    <div class="table-header-row" aria-hidden="true">
+      <span class="th-date"><span class="slash">/</span> Date</span>
+      <span class="th-title"><span class="slash">/</span> Name</span>
+      <span class="th-actions"><span class="slash">/</span> Details</span>
+    </div>
+
+    <ol class="post-list">
+      @for (post of displayPosts(); track post.id) {
+        <li
+          class="post-item"
+          [class.is-upcoming]="post.status === 'upcoming'"
+          [class.is-expanded]="isExpanded(post.id)"
+        >
+          <!-- Main Row -->
+          <div class="post-row-main" (click)="toggleExpand(post.id)">
+            <div class="row-date-col">
+              <span class="bullet-square" aria-hidden="true">■</span>
+              <time class="date-text">{{ post.date }}</time>
+            </div>
+
+            <div class="row-title-col">
+              @if (post.status === 'published') {
+                <h2 class="item-title">
+                  <a
+                    [routerLink]="['/blog', post.slug]"
+                    class="title-link"
+                    (click)="$event.stopPropagation()"
+                  >
+                    {{ post.title }}
+                  </a>
+                </h2>
+              } @else {
+                <h2 class="item-title">
+                  {{ post.title }}
+                </h2>
+              }
+              <span class="badge-status" [class.badge-upcoming]="post.status === 'upcoming'">
+                {{ post.status === 'published' ? localeService.dict().blogList.statusPublished : localeService.dict().blogList.statusUpcoming }}
+              </span>
+            </div>
+
+            <div class="row-toggle-col">
+              <button
+                type="button"
+                class="toggle-btn"
+                [attr.aria-expanded]="isExpanded(post.id)"
+                [attr.aria-controls]="'details-' + post.id"
+                [attr.aria-label]="(isExpanded(post.id) ? 'Collapse' : 'Expand') + ' details for ' + post.title"
+                (click)="$event.stopPropagation(); toggleExpand(post.id)"
+              >
+                <svg
+                  class="toggle-icon"
+                  [class.is-rotated]="isExpanded(post.id)"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  aria-hidden="true"
+                >
+                  <line x1="8" y1="2" x2="8" y2="14" class="icon-v" />
+                  <line x1="2" y1="8" x2="14" y2="8" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Accordion Inline Details Panel -->
+          @if (isExpanded(post.id)) {
+            <div class="post-details-panel" [id]="'details-' + post.id">
+              <div class="details-grid">
+                <div class="details-summary">
+                  <span class="detail-label"><span class="slash">/</span> Summary:</span>
+                  <p class="item-excerpt">{{ post.excerpt }}</p>
+                </div>
+
+                <div class="details-meta">
+                  <div class="meta-block">
+                    <span class="detail-label"><span class="slash">/</span> Meta:</span>
+                    <p class="item-meta">
+                      <span class="meta-badge episode-badge">EP.{{ post.episode }}</span>
+                      <span class="meta-badge date-badge">{{ post.date }}</span>
+                      <span class="meta-badge read-badge">{{ post.readTime }}</span>
+                    </p>
+                  </div>
+
+                  <div class="meta-block">
+                    <span class="detail-label"><span class="slash">/</span> Topic:</span>
+                    <span class="topic-pill">{{ post.tag }}</span>
+                  </div>
+
+                  <div class="meta-action">
+                    @if (post.status === 'published') {
+                      <a [routerLink]="['/blog', post.slug]" class="read-action-btn">
+                        <span>{{ localeService.dict().blogList.readArticle }}</span>
+                        <svg class="arrow-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                        </svg>
+                      </a>
+                    } @else {
+                      <span class="upcoming-notice">
+                        {{ localeService.dict().blogList.statusUpcoming }} · 2026
+                      </span>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </li>
+      }
+    </ol>
+  </section>
+</main>
