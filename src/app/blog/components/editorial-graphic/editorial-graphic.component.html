@@ -1,5 +1,5 @@
-<div class="editorial-graphic-container">
-  <figure>
+<figure class="editorial-graphic-figure">
+  <div class="graphic-canvas-container">
     <svg viewBox="0 0 800 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" [attr.aria-label]="label() || 'System Architecture Schematic'">
       <defs>
         <!-- Background Architectural Dot Matrix -->
@@ -301,12 +301,12 @@
         </g>
       }
     </svg>
+  </div>
 
-    <!-- Optional Caption -->
-    @if (caption()) {
-      <figcaption class="editorial-caption">
-        {{ caption() }}
-      </figcaption>
-    }
-  </figure>
-</div>
+  <!-- Optional Editorial Caption sitting cleanly below the canvas -->
+  @if (caption()) {
+    <figcaption class="editorial-caption">
+      {{ caption() }}
+    </figcaption>
+  }
+</figure>

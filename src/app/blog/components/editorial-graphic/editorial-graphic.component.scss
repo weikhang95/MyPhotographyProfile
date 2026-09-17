@@ -1,6 +1,7 @@
 :host {
   display: block;
   width: 100%;
+  margin: 2.5rem 0;
 
   // Light theme tokens (Warm Editorial Canvas)
   --eg-bg: #f7f4ed;
@@ -18,7 +19,8 @@
 }
 
 :host-context(.dark),
-:host-context(html.dark) {
+:host-context(html.dark),
+:host-context(html[class*="dark"]) {
   // Dark theme tokens (Warm Obsidian Canvas)
   --eg-bg: #141311;
   --eg-border: #282622;
@@ -32,17 +34,20 @@
   --eg-dot: rgba(232, 228, 220, 0.08);
 }
 
-.editorial-graphic-container {
+.editorial-graphic-figure {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.graphic-canvas-container {
   border-radius: 0.75rem;
   overflow: hidden;
   border: 1px solid var(--eg-border);
   background-color: var(--eg-bg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.02);
   transition: border-color 0.3s ease, background-color 0.3s ease;
-
-  figure {
-    margin: 0;
-    padding: 0;
-  }
 
   svg {
     display: block;
@@ -50,15 +55,21 @@
     height: auto;
     user-select: none;
   }
+}
 
-  .caption-text {
-    font-family: var(--eg-font-sans);
-    font-size: 0.8125rem;
-    line-height: 1.4;
-    color: var(--eg-stroke-sub);
-    padding: 0.75rem 1.25rem;
-    border-top: 1px solid var(--eg-border);
-    background-color: color-mix(in srgb, var(--eg-bg) 75%, var(--eg-node-bg));
+.editorial-caption {
+  display: block;
+  margin-top: 0.875rem;
+  padding: 0 0.25rem;
+  font-family: var(--eg-font-sans);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--eg-stroke-sub);
+  letter-spacing: 0.01em;
+
+  :host-context(.dark) &,
+  :host-context(html.dark) & {
+    color: #9c978f;
   }
 }
 
