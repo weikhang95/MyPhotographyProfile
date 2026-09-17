@@ -9,7 +9,6 @@ import {
   signal, 
   computed 
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { Fancybox } from '@fancyapps/ui';
 import { LocaleService } from '../i18n/locale.service';
 
@@ -50,7 +49,7 @@ const IMAGE_CONFIG = {
   styleUrls: ['./portfolio.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink]
+  imports: []
 })
 export class PortfolioComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly localeService = inject(LocaleService);

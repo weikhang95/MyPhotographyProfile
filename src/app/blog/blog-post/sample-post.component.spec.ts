@@ -24,15 +24,17 @@ describe('SamplePostComponent', () => {
   it('should render the post title and author', () => {
     const el = fixture.nativeElement as HTMLElement;
     expect(el.querySelector('.post-title')?.textContent).toContain(
-      'Decoupling the Brain from the Hands'
+      'The Three Ways an LLM Responds'
     );
     expect(el.querySelector('.author-badge')?.textContent).toContain('Chong Wei Khang');
   });
 
-  it('should render editorial graphics within the article', () => {
+  it('should render code windows and comparison table within the article', () => {
     const el = fixture.nativeElement as HTMLElement;
-    const graphics = el.querySelectorAll('app-editorial-graphic');
-    expect(graphics.length).toBe(3);
+    const codeWindows = el.querySelectorAll('.code-window');
+    expect(codeWindows.length).toBeGreaterThanOrEqual(4);
+    const table = el.querySelector('.comparison-table');
+    expect(table).toBeTruthy();
   });
 
   it('should render the portfolio back link', () => {
@@ -47,9 +49,9 @@ describe('SamplePostComponent', () => {
 
     const el = fixture.nativeElement as HTMLElement;
     expect(el.querySelector('.post-title')?.textContent).toContain(
-      '解耦思考与行动'
+      '大模型输出的三种形态'
     );
-    expect(el.querySelector('.post-lead')?.textContent).toContain('大模型能力快速迭代');
+    expect(el.querySelector('.post-lead')?.textContent).toContain('大多数人以为大模型只是在“打字吐字”');
     expect(el.querySelector('.author-badge')?.textContent).toContain('张炜康');
   });
 });

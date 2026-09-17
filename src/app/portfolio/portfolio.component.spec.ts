@@ -26,14 +26,14 @@ describe('PortfolioComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render all 12 images initially', () => {
+  it('should render all 12 images directly in the photo stream', () => {
     expect(component.filteredImages().length).toBe(12);
     const compiled = fixture.nativeElement as HTMLElement;
-    const cards = compiled.querySelectorAll('.gallery-card');
-    expect(cards.length).toBe(12);
+    const items = compiled.querySelectorAll('.photo-item');
+    expect(items.length).toBe(12);
   });
 
-  it('should filter images by category', () => {
+  it('should filter images by category when series links are clicked', () => {
     component.setCategory('street');
     fixture.detectChanges();
     expect(component.selectedCategory()).toBe('street');
@@ -52,9 +52,13 @@ describe('PortfolioComponent', () => {
     expect(component.getImageLocation(firstImg)).toBe('马来西亚·槟城');
   });
 
-  it('should render the identity intro strip and latest writing bridge', () => {
+  it('should present pure photographs with clean series nav and zero caption clutter', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.identity-statement')).toBeTruthy();
-    expect(compiled.querySelector('.writing-bridge-card')).toBeTruthy();
+    expect(compiled.querySelector('.series-nav')).toBeTruthy();
+    expect(compiled.querySelector('.photo-stream')).toBeTruthy();
+    // Verify no template card boxes or self-intro clutter
+    expect(compiled.querySelector('.identity-strip')).toBeNull();
+    expect(compiled.querySelector('.photo-meta')).toBeNull();
+    expect(compiled.querySelector('.writing-bridge-card')).toBeNull();
   });
 });

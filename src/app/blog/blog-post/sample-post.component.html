@@ -10,17 +10,17 @@
     </a>
   </div>
 
-  <!-- Category & Breadcrumbs -->
+  <!-- Category -->
   <div class="post-category">
     <span>{{ localeService.dict().post.category }}</span>
   </div>
 
-  <!-- Main Headline -->
+  <!-- Headline -->
   <h1 class="post-title">
     {{ localeService.dict().post.title }}
   </h1>
 
-  <!-- Executive Summary (Anthropic Lead Style) -->
+  <!-- Lead -->
   <div class="post-lead">
     {{ localeService.dict().post.lead }}
   </div>
@@ -30,100 +30,208 @@
     <div class="meta-item author-badge">{{ localeService.dict().post.author }}</div>
     <div class="meta-item">{{ localeService.dict().post.publishDate }}</div>
     <div class="meta-item">{{ localeService.dict().post.readTime }}</div>
-    <div class="meta-item">{{ localeService.dict().post.tag }}</div>
+    <div class="meta-item">{{ localeService.dict().post.tags }}</div>
   </div>
 
-  <!-- Post Body Content -->
+  <!-- Post Body -->
   <div class="post-body">
-    <p>
-      {{ localeService.dict().post.p1 }}
-    </p>
+    <!-- Opening -->
+    <p>{{ localeService.dict().post.pIntro }}</p>
 
-    <div class="editorial-callout">
-      <div class="callout-title">{{ localeService.dict().post.cattleTitle }}</div>
-      <p>
-        {{ localeService.dict().post.cattleBody }}
-      </p>
-    </div>
+    <!-- Section 1: Free Text -->
+    <h2>{{ localeService.dict().post.h2Mode1 }}</h2>
+    <p>{{ localeService.dict().post.pMode1Intro }}</p>
 
-    <h2>{{ localeService.dict().post.h2_1 }}</h2>
-
-    <p>
-      {{ localeService.dict().post.p2 }}
-    </p>
-
-    <!-- Visual Artifact: Decoupled Schematic -->
-    <app-editorial-graphic 
-      variant="decoupled"
-      label="VIRTUALIZATION // HARNESS_V1"
-      [caption]="localeService.dict().post.fig1Caption">
-    </app-editorial-graphic>
-
-    <p>
-      {{ localeService.dict().post.p3 }}
-    </p>
-
-    <!-- Code Block Artifact -->
     <div class="code-window">
       <div class="code-header">
-        <div class="code-dots">
-          <span></span><span></span><span></span>
-        </div>
-        <span>agent-contract.ts</span>
+        <div class="code-dots"><span></span><span></span><span></span></div>
+        <span>response.json</span>
       </div>
-      <pre><code>// The stateless boundary between Brain and Hands
-interface AgentToolContract&lt;TInput = unknown, TOutput = unknown&gt; &#123;
-  readonly name: string;
-  readonly description: string;
-  readonly inputSchema: JsonSchema;
-  execute(args: TInput, client: &#123; signal: AbortSignal &#125;): Promise&lt;TOutput&gt;;
-&#125;
-
-// In Angular 22, registered automatically via WebMCP:
-provideExperimentalWebMcpTools([
-  searchPortfolioTool,
-  submitContactInquiryTool
-]);</code></pre>
+      <pre><code>&#123;
+  "role": "assistant",
+  "content": [
+    &#123;
+      "type": "text",
+      "text": "The capital of Malaysia is Kuala Lumpur."
+    &#125;
+  ],
+  "stop_reason": "end_turn"
+&#125;</code></pre>
     </div>
 
-    <h2>{{ localeService.dict().post.h2_2 }}</h2>
+    <p>{{ localeService.dict().post.pMode1Explain }}</p>
 
-    <p>
-      {{ localeService.dict().post.p4 }}
-    </p>
+    <!-- Section 2: Structured JSON -->
+    <h2>{{ localeService.dict().post.h2Mode2 }}</h2>
+    <p>{{ localeService.dict().post.pMode2Intro }}</p>
 
-    <!-- Visual Artifact: Stream Schematic -->
-    <app-editorial-graphic 
-      variant="stream"
-      label="EVENT_STREAM // DURABLE_LOG"
-      [caption]="localeService.dict().post.fig2Caption">
-    </app-editorial-graphic>
+    <div class="code-window">
+      <div class="code-header">
+        <div class="code-dots"><span></span><span></span><span></span></div>
+        <span>request &mdash; response schema</span>
+      </div>
+      <pre><code>"response_schema": &#123;
+  "type": "object",
+  "properties": &#123;
+    "location":    &#123; "type": "string" &#125;,
+    "time_of_day": &#123; "type": "string",
+                     "enum": ["golden_hour", "blue_hour",
+                              "midday", "night"] &#125;,
+    "mood":        &#123; "type": "string" &#125;
+  &#125;,
+  "required": ["location", "time_of_day", "mood"]
+&#125;</code></pre>
+    </div>
 
-    <p>
-      {{ localeService.dict().post.p5 }}
-    </p>
+    <p>{{ localeService.dict().post.pMode2Constrained }}</p>
 
-    <h2>{{ localeService.dict().post.h2_3 }}</h2>
+    <div class="code-window">
+      <div class="code-header">
+        <div class="code-dots"><span></span><span></span><span></span></div>
+        <span>response &mdash; constrained output</span>
+      </div>
+      <pre><code>&#123;
+  "role": "assistant",
+  "content": [
+    &#123;
+      "type": "text",
+      "text": "&#123;\"location\": \"George Town, Penang\",
+              \"time_of_day\": \"golden_hour\",
+              \"mood\": \"nostalgic\"&#125;"
+    &#125;
+  ],
+  "stop_reason": "end_turn"
+&#125;</code></pre>
+    </div>
 
-    <p>
-      {{ localeService.dict().post.p6 }}
-    </p>
+    <p>{{ localeService.dict().post.pMode2Explain }}</p>
 
-    <!-- Visual Artifact: Matrix Schematic -->
-    <app-editorial-graphic 
-      variant="matrix"
-      label="TOPOLOGY // ORCHESTRATION_MESH"
-      [caption]="localeService.dict().post.fig3Caption">
-    </app-editorial-graphic>
+    <!-- Section 3: Tool Use -->
+    <h2>{{ localeService.dict().post.h2Mode3 }}</h2>
+    <p>{{ localeService.dict().post.pMode3Intro }}</p>
 
-    <h2>{{ localeService.dict().post.h2_conclusion }}</h2>
+    <div class="code-window">
+      <div class="code-header">
+        <div class="code-dots"><span></span><span></span><span></span></div>
+        <span>tool definition</span>
+      </div>
+      <pre><code>&#123;
+  name: "get_weather",
+  description: "Get current weather for a city.
+                Call when the user asks about weather.",
+  input_schema: &#123;
+    type: "object",
+    properties: &#123;
+      city: &#123; type: "string",
+             description: "e.g. Penang" &#125;
+    &#125;,
+    required: ["city"]
+  &#125;
+&#125;</code></pre>
+    </div>
 
-    <p>
-      {{ localeService.dict().post.conclusionP }}
-    </p>
+    <p>{{ localeService.dict().post.pMode3ThreePieces }}</p>
+    <p>{{ localeService.dict().post.pMode3Explain }}</p>
+
+    <div class="code-window">
+      <div class="code-header">
+        <div class="code-dots"><span></span><span></span><span></span></div>
+        <span>response &mdash; tool_use</span>
+      </div>
+      <pre><code>&#123;
+  "role": "assistant",
+  "content": [
+    &#123;
+      "type": "text",
+      "text": "Let me check the weather in Penang."
+    &#125;,
+    &#123;
+      "type": "tool_use",
+      "id": "call_01",
+      "name": "get_weather",
+      "input": &#123; "city": "Penang" &#125;
+    &#125;
+  ],
+  "stop_reason": "tool_use"
+&#125;</code></pre>
+    </div>
+
+    <!-- Callout -->
+    <div class="editorial-callout">
+      <div class="callout-title">{{ localeService.dict().post.calloutTitle }}</div>
+      <p>{{ localeService.dict().post.calloutBody }}</p>
+    </div>
+
+    <!-- Section 4: The Loop -->
+    <h2>{{ localeService.dict().post.h2Loop }}</h2>
+
+    <div class="code-window">
+      <div class="code-header">
+        <div class="code-dots"><span></span><span></span><span></span></div>
+        <span>the agent loop</span>
+      </div>
+      <pre><code>User:     "What's the weather in Penang?"
+               &darr;
+Model:    "I need get_weather"           &larr; stop_reason: "tool_use"
+               &darr;
+System:   runs get_weather("Penang")     &larr; your code
+               &darr;
+          returns "31&deg;C, Partly cloudy"
+               &darr;
+Model:    "It's 31&deg;C and partly cloudy   &larr; stop_reason: "end_turn"
+           in Penang right now."</code></pre>
+    </div>
+
+    <p>{{ localeService.dict().post.pLoop }}</p>
+
+    <!-- Section 5: Closing -->
+    <h2>{{ localeService.dict().post.h2Closing }}</h2>
+
+    <!-- Summary Table -->
+    <div class="comparison-table">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Free Text</th>
+            <th>Structured JSON</th>
+            <th>Tool Use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">Block type</td>
+            <td><code>text</code></td>
+            <td><code>text</code> (JSON string)</td>
+            <td><code>text</code> + <code>tool_use</code></td>
+          </tr>
+          <tr>
+            <td class="row-label">Stop reason</td>
+            <td><code>end_turn</code></td>
+            <td><code>end_turn</code></td>
+            <td><code>tool_use</code></td>
+          </tr>
+          <tr>
+            <td class="row-label">Schema?</td>
+            <td>None</td>
+            <td><code>response_schema</code></td>
+            <td><code>input_schema</code></td>
+          </tr>
+          <tr>
+            <td class="row-label">Who acts?</td>
+            <td>Nobody</td>
+            <td>Your parser</td>
+            <td>Your executor</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>{{ localeService.dict().post.pClosing }}</p>
+    <p><em>{{ localeService.dict().post.pNextPost }}</em></p>
   </div>
 
-  <!-- Author Footer Card -->
+  <!-- Author Footer -->
   <div class="post-footer-author">
     <div class="author-info">
       <h4>{{ localeService.dict().post.authorName }}</h4>

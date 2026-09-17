@@ -1,127 +1,97 @@
-<div class="about-container">
-  <!-- 1. Header & Lead -->
-  <header class="about-header">
-    <div class="header-pretitle">
-      <span class="dot-indicator">●</span>
-      <span class="pretitle-text">BIOGRAPHY & PERSPECTIVE</span>
+<article class="about-editorial-page">
+  <div class="about-grid">
+    <!-- Visual Column: Environmental Portrait -->
+    <div class="visual-col">
+      <figure class="portrait-figure">
+        <img 
+          [src]="getCloudinaryUrl(profileImage.filename, profileImage.width, profileImage.height)"
+          [alt]="profileImage.alt"
+          [width]="profileImage.width"
+          [height]="profileImage.height"
+          loading="eager"
+          decoding="async"
+          class="portrait-photo" />
+        <figcaption class="portrait-meta">
+          <span class="meta-author">Chong Wei Khang · 张炜康</span>
+          <span class="meta-coord">5.4164° N, 100.3327° E · Penang, MY</span>
+        </figcaption>
+      </figure>
     </div>
-    <h1 class="about-title">{{ localeService.dict().about.title }}</h1>
-    <p class="about-lead">{{ localeService.dict().about.subtitle }}</p>
-  </header>
 
-  <!-- 2. Dual-Track Hero: Portrait + Narrative -->
-  <div class="about-hero-grid">
-    <!-- Left: Portrait & Quick Meta -->
-    <aside class="portrait-column">
-      <div class="portrait-card">
-        <div class="portrait-frame">
-          <img 
-            [src]="getCloudinaryUrl(profileImage.filename, profileImage.width, profileImage.height)"
-            [alt]="profileImage.alt"
-            [width]="profileImage.width"
-            [height]="profileImage.height"
-            loading="eager"
-            decoding="async"
-            class="portrait-img" />
-        </div>
-        <div class="portrait-caption">
-          <span class="caption-name">Chong Wei Khang · 张炜康</span>
-          <span class="caption-location">Penang, Malaysia (5.4164° N, 100.3327° E)</span>
-        </div>
-      </div>
+    <!-- Textual Column: Statement & Practice -->
+    <div class="prose-col">
+      <header class="statement-header">
+        <h1 class="author-name">Chong Wei Khang</h1>
+        <p class="author-subname">张炜康</p>
+        <p class="author-descriptor">
+          {{ localeService.isChinese() ? '全栈系统工程师 · 独立摄影师' : 'Senior Software Engineer & Photographer' }}
+        </p>
+      </header>
 
-      <div class="quick-facts-card">
-        <div class="fact-item">
-          <span class="fact-label">LOCATION</span>
-          <span class="fact-value">Penang, Malaysia</span>
-        </div>
-        <div class="fact-item">
-          <span class="fact-label">PRIMARY ROLE</span>
-          <span class="fact-value">Senior Full Stack Developer</span>
-        </div>
-        <div class="fact-item">
-          <span class="fact-label">CAMERA SYSTEM</span>
-          <span class="fact-value">Nikon Z Mirrorless</span>
-        </div>
-      </div>
-    </aside>
-
-    <!-- Right: The Dual-Track Narrative -->
-    <main class="narrative-column">
-      <!-- Track 1: The Builder -->
-      <section class="narrative-block">
-        <div class="block-tag">
-          <span class="tag-number">01</span>
-          <span class="tag-label">ENGINEERING ARCHITECTURE</span>
-        </div>
-        <h2 class="block-heading">{{ localeService.dict().about.builderTitle }}</h2>
-        <p class="block-text">{{ localeService.dict().about.builderText }}</p>
+      <!-- Editorial Narrative Paragraphs -->
+      <section class="statement-body">
+        @if (localeService.isChinese()) {
+          <p class="prose-p">
+            现居马来西亚槟城。机电一体化工程背景出身，自 2019 年起在 ViTrox Corporation 担任资深全栈工程师，主导高可靠性分布式系统架构、现代化 Web 前端以及基于 WebMCP 协议的智能体工作流研发。
+          </p>
+          <p class="prose-p">
+            代码之外，摄影是我观察世界与理解时间的媒介。手持一台全画幅 Nikon Z5，在槟城老城的晨昏微光、独立精品咖啡馆、以及跨越欧亚的旅途中，捕捉没有修饰的真实几何与自然光影。
+          </p>
+        } @else {
+          <p class="prose-p">
+            Based in Penang, Malaysia. With foundations in Mechatronics Engineering, I lead distributed software architecture, modern high-responsiveness web platforms, and agentic workflows using WebMCP at ViTrox Corporation since 2019.
+          </p>
+          <p class="prose-p">
+            Beyond engineering systems, photography is my practice of slowing down. Carrying a Nikon Z mirrorless system with prime and zoom glass, I look for quiet geometry, candid human atmospheres, and the honest texture of light across Penang, Southeast Asia, and Europe.
+          </p>
+        }
       </section>
 
-      <!-- Track 2: The Observer -->
-      <section class="narrative-block">
-        <div class="block-tag">
-          <span class="tag-number">02</span>
-          <span class="tag-label">VISUAL OBSERVATION</span>
-        </div>
-        <h2 class="block-heading">{{ localeService.dict().about.observerTitle }}</h2>
-        <p class="block-text">{{ localeService.dict().about.observerText }}</p>
+      <!-- Editorial Section: Equipment & Engineering (Hairline Table, Zero Box Cards) -->
+      <section class="hairline-section">
+        <h2 class="section-label">{{ localeService.isChinese() ? '器材与技术体系' : 'Optics & Systems' }}</h2>
+        <dl class="hairline-list">
+          <div class="hairline-row">
+            <dt class="hairline-term">{{ localeService.isChinese() ? '摄影光学' : 'Camera & Optics' }}</dt>
+            <dd class="hairline-desc">Nikon Z5 · NIKKOR Z 24-120mm f/4 S · NIKKOR Z 40mm f/2</dd>
+          </div>
+          <div class="hairline-row">
+            <dt class="hairline-term">{{ localeService.isChinese() ? '工程架构' : 'Engineering' }}</dt>
+            <dd class="hairline-desc">Angular 22 · TypeScript · Python · WebMCP · Tailwind CSS · Cloudflare</dd>
+          </div>
+        </dl>
       </section>
-    </main>
-  </div>
 
-  <!-- 3. Structured Information Modules -->
-  <div class="modules-grid">
-    <!-- Equipment & Tools -->
-    <section class="info-card gear-card">
-      <div class="card-header">
-        <span class="card-icon">⚙</span>
-        <h3 class="card-title">{{ localeService.dict().about.gearTitle }}</h3>
-      </div>
-      <div class="card-body">
-        <div class="spec-row">
-          <span class="spec-title">{{ localeService.dict().about.cameraGearLabel }}</span>
-          <p class="spec-desc font-mono">{{ localeService.dict().about.cameraGear }}</p>
-        </div>
-        <div class="spec-row">
-          <span class="spec-title">{{ localeService.dict().about.techStackLabel }}</span>
-          <p class="spec-desc font-mono">{{ localeService.dict().about.techStack }}</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Journey & Milestones -->
-    <section class="info-card timeline-card">
-      <div class="card-header">
-        <span class="card-icon">⏱</span>
-        <h3 class="card-title">{{ localeService.dict().about.milestonesTitle }}</h3>
-      </div>
-      <div class="card-body timeline-list">
-        <div class="timeline-item">
-          <div class="timeline-year">{{ localeService.dict().about.milestone1Year }}</div>
-          <div class="timeline-content">
-            <h4 class="timeline-role">{{ localeService.dict().about.milestone1Title }}</h4>
-            <p class="timeline-desc">{{ localeService.dict().about.milestone1Desc }}</p>
+      <!-- Editorial Section: Timeline (Hairline Table) -->
+      <section class="hairline-section">
+        <h2 class="section-label">{{ localeService.isChinese() ? '经历与背景' : 'Practice & Timeline' }}</h2>
+        <dl class="hairline-list">
+          <div class="hairline-row">
+            <dt class="hairline-term">2019 — Present</dt>
+            <dd class="hairline-desc">
+              <strong class="role-title">{{ localeService.isChinese() ? '资深全栈工程师 · ViTrox' : 'Senior Full Stack Developer · ViTrox' }}</strong>
+              <span class="role-sub">{{ localeService.isChinese() ? '主导全栈 Web 架构、数据服务与智能体工具链开发' : 'Full-stack platform architecture, data services, and agentic workflows' }}</span>
+            </dd>
           </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-year">{{ localeService.dict().about.milestone2Year }}</div>
-          <div class="timeline-content">
-            <h4 class="timeline-role">{{ localeService.dict().about.milestone2Title }}</h4>
-            <p class="timeline-desc">{{ localeService.dict().about.milestone2Desc }}</p>
+          <div class="hairline-row">
+            <dt class="hairline-term">2015 — 2019</dt>
+            <dd class="hairline-desc">
+              <strong class="role-title">{{ localeService.isChinese() ? '机电一体化工程荣誉学士' : 'B.Eng. in Mechatronics Engineering' }}</strong>
+              <span class="role-sub">{{ localeService.isChinese() ? '嵌入式控制系统与自动化软件工程基础' : 'First-class foundations in embedded systems and software integration' }}</span>
+            </dd>
           </div>
-        </div>
-      </div>
-    </section>
-  </div>
+        </dl>
+      </section>
 
-  <!-- 4. Colophon (Handcrafted Architecture) -->
-  <footer class="colophon-section">
-    <div class="colophon-card">
-      <div class="colophon-header">
-        <span class="colophon-tag">COLOPHON // 网站架构手记</span>
-      </div>
-      <p class="colophon-text">{{ localeService.dict().about.colophonText }}</p>
+      <!-- Editorial Section: Colophon -->
+      <section class="hairline-section">
+        <h2 class="section-label">{{ localeService.isChinese() ? '站点手记' : 'Colophon' }}</h2>
+        <p class="colophon-note">
+          {{ localeService.isChinese() 
+            ? '本数字花园采用 Angular 22 独立组件与 Tailwind CSS 构建，托管于 Cloudflare 全球边缘网络。无第三方跟踪脚本，提供沉浸式纯粹摄影与技术阅读体验。' 
+            : 'Handcrafted with Angular 22 standalone components and Tailwind CSS. Hosted on Cloudflare Workers edge network with zero tracking scripts.' }}
+        </p>
+      </section>
     </div>
-  </footer>
-</div>
+  </div>
+</article>

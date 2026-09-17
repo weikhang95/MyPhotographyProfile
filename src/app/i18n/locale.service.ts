@@ -27,23 +27,26 @@ export interface TranslationDictionary {
     readonly authorName: string;
     readonly publishDate: string;
     readonly readTime: string;
-    readonly tag: string;
-    readonly cattleTitle: string;
-    readonly cattleBody: string;
-    readonly p1: string;
-    readonly h2_1: string;
-    readonly p2: string;
-    readonly fig1Caption: string;
-    readonly p3: string;
-    readonly h2_2: string;
-    readonly p4: string;
-    readonly fig2Caption: string;
-    readonly p5: string;
-    readonly h2_3: string;
-    readonly p6: string;
-    readonly fig3Caption: string;
-    readonly h2_conclusion: string;
-    readonly conclusionP: string;
+    readonly tags: string;
+    readonly pIntro: string;
+    readonly h2Mode1: string;
+    readonly pMode1Intro: string;
+    readonly pMode1Explain: string;
+    readonly h2Mode2: string;
+    readonly pMode2Intro: string;
+    readonly pMode2Constrained: string;
+    readonly pMode2Explain: string;
+    readonly h2Mode3: string;
+    readonly pMode3Intro: string;
+    readonly pMode3ThreePieces: string;
+    readonly pMode3Explain: string;
+    readonly calloutTitle: string;
+    readonly calloutBody: string;
+    readonly h2Loop: string;
+    readonly pLoop: string;
+    readonly h2Closing: string;
+    readonly pClosing: string;
+    readonly pNextPost: string;
     readonly authorBio: string;
   };
   readonly home: {
@@ -100,30 +103,33 @@ const EN_DICTIONARY: TranslationDictionary = {
     switchButtonText: '中文',
   },
   post: {
-    category: 'ENGINEERING // AGENT ARCHITECTURE',
-    title: 'Decoupling the Brain from the Hands: Architectural Patterns for Reliable AI Agents',
-    lead: 'Harnesses encode assumptions that go stale as models improve. Building reliable, long-horizon agents requires treating execution sandboxes as disposable cattle and decoupling the reasoning loop from ephemeral runtime state.',
-    author: 'By Chong Wei Khang',
-    authorName: 'Chong Wei Khang',
+    category: 'ENGINEERING // AGENT BASICS',
+    title: 'The Three Ways an LLM Responds (And Why It Matters for Agents)',
+    lead: 'Most people think an LLM "types text." But under the API surface, there are three distinct output modes \u2014 and understanding them is the single fastest way to demystify how agents work.',
+    author: 'By Chong Wei Khang (张炜康)',
+    authorName: 'Chong Wei Khang (张炜康)',
     publishDate: 'Published Sep 17, 2026',
-    readTime: '6 min read',
-    tag: 'Angular 22 · WebMCP',
-    cattleTitle: 'The Cattle Principle',
-    cattleBody: 'If an agent’s sandbox dies or hits an unrecoverable timeout, the orchestrator should never crash with it. Treat execution environments as interchangeable cattle: catch the tool-call error, teardown the container, and re-provision from a standard recipe.',
-    p1: 'A common architectural trap when building AI agents is placing all components—the model harness, the session history, and the execution environment—inside a single container. While tempting for rapid prototyping, this introduces what infrastructure engineers describe as the “pet problem”: the server becomes a delicate, irreplaceable pet that must be continually nursed when an execution loop stalls.',
-    h2_1: '1. The Decoupled Tools Boundary',
-    p2: 'The structural solution is to decouple what we consider the “Brain” (the LLM reasoning loop and harness) from the “Hands” (the execution sandbox, file system, and API proxies). The harness communicates across an isolated interface bus using a strict, schema-driven contract:',
-    fig1Caption: 'Figure 1: Decoupling the decision loop (Brain) from ephemeral execution sandboxes (Hands). Zero credentials leak into the sandbox.',
-    p3: 'Under this architecture, the agent harness does not care whether the sandbox is a local Docker container, a Cloudflare Worker, or a WebMCP browser endpoint. The interface remains uniform: execute(name, input) → string.',
-    h2_2: '2. The Session is Not the Context Window',
-    p4: 'Another critical mistake is conflating the model’s ephemeral context window with the durable session state. Models have token limits; sessions have infinite horizons. Instead of irreversible in-place context trimming, we maintain an append-only event stream that lives completely outside the model’s active window:',
-    fig2Caption: 'Figure 2: The append-only event stream. The model interrogates positional slices without destroying raw historical context.',
-    p5: 'When an agent reboots after a crash or resumes on a subsequent day, it calls wake(sessionId), fetches the event stream from the append head, and resumes without state loss.',
-    h2_3: '3. Multi-Agent Specialization',
-    p6: 'As intelligence scales, single monolithic agents struggle with cognitive overload. The multi-agent pattern delegates distinct responsibilities to specialized nodes under a central orchestrator:',
-    fig3Caption: 'Figure 3: Multi-agent coordination matrix. The central orchestrator decomposes tasks into specialized planner, executor, and evaluator steps.',
-    h2_conclusion: 'Conclusion & Key Takeaways',
-    conclusionP: 'By designing systems around small, stable interfaces—decoupling the brain from the hands and the session log from the context window—we build architectures that outlast any single model generation. As models improve, the harness doesn\'t need to be rewritten; it simply orchestrates smarter tools.',
+    readTime: '5 min read',
+    tags: 'Agent Basics \u00B7 Tool Calling \u00B7 Structured Output',
+    pIntro: 'Ask any LLM what the weather is right now. It\'ll apologize \u2014 it doesn\'t know. Not because it can\'t reason, but because it has no hands. It can think, but it can\'t reach outside its own text and touch the real world. A tool gives it hands. But before we talk about tools, we need to understand something most tutorials skip: what an LLM\'s output actually looks like under the hood.',
+    h2Mode1: '1. Free Text \u2014 The Default',
+    pMode1Intro: 'When you chat with Claude or ChatGPT in a browser, you see flowing text. It feels like the model is \u201Ctyping.\u201D But underneath, the API response is a structured object \u2014 not a string. Here\'s what Claude\'s API actually returns:',
+    pMode1Explain: 'Two things to notice. First, content is an array of typed blocks, not a raw string. Each block has a type \u2014 here it\'s \u201Ctext\u201D. But there are other types, and that\'s the key. Second, stop_reason tells you why the model stopped generating. \u201Cend_turn\u201D means it\'s done talking. But there\'s another stop reason that changes everything.',
+    h2Mode2: '2. Structured JSON \u2014 Schema-Constrained Output',
+    pMode2Intro: 'Sometimes you don\'t want free prose \u2014 you want data in a specific shape. Imagine you\'re building a photo metadata extractor. You want the model to look at a description and return structured fields, not a paragraph. You send a response schema alongside your prompt \u2014 telling the API \u201Crespond in this exact shape\u201D:',
+    pMode2Constrained: 'Now the model\'s output is constrained. It must produce valid JSON matching your schema:',
+    pMode2Explain: 'The type is still \u201Ctext\u201D, the stop_reason is still \u201Cend_turn\u201D \u2014 but the content is guaranteed to be parseable JSON. The model isn\'t \u201Cchoosing\u201D to format nicely; the API enforces this at the token generation level. It literally will not produce a token that violates your schema. This is called constrained decoding, and every major provider (Anthropic, OpenAI, Google) supports it.',
+    h2Mode3: '3. Tool Use \u2014 The Model Requests Action',
+    pMode3Intro: 'This is where things get interesting. The model stops answering you directly and instead says: \u201CI don\'t know the answer, but I\'d like to call a function to find out.\u201D You define tools when calling the API. Each tool has three parts:',
+    pMode3ThreePieces: 'name \u2014 what the model uses to identify the tool. description \u2014 when and why to call it (this is for the model to read, not humans \u2014 this is where the real engineering happens). input_schema \u2014 what arguments to pass (using JSON Schema).',
+    pMode3Explain: 'Now, when a user asks \u201CWhat\'s the weather in Penang?\u201D the model does not return text. It returns something entirely different: a tool_use block. It says: \u201CI want to call get_weather with { city: \"Penang\" }.\u201D Notice the stop_reason: \u201Ctool_use\u201D. The model is saying: \u201CI\'m not done. Go run this, give me the result, and I\'ll finish.\u201D The model didn\'t execute anything. It just asked. Your code does the executing.',
+    calloutTitle: 'The Model Requests, the System Acts',
+    calloutBody: 'This is the most critical mental model in agent engineering: LLMs cannot take actions. They can only output structured text that says "please take this action for me." The execution \u2014 making the API call, querying the database, sending the email \u2014 happens entirely in your code, outside the model.',
+    h2Loop: '4. The Complete Loop',
+    pLoop: 'Every agent framework \u2014 LangChain, CrewAI, Anthropic\'s Agent SDK, Google\'s ADK \u2014 is built on repeating this exact loop until the model returns stop_reason: "end_turn". That is the atom of agent engineering. Everything else is molecules.',
+    h2Closing: 'Three Modes, One Mental Model',
+    pClosing: 'These three modes are the entire vocabulary of how an LLM communicates with the world: free text for humans, structured JSON for machines, and tool use to request actions. Once you see this clearly, the magic disappears \u2014 and engineering begins.',
+    pNextPost: 'Next in this series: What happens when the model has 10 tools to choose from. That\'s where description engineering gets interesting.',
     authorBio: 'Senior Full Stack Developer at ViTrox & Photographer in Penang, Malaysia. Exploring agentic patterns, WebMCP, and modern frontend architecture.',
   },
   home: {
@@ -133,10 +139,10 @@ const EN_DICTIONARY: TranslationDictionary = {
     filterStreet: 'Street & Heritage',
     filterTravel: 'Travel & Scenery',
     filterQuiet: 'Quiet & Coffee',
-    latestWritingTag: 'LATEST ESSAY // ARCHITECTURE',
-    latestWritingTitle: 'Decoupling the Brain from the Hands: Architectural Patterns for Reliable AI Agents',
-    latestWritingMeta: '6 min read · WebMCP · Event Streams',
-    readEssay: 'Read Essay →',
+    latestWritingTag: 'Latest Technical Essay // Agent Architecture',
+    latestWritingTitle: 'The Three Ways an LLM Responds (And Why It Matters for Agents)',
+    latestWritingMeta: '5 min read · WebMCP · Tool Calling',
+    readEssay: 'Read Full Essay →',
   },
   about: {
     title: 'About Me',
@@ -180,31 +186,34 @@ const ZH_DICTIONARY: TranslationDictionary = {
     switchButtonText: 'EN',
   },
   post: {
-    category: '工程架构 // AGENT 架构设计',
-    title: '解耦思考与行动：构建高可靠 AI Agent 系统的架构模式',
-    lead: '当底层大模型能力快速迭代时，把推理决策与执行环境绑死会导致系统过早老化。构建长期可靠的智能体系统，核心在于将执行沙箱视为可替换的“消耗品”（Cattle），并将核心决策回路与瞬态运行状态彻底解耦。',
+    category: '工程架构 // AGENT 基础核心',
+    title: '大模型输出的三种形态（以及为什么它对 Agent 至关重要）',
+    lead: '大多数人以为大模型只是在“打字吐字”。但在 API 底层，输出其实只有三种截然不同的模式——理解这三种模式，是彻底看懂所有 Agent 运行机制的最快途径。',
     author: '作者：张炜康 (Chong Wei Khang)',
     authorName: '张炜康 (Chong Wei Khang)',
     publishDate: '发布于 2026年9月17日',
-    readTime: '6 分钟阅读',
-    tag: 'Angular 22 · WebMCP',
-    cattleTitle: '消耗品原则 (The Cattle Principle)',
-    cattleBody: '如果智能体的沙箱环境发生崩溃或超时，中枢调度器绝不能一同受阻。必须把执行环境当成随时可以重置的消耗品：捕获工具执行异常，销毁容器，并从标准模板秒级重建。',
-    p1: '在构建 AI Agent 时，一个普遍的架构陷阱是将模型决策回路、会话历史与沙箱执行环境放在同一个容器内。在原型阶段这种做法看似敏捷，但极易带来运维工程师常说的“宠物问题”（Pet Problem）：容器变成了娇贵、不可替代的宠物，一旦执行死循环或崩溃就需要人工小心翼翼地维护。',
-    h2_1: '1. 工具接口的解耦边界 (Decoupled Boundary)',
-    p2: '根本性的工程解法是将系统划分为“大脑”（LLM 推理循环与 Harness 调度层）与“双手”（隔离执行沙箱、文件系统与 API 代理）。大脑与双手之间仅通过一条严格遵循 JSON Schema 约定的隔离通信总线交互：',
-    fig1Caption: '图 1：将决策核心（大脑）与瞬态执行沙箱（双手）解耦。沙箱内完全零凭证暴露。',
-    p3: '在此架构下，Agent Harness 无需关心执行环境是本地 Docker 容器、Cloudflare Worker 边缘节点还是基于浏览器 WebMCP 的端点。外部接口始终保持统一的 execute(name, input) → string 契约。',
-    h2_2: '2. 会话状态不等于模型上下文窗口',
-    p4: '另一个常见设计误区是将大模型的瞬态上下文窗口（Context Window）与系统的持久化会话状态（Session）混为一谈。Token 窗口存在硬性上限，但现实任务的生命周期是无限的。我们不应直接在窗口内粗暴裁剪历史，而是维护一条只增不减的追加型事件日志（Append-Only Event Stream）：',
-    fig2Caption: '图 2：只增不减的事件流架构。模型按需查询历史切片，不破坏底层上下文完整性。',
-    p5: '当智能体因超时重启或跨天唤醒时，只需调用 wake(sessionId)，从事件流最新的追加位点拉取断点信息，即可无损恢复执行。',
-    h2_3: '3. 多智能体专业化协作拓扑',
-    p6: '随着业务复杂度提升，单一全能型智能体极易出现认知过载。成熟的工程实践采用中心化协调器拓扑，将工作流解构给各个高度专精的职能节点：',
-    fig3Caption: '图 3：多智能体协作矩阵。中心调度器将复杂意图拆解并分派给规划、执行、代码与回归验证专员。',
-    h2_conclusion: '总结与核心思考',
-    conclusionP: '通过设计简洁且稳定的边界契约——将决策大脑与执行双手解耦，将持久会话与临时上下文解耦——我们能够构建出超越单代模型生命周期的健壮系统。未来模型变得更聪明时，架构基座无需重写，只需接入更精准的工具。',
-    authorBio: 'ViTrox 资深全栈开发工程师，现居马来西亚槟城，独立摄影师。专注探索 Agent 架构、WebMCP 与现代前端工程演进。',
+    readTime: '5 分钟阅读',
+    tags: 'Agent 基础 · Tool Calling · 结构化输出',
+    pIntro: '问任何一个大模型现在天气怎么样，它会道歉——它不知道。不是因为它推理不行，而是因为它没有手。它能思考，但无法伸出文字之外去触碰真实世界。Tool（工具）就是给它的手。但在聊 tool 之前，我们得先理解一件大多数教程跳过的事：LLM 的输出在底层到底长什么样。',
+    h2Mode1: '1. 纯文本 — 默认模式',
+    pMode1Intro: '在浏览器里和 Claude 或 ChatGPT 聊天时，你看到的是流动的文字，好像模型在"打字"。但在底层，API 返回的是一个结构化对象——不是字符串。以下是 Claude API 实际返回的内容：',
+    pMode1Explain: '两件事值得注意。第一，content 是一个带类型标签的数组，不是原始字符串。每个 block 有一个 type——这里是 "text"。但还有其他类型，这才是关键。第二，stop_reason 告诉你模型为什么停了下来。"end_turn" 意思是"我说完了"。但还有另一种 stop reason，它改变了一切。',
+    h2Mode2: '2. 结构化 JSON — Schema 约束输出',
+    pMode2Intro: '有时你不需要自由文本——你需要特定结构的数据。比如你在做一个照片元数据提取器，希望模型看了描述后返回结构化字段，而不是一段话。你在请求里附上一个 response schema——告诉 API"请按这个结构回答"：',
+    pMode2Constrained: '现在模型的输出被约束了，必须产出符合你 schema 的合法 JSON：',
+    pMode2Explain: 'type 还是 "text"，stop_reason 还是 "end_turn"——但内容保证是可解析的 JSON。模型不是在"选择"好好格式化；是 API 在 token 生成层面约束了输出，只允许产生符合你 schema 的内容。这叫受约束解码（constrained decoding）——三大主流厂商（Anthropic、OpenAI、Google）都在用它。',
+    h2Mode3: '3. Tool Use — 模型请求行动',
+    pMode3Intro: '第三种模式是最有意思的。模型不再直接回答，而是说："我自己答不了——让我调一个函数。"你在调用 API 时提供一组可用工具。每个 tool 有三个组成部分：',
+    pMode3ThreePieces: 'name — 模型调用它时用的名字。description — 什么时候调用（写给模型看的，不是给人看的——真正的工程细节在这里）。input_schema — 接收什么参数（JSON Schema 格式）。',
+    pMode3Explain: '当用户问"槟城天气怎么样？"时，返回结果彻底变了。出现了新的 block 类型："tool_use"——模型发出了一个结构化的函数调用请求。stop_reason 变成了 "tool_use"——模型在说"我没说完，请执行这个，然后告诉我结果。"模型没有执行任何东西。它只是请求。你的代码负责行动。',
+    calloutTitle: '模型发出请求，系统执行动作',
+    calloutBody: '这是 Agent 工程中最重要的心智模型：LLM 唯一的超能力是决定调用哪个工具、传什么参数。真正的执行——发 API 请求、读文件、查数据库——完全发生在你的代码里，在模型之外。',
+    h2Loop: '4. 完整的循环',
+    pLoop: '所有 agent 框架——LangChain、CrewAI、Anthropic 的 Agent SDK、Google 的 ADK——都只是这个循环的反复执行。模型不断调用 tool，直到 stop_reason 变回 "end_turn" 为止。这就是 agent 工程的原子。其他一切都是分子。',
+    h2Closing: '三种模式，一个心智模型',
+    pClosing: '这三种模式就是 LLM 与外部世界交互的完整词汇表。所有建立在上面的东西——多步骤 agent、chain、orchestration——都是这些原子的组合。',
+    pNextPost: '下一篇：当模型面前有 10 个 tool 时会发生什么。那就是 description 工程开始变有趣的地方。',
+    authorBio: 'ViTrox 资深全栈开发工程师，现居马来西亚槟城，独立摄影师。专注探索 Agent 架构与现代前端工程演进。',
   },
   home: {
     introStatement: '张炜康 (Chong Wei Khang) — 现居马来西亚槟城的全栈开发工程师与独立摄影师。记录街道上的沉静光影与旅途氛围，同时构建高可靠性的智能体软件。',
@@ -214,8 +223,8 @@ const ZH_DICTIONARY: TranslationDictionary = {
     filterTravel: '旅途光影',
     filterQuiet: '静物咖啡',
     latestWritingTag: '最新技术专栏 // 智能体架构',
-    latestWritingTitle: '解耦思考与行动：构建高可靠 AI Agent 系统的架构模式',
-    latestWritingMeta: '6 分钟深度阅读 · WebMCP · 只增不减事件流',
+    latestWritingTitle: '大模型输出的三种形态（以及为什么它对 Agent 至关重要）',
+    latestWritingMeta: '5 分钟深度阅读 · WebMCP · Tool Calling',
     readEssay: '阅读全文 →',
   },
   about: {

@@ -20,11 +20,12 @@ describe('AboutComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render the dual-track headings in English by default', () => {
+  it('should render author identity and English narrative by default', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.about-title')?.textContent).toContain('About Me');
-    expect(compiled.textContent).toContain('The Builder — Code & Systems');
-    expect(compiled.textContent).toContain('The Observer — Light & Moments');
+    expect(compiled.querySelector('.author-name')?.textContent).toContain('Chong Wei Khang');
+    expect(compiled.querySelector('.author-subname')?.textContent).toContain('张炜康');
+    expect(compiled.textContent).toContain('Based in Penang, Malaysia');
+    expect(compiled.textContent).toContain('Senior Software Engineer & Photographer');
   });
 
   it('should reactively render Chinese content when locale changes', () => {
@@ -32,16 +33,22 @@ describe('AboutComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.about-title')?.textContent).toContain('关于我');
-    expect(compiled.textContent).toContain('构建者 — 代码与系统架构');
-    expect(compiled.textContent).toContain('观察者 — 光线与静止瞬间');
+    expect(compiled.textContent).toContain('现居马来西亚槟城');
+    expect(compiled.textContent).toContain('全栈系统工程师 · 独立摄影师');
+    expect(compiled.textContent).toContain('器材与技术体系');
   });
 
-  it('should render gear, milestones, and colophon', () => {
+  it('should render environmental portrait, optics, timeline, and colophon without template card boxes', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.gear-card')).toBeTruthy();
-    expect(compiled.querySelector('.timeline-card')).toBeTruthy();
-    expect(compiled.querySelector('.colophon-card')).toBeTruthy();
+    expect(compiled.querySelector('.portrait-photo')).toBeTruthy();
+    expect(compiled.querySelectorAll('.hairline-section').length).toBeGreaterThanOrEqual(3);
     expect(compiled.textContent).toContain('Nikon Z5');
+    expect(compiled.textContent).toContain('ViTrox');
+
+    // Verify template card boxes are completely gone
+    expect(compiled.querySelector('.portrait-card')).toBeNull();
+    expect(compiled.querySelector('.gear-card')).toBeNull();
+    expect(compiled.querySelector('.timeline-card')).toBeNull();
+    expect(compiled.querySelector('.colophon-card')).toBeNull();
   });
 });
