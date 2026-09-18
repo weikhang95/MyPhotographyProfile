@@ -14,6 +14,7 @@
 | 05 | [Current UI audit](./design-research/05-current-ui-audit.md): repo audit with file:line references, blockers, Material removal, redesign order | ~420 |
 | 06 | [Playful zone](./design-research/06-playful-3d-pixel.md): three.js / pixel / game-like / anime-inspired, phased plan | ~215 |
 | 07 | [**Visual review**](./design-research/07-visual-review.md): screenshots of the current site (post Angular 22 / i18n / blog commits) vs samalive, Anthropic, Simon, Soth, Kander, sspai; gap analysis, bugs, 3 direction options | ~190 |
+| 08 | [**samalive.co teardown**](./design-research/08-samalive-teardown.md): measured layout (grid 86%, 5px gutters, 569–825px rows, 12px nav), series index model, lightbox, About; side-by-side with our numbers; spec for our photo pages | ~130 |
 
 ---
 
@@ -25,6 +26,8 @@ The site currently has **two competing visual voices**: a calm editorial shell a
 - clipped diagram labels.
 
 See [07](./design-research/07-visual-review.md).
+
+**2026-09-18:** owner chose **samalive styling for the photo pages only** (writing stays editorial). [08](./design-research/08-samalive-teardown.md) measures samalive properly: the gap is *structure*, not palette — justified rows vs our fixed 3 columns, 5px vs our 16px gutters, photos starting at y=22px vs our y=248px, nav 11.9px vs our 20px.
 
 ## ⚠️ Found during research — needs owner attention
 
