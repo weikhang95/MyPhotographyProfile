@@ -1,0 +1,24 @@
+{
+  "generated": "2026-09-18T13:28:49.712Z",
+  "photos": [
+    {
+      "alt": "",
+      "caption": "",
+      "location": "",
+      "slug": "portrait",
+      "series": null,
+      "source": "photos/originals/portrait.jpg",
+      "digest": "27b426ef0ed4",
+      "width": 3848,
+      "height": 4810,
+      "aspect": 0.8,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "blur": "data:image/webp;base64,UklGRowAAABXRUJQVlA4IIAAAADQBACdASoUABkAPzmMu1YvKSWjsBgIAeAnCWUAuDAPRtcstZxP6qOPrOifsoqmgAD+qJJvXpjGTKixV0e9zT8atGBsIpmR2jC0X080pirZf2WKuZfh5mKW5cfhqDia4Kjc4WoJHE/zWK40nn7QFhxV9yIHfEt8Sb4p7ScisAAAAA=="
+    }
+  ]
+}

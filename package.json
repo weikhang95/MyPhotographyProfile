@@ -14,7 +14,8 @@
     "db:migrate:local": "wrangler d1 migrations apply chong-db --local",
     "db:migrate:remote": "wrangler d1 migrations apply chong-db --remote",
     "typecheck:worker": "tsc -p worker/tsconfig.json",
-    "cf-typegen": "wrangler types worker/worker-configuration.d.ts"
+    "cf-typegen": "wrangler types worker/worker-configuration.d.ts",
+    "photos:build": "node scripts/photos/process.mjs"
   },
   "private": true,
   "dependencies": {
@@ -42,10 +43,12 @@
     "@angular/cli": "^22.1.8",
     "@angular/compiler-cli": "^22.1.7",
     "@types/jest": "^30.0.0",
+    "exif-reader": "^2.0.3",
     "jest": "^30.3.0",
     "jest-environment-jsdom": "^30.3.0",
     "jest-preset-angular": "^17.0.0",
     "jsdom": "^29.0.1",
+    "sharp": "^0.35.4",
     "tailwindcss": "^4.2.2",
     "typescript": "~6.0.3",
     "wrangler": "^4.132.0"

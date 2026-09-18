@@ -48,3 +48,7 @@ Thumbs.db
 
 # macOS
 .DS_Store
+
+# Photos: camera exports and the sizes generated from them (see photos/README.md)
+/photos/originals
+/src/assets/gallery
